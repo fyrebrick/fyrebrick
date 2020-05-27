@@ -1,0 +1,10 @@
+{
+  "oauth_consumer_key":"99B44D144DE848E795D4228F4C161700",
+  "oauth_token":"AC40C8C32A1748E0AE1EFA13CCCFAC3A",
+  "oauth_signature_method":"HMAC-SHA1",
+  "oauth_signature":"0IeNpR5N0kTEBURcuUMGTDPKU1c%3D",
+  "oauth_timestamp":"1191242096",
+  "oauth_nonce":"kllo9940pd9333jh",
+  "oauth_version":"1.0",
+  "oauth_signature_method": "HMAC-SHA1"
+}
