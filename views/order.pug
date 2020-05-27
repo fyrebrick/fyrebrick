@@ -1,0 +1,55 @@
+html
+    head
+        title=title
+        link(rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js')
+        script(type='text/javascript' charset='utf8' src='https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js')
+    body
+        button#gaTerug ga terug <======
+        table#table_id.display
+            thead
+                tr
+                    th Remarks
+                    th Color name
+                    th Quantity
+                    th New or Used
+                    th.data-class-name Item no
+                    th Item name
+                    th fotootje
+                    th Check!
+        script.
+            $(document).ready(function () {
+                $('#table_id').DataTable({
+                    ajax: {
+                        url: '/api/orders/#{order_id}/items',
+                        dataSrc: 'data',
+                        paging: false,
+
+                    },
+                    columns:[
+                        {data:'remarks'},
+                        {data:'color_name'},
+                        {data:'quantity'},
+                        {data:'new_or_used'},
+                        {
+                            data:'color_id',
+                            bSortable: false,
+                            bSearchable: false,
+                            render: function (data, type, row, meta) {
+                                return "<img src=\"https://img.bricklink.com/"+"P"+"/"+data+"/"+row.item.no+".jpg\" alt=\"\"> ";
+                            }
+                        },
+                        {data:'item.no',},
+                        {data:'item.name'},
+                        {
+                            data:null,
+                            bSearchable: false,
+                            defaultContent: "<input type='checkbox'></input>"
+                        }
+                    ]
+                });
+                $("#gaTerug").click(function(){
+                    window.location.href = "/";
+                })
+            });
+

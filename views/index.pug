@@ -1,0 +1,55 @@
+html
+    head
+        title=title
+        link(rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        script(type='text/javascript' charset='utf8' src='https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js')
+    body
+        table#table_id.display
+            thead
+                tr
+                    th.data-class-name Order Id
+                    th Date Ordered
+                    th Date Status Changed
+                    th Seller name
+                    th Seller name
+                    th Buyer name
+                    th Status
+                    th Total Count
+                    th Unique Count
+                    th Is filed
+        script.
+            $(document).ready(function () {
+                $('#table_id').DataTable({
+                    ajax: {
+                        url: '/api/orders?direction=in',
+                        dataSrc: 'data'
+                    },
+                    columns:[
+                        {
+                            data:'order_id',
+                            "render": function (data, type, row, meta) {
+                                return "<a href=\"\/orders\/"+data+"\/items\" id=\"order_id\""+data+"\"  >" + data + "</a>";
+                            }
+                        },
+                        {data:'date_ordered'},
+                        {data:'date_status_changed'},
+                        {data:'seller_name'},
+                        {data:'store_name'},
+                        {data:'buyer_name'},
+                        {data:'status',},
+                        {
+                            data:'total_count',
+                            bSearchable: false
+                        },
+                        {
+                            data:'unique_count',
+                            bSearchable: false
+                        },
+                        {
+                            data:'is_filed',
+                            bSearchable: false
+                        }
+                    ]
+                });
+            });
