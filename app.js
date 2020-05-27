@@ -12,6 +12,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+console.log("ENV:",process.env);
 
 app.use('/', indexRouter);
 // catch 404 and forward to error handler
