@@ -6,6 +6,8 @@ block styles
             font-weight: bold;
         }
 block content
+    h1#pappieBedrag.display-3 Loading...
+    hr
     table#table_id.display(data-display-length='-1')
         thead
             tr
@@ -30,7 +32,16 @@ block scripts
                     console.log("#"+this)
                     $("#"+this.id).prop("checked",state);
                 }
-            })
+            }).on('click','img',function(e){
+               e.preventDefault();
+               console.log(e);
+               if($(e.target).is('img.img-thumbnail')){
+                   let modalId = "#modal"+this.id.substr(3,this.id.length);
+                   console.log(modalId);
+                   $(modalId).modal('show');
+               }
+            });
+            let pappieBedrag = 0.00;
             $('#table_id').DataTable({
                 ajax: {
                     paging: false,
@@ -42,11 +53,25 @@ block scripts
                         data: null,
                         bSearchable: false,
                         render: function (data, type, row, meta) {
+                            let l = row.remarks.substr(0,1).toLowerCase();
+                            console.log(row);
+                            if(row.remarks!=="BLACK BOX"&&l==="a"||l==="b"||l==="c"){
+                                pappieBedrag+=(row.unit_price*row.quantity);
+                            }
                             return "<input type='checkbox' class='checkers' id='check" + row.inventory_id + "' >";
                         }
                     },
                     {data:'remarks'},
-                    {data:'color_name'},
+                    {
+                        data:'color_name',
+                        render: function(data,type,row,meta){
+                            if(data==="(Not Applicable)"){
+                                return "<i class=\"fas fa-tint-slash\"></i>";
+                            }else{
+                                return data;
+                            }
+                        }
+                    },
                     {data:'quantity'},
                     {data:'new_or_used'},
                     {
@@ -54,10 +79,50 @@ block scripts
                         bSortable: false,
                         bSearchable: false,
                         render: function (data, type, row, meta) {
-                            return "</span><img class=\"img-thumbnail \" src=\"https://img.bricklink.com/"+"P"+"/"+data+"/"+row.item.no+".jpg\" alt=\"\"> ";
+                            let id = row.color_id+row.item.no;
+                            let modal = "<div class=\"modal fade\" id=\"modal"+id+"\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle"+id+"\" aria-hidden=\"true\">\n" +
+                                "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
+                                "    <div class=\"modal-content\">\n" +
+                                "      <div class=\"modal-header\">\n" +
+                                "        <h5 class=\"modal-title\" id=\"modalTitel"+id+"\">Item no "+row.item.no+"</h5>\n" +
+                                "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+                                "          <span aria-hidden=\"true\">&times;</span>\n" +
+                                "        </button>\n" +
+                                "      </div>\n" +
+                                "      <div class=\"modal-body\">\n" +
+                                "        "+row.item.name+
+                                "      </div>\n" +
+                                "      <div class=\"modal-footer\">\n" +
+                                "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
+                                "      </div>\n" +
+                                "    </div>\n" +
+                                "  </div>\n" +
+                                "</div>";
+                            let _type=row.item.type.substr(0,1);
+
+                            switch (_type) {
+                                case "S":
+                                    return modal + "\n" +
+                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/" + _type + "/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
+                                    break;
+                                case "M":
+                                    return modal + "\n" +
+                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/"+row.color_id+"/"+row.item.no+".png\"" + " alt=\"\"> ";
+                                    break;
+                                case "P":
+                                    return modal + "\n" +
+                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/"+_type+"/"+data+"/"+row.item.no+".jpg\"" + " alt=\"\"> ";
+                                    break;
+                                default:
+                                    return "<i class=\"fas fa-image\"></i>";
+                            }
+
                         }
                     }
-                ]
+                ],
+                initComplete:function(settings,json){
+                    $("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
+                }
             });
         });
 
