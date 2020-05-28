@@ -21,7 +21,11 @@ router.all('/:v1', function(req, res, next) {
     getJSON(req,res);
 });
 router.all('/:v1/:v2', function(req, res, next) {
-    getJSON(req,res);
+    if(req.params.v1==="status"){
+        getJSON(req,res,req.params.v2);
+    }else{
+        getJSON(req,res);
+    }
 });
 router.all('/:v1/:v2/:v3', function(req, res, next) {
     getJSON(req,res);
@@ -33,8 +37,10 @@ router.all('/:v1/:v2/:v3/:v4/v5', function(req, res, next) {
     getJSON(req,res);
 });
 
-let getJSON = function(req,res){
+function getJSON (req,res,status=""){
+    console.log(status);
     let link = 'https://api.bricklink.com/api/store/v1/';
+    let statusLink = 'https://api.bricklink.com/api/store/v1/orders?direction=in';
     link += req.params.v1;
     if(req.params.v2){
         link+='/'+req.params.v2;
@@ -54,13 +60,26 @@ let getJSON = function(req,res){
 
     console.log("GET JSON from "+link);
     oauth.get(
-        link,
+        (status)?statusLink:link,
         process.env.TOKEN_VALUE,
         process.env.TOKEN_SECRET, //test user secret
         function (e, data){
             if (e) console.error(e);
             res.setHeader('Content-Type', 'application/json');
             let obj = JSON.parse(new Object(data));
+            let statusObj;
+            if(status){
+                statusObj = {meta:obj.meta,data:[]};
+                //console.log(obj);
+                for(let order of obj.data){
+                    //console.log(order.status,status);
+                    if(order.status===status){
+                        statusObj.data.push(order);
+                    }
+                }
+                res.send((statusObj));
+                return;
+            }
             if(req.params.v3==='items'){
                 res.send(({
                     "meta":obj.meta,

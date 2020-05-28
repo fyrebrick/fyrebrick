@@ -1,0 +1,22 @@
+li.nav-item.dropdown
+    a#navbarDropdownMenuLink.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+        span.text-white.bigger-text Status
+    .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+        a.dropdown-item(href='/status/COMPLETED')
+            i.fas.fa-check-double
+            span Completed
+        a.dropdown-item(href='/status/READY')
+            i.fas.fa-check
+            span Ready
+        a.dropdown-item(href='/status/PAID')
+            i.fas.fa-dollar-sign
+            span Paid
+        a.dropdown-item(href='/status/PACKED')
+            i.fas.fa-box
+            span Packed
+        a.dropdown-item(href='/status/RECEIVED')
+            i.fas.fa-box-open
+            span Received
+        a.dropdown-item(href='/status/UPDATED')
+            i.fas.fa-clipboard-list
+            span Updated

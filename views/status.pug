@@ -9,16 +9,12 @@ block content
                 th Status
 block nav-items
     include _nav-items-status
-block styles
-    style.
-        td {
-            font-size:24px;
-        }
 block scripts
     script.
+        console.log("#{status}")
         $(document).ready(function () {
             $('#table_id').DataTable({
-                ajax: {                    url: '/api/orders?direction=in', dataSrc: 'data'                },
+                ajax: {                    url: '/api/status/'+"#{status}", dataSrc: 'data'                },
                 columns:[
                     {                        data:'order_id',
                         "render": function (data, type, row, meta) {
@@ -30,26 +26,25 @@ block scripts
                             const options = { year: 'numeric', month: 'long', day: 'numeric'};
                             return d.toLocaleDateString('nl-BE', options)+" om "+d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}
                     },
-
                     {data:'buyer_name'},
                     {data:'status',
                         render:function(data,type,row,meta){
-                        switch(data){
-                            case 'COMPLETED':
-                                return "<i class=\"fas fa-check-double data-status\"></i>";
-                            case 'READY':
-                                return "<i class=\"fas fa-check data-status\"></i>";
-                            case 'PAID':
-                                return "<i class=\"fas fa-dollar-sign data-status\"></i>";
-                            case 'PACKED':
-                                return "<i class=\"fas fa-box data-status\"></i>";
-                            case 'SHIPPED':
-                                return "<i class=\"fas fa-shipping-fast data-status\"></i>";
-                            case 'RECEIVED':
-                                return "<i class=\"fas fa-box-open data-status\"></i>";
-                            case 'UPDATED':
-                                return "<i class=\"fas fa-clipboard-list data-status\"></i>";
-                        }
+                            switch(data){
+                                case 'COMPLETED':
+                                    return "<i class=\"fas fa-check-double data-status\"></i>";
+                                case 'READY':
+                                    return "<i class=\"fas fa-check data-status\"></i>";
+                                case 'PAID':
+                                    return "<i class=\"fas fa-dollar-sign data-status\"></i>";
+                                case 'PACKED':
+                                    return "<i class=\"fas fa-box data-status\"></i>";
+                                case 'SHIPPED':
+                                    return "<i class=\"fas fa-shipping-fast data-status\"></i>";
+                                case 'RECEIVED':
+                                    return "<i class=\"fas fa-box-open data-status\"></i>";
+                                case 'UPDATED':
+                                    return "<i class=\"fas fa-clipboard-list data-status\"></i>";
+                            }
                         }}
                 ]
             });

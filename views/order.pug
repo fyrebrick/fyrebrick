@@ -1,55 +1,63 @@
-html
-    head
-        title=title
-        link(rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js')
-        script(type='text/javascript' charset='utf8' src='https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js')
-    body
-        button#gaTerug ga terug <======
-        table#table_id.display
-            thead
-                tr
-                    th Remarks
-                    th Color name
-                    th Quantity
-                    th New or Used
-                    th.data-class-name Item no
-                    th Item name
-                    th fotootje
-                    th Check!
-        script.
-            $(document).ready(function () {
-                $('#table_id').DataTable({
-                    ajax: {
-                        url: '/api/orders/#{order_id}/items',
-                        dataSrc: 'data',
-                        paging: false,
-
-                    },
-                    columns:[
-                        {data:'remarks'},
-                        {data:'color_name'},
-                        {data:'quantity'},
-                        {data:'new_or_used'},
-                        {
-                            data:'color_id',
-                            bSortable: false,
-                            bSearchable: false,
-                            render: function (data, type, row, meta) {
-                                return "<img src=\"https://img.bricklink.com/"+"P"+"/"+data+"/"+row.item.no+".jpg\" alt=\"\"> ";
-                            }
-                        },
-                        {data:'item.no',},
-                        {data:'item.name'},
-                        {
-                            data:null,
-                            bSearchable: false,
-                            defaultContent: "<input type='checkbox'></input>"
+extends layout
+block styles
+    style.
+        td {
+            font-size: 41px;
+            font-weight: bold;
+        }
+block content
+    table#table_id.display(data-display-length='-1')
+        thead
+            tr
+                th Check!
+                th Remark
+                th Color
+                th.data-class-name Qt
+                th N/U
+                th fotootje
+block nav-items
+    a.nav-item(href='#')
+block scripts
+    script.
+        $(document).ready(function () {
+            $('table#table_id').on('mousedown', 'input', function (e) {
+                console.log("test1");
+                e.preventDefault();
+                console.log("test2");
+                if ($(e.target).is("input.checkers")) {
+                    console.log($(this).is(":checked"));
+                    let state = $(this).is(":checked");
+                    console.log("#"+this)
+                    $("#"+this.id).prop("checked",state);
+                }
+            })
+            $('#table_id').DataTable({
+                ajax: {
+                    paging: false,
+                    url: '/api/orders/#{order_id}/items',
+                    dataSrc: 'data'
+                },
+                columns:[
+                    {
+                        data: null,
+                        bSearchable: false,
+                        render: function (data, type, row, meta) {
+                            return "<input type='checkbox' class='checkers' id='check" + row.inventory_id + "' >";
                         }
-                    ]
-                });
-                $("#gaTerug").click(function(){
-                    window.location.href = "/";
-                })
+                    },
+                    {data:'remarks'},
+                    {data:'color_name'},
+                    {data:'quantity'},
+                    {data:'new_or_used'},
+                    {
+                        data:'color_id',
+                        bSortable: false,
+                        bSearchable: false,
+                        render: function (data, type, row, meta) {
+                            return "</span><img class=\"img-thumbnail \" src=\"https://img.bricklink.com/"+"P"+"/"+data+"/"+row.item.no+".jpg\" alt=\"\"> ";
+                        }
+                    }
+                ]
             });
+        });
 

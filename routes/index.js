@@ -11,4 +11,9 @@ router.get('/orders/:order_id/items',(req,res,next)=>{
    })
 });
 
+router.get('/status/:status',(req,res,next)=>{
+    console.log(req.params.status);
+    res.render('status',{'status':req.params.status});
+});
+
 module.exports = router;
