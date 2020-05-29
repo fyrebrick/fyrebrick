@@ -18,6 +18,7 @@ block scripts
     script.
         $(document).ready(function () {
             $('#table_id').DataTable({
+                "order": [[ 0, "desc" ]],
                 ajax: {                    url: '/api/orders?direction=in', dataSrc: 'data'                },
                 columns:[
                     {                        data:'order_id',

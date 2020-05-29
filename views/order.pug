@@ -55,10 +55,14 @@ block scripts
                         render: function (data, type, row, meta) {
                             let l = row.remarks.substr(0,1).toLowerCase();
                             console.log(row);
-                            if(row.remarks!=="BLACK BOX"&&l==="a"||l==="b"||l==="c"){
+                            const de = /[a-d,A-D]\d{1,}/gm;
+                            const ute = row.remarks;
+                            if(de.exec(ute)){
                                 pappieBedrag+=(row.unit_price*row.quantity);
+                                return "<div class='pappieCheckbox'><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
+                            }else {
+                                return "<input type='checkbox' class='checkers' id='check" + row.inventory_id + "' >";
                             }
-                            return "<input type='checkbox' class='checkers' id='check" + row.inventory_id + "' >";
                         }
                     },
                     {data:'remarks'},
@@ -111,7 +115,7 @@ block scripts
                                     break;
                                 case "P":
                                     return modal + "\n" +
-                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/"+_type+"/"+data+"/"+row.item.no+".jpg\"" + " alt=\"\"> ";
+                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/"+data+"/"+row.item.no+".png\"" + " alt=\"\"> ";
                                     break;
                                 default:
                                     return "<i class=\"fas fa-image\"></i>";
