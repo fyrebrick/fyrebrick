@@ -117,6 +117,10 @@ block scripts
                                     return modal + "\n" +
                                         "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/"+data+"/"+row.item.no+".png\"" + " alt=\"\"> ";
                                     break;
+                                case 'I':
+                                    return modal + "\n" +
+                                        "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                                    break;
                                 default:
                                     return "<i class=\"fas fa-image\"></i>";
                             }

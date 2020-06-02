@@ -13,8 +13,7 @@ var oauth = new OAuth.OAuth(
     oauth_data.oauth_signature_method
 );
 router.all('/', function(req, res, next) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send({"meta":{"description":"API call not found","message":"API call not found","code":"404"}});
+    getJSON(req,res);
 });
 
 router.all('/:v1', function(req, res, next) {
@@ -41,7 +40,9 @@ function getJSON (req,res,status=""){
     console.log(status);
     let link = 'https://api.bricklink.com/api/store/v1/';
     let statusLink = 'https://api.bricklink.com/api/store/v1/orders?direction=in';
-    link += req.params.v1;
+    if(req.params.v1){
+        link += req.params.v1;
+    }
     if(req.params.v2){
         link+='/'+req.params.v2;
     }

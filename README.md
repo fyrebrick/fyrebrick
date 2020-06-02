@@ -2,6 +2,9 @@ Bricklink webservice
 --
 This node.js server is a simple tool to use the authentication for the Bricklink API.
 
+### How to use
+You can use the api by making a request on `http://[hostname]/api/[api_call]` , all request types are premitted 
+
 ### Setup
 You can either run using node.js or docker.
 
