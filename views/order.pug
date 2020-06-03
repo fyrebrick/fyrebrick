@@ -6,7 +6,7 @@ block styles
             font-weight: bold;
         }
 block content
-    h1#pappieBedrag.display-3 Loading...
+    //h1#pappieBedrag.display-3 Loading...
     hr
     table#table_id.display(data-display-length='-1')
         thead
@@ -53,19 +53,31 @@ block scripts
                         data: null,
                         bSearchable: false,
                         render: function (data, type, row, meta) {
-                            let l = row.remarks.substr(0,1).toLowerCase();
-                            console.log(row);
-                            const de = /[a-d,A-D]\d{1,}/gm;
-                            const ute = row.remarks;
-                            if(de.exec(ute)){
-                                pappieBedrag+=(row.unit_price*row.quantity);
-                                return "<div class='pappieCheckbox'><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
-                            }else {
-                                return "<input type='checkbox' class='checkers' id='check" + row.inventory_id + "' >";
+                            if(row.remarks!==undefined){
+                                let l = row.remarks.substr(0, 1).toLowerCase();
+                                console.log(row);
+                                const de = /[a-d,A-D]\d{1,}/gm;
+                                const ute = row.remarks;
+                                if (de.exec(ute)) {
+                                    //pappieBedrag+=(row.unit_price*row.quantity);
+                                    return "<div class='pappieCheckbox'><span class='box papa'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
+                                } else {
+                                    return "<div class='merijnCheckbox'><span class='box merijn'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
+                                }
+                            }else{
+                                return "<div class='merijnCheckbox'><span class='box merijn'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
                             }
                         }
                     },
-                    {data:'remarks'},
+                    {data:null,
+                    render:function(data,type,row,meta){
+                        if(row.remarks===undefined){
+                            return '';
+                        }else{
+                            return row.remarks;
+                        }
+                    }
+                    },
                     {
                         data:'color_name',
                         render: function(data,type,row,meta){
@@ -104,22 +116,38 @@ block scripts
                                 "</div>";
                             let _type=row.item.type.substr(0,1);
 
-                            switch (_type) {
-                                case "S":
+                            switch (row.item.type) {
+                                case "SET":
                                     return modal + "\n" +
-                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/" + _type + "/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
+                                        "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
                                     break;
-                                case "M":
+                                case "MINIFIG":
                                     return modal + "\n" +
                                         "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/"+row.color_id+"/"+row.item.no+".png\"" + " alt=\"\"> ";
                                     break;
-                                case "P":
+                                case "PART":
                                     return modal + "\n" +
                                         "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/"+data+"/"+row.item.no+".png\"" + " alt=\"\"> ";
                                     break;
-                                case 'I':
+                                case 'INSTRUCTION':
+                                    return modal + "\n" +
+                                        "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                                    break;
+                                case 'BOOK':
+                                    return modal + "\n" +
+                                        "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                                    break;
+                                case 'SET':
                                     return modal + "\n" +
                                         "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                                    break;
+                                case 'GEAR':
+                                    return modal + "\n" +
+                                        "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                                    break;
+                                case 'CATALOG':
+                                    return modal + "\n" +
+                                        "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
                                     break;
                                 default:
                                     return "<i class=\"fas fa-image\"></i>";
@@ -129,7 +157,7 @@ block scripts
                     }
                 ],
                 initComplete:function(settings,json){
-                    $("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
+                    //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
                 }
             });
         });
