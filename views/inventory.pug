@@ -1,0 +1,187 @@
+extends layout
+block styles
+    style.
+        td {
+            font-size: 41px;
+            font-weight: bold;
+        }
+        [type="search"] {
+            font-size: 34px;
+        }
+        #searchButton{
+            height: 65px;
+        }
+        .dataTables_filter, .dataTables_info { display: none; }
+block content
+    .row
+        .col-2
+            #loadingSection
+        .col-10
+            div.form-inline.float-right
+                input#search.form-control.mr-sm-2(type='search' placeholder='Search on remark' aria-label='Search')
+                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
+    #drawTable
+        table#table_id.table.table-striped
+            thead.thead-dark
+                tr
+                    th(scope="col") Remark
+                    th(scope="col") Colour
+                    th.data-class-name(scope="col") Qt
+                    th(scope="col") N/U
+                    th(scope="col") Fotootje
+            tbody#bodyOfTable
+block scripts
+    script.
+        $(document).ready(function () {
+            $('table#table_id').on('mousedown', 'input', function (e) {
+                e.preventDefault();
+                if ($(e.target).is("input.checkers")) {
+                    let state = $(this).is(":checked");
+                    $("#" + this.id).prop("checked", state);
+                }
+            }).on('click', 'img', function (e) {
+                e.preventDefault();
+                if ($(e.target).is('img.img-thumbnail')) {
+                    let modalId = "#modal" + this.id.substr(3, this.id.length);
+                    $(modalId).modal('show');
+                }
+            });
+            let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary\" type=\"button\" disabled>\n" +
+                "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
+                "  Loading...\n" +
+                "</button>"
+            $("#searchButton").on("click", function() {
+                    $("#bodyOfTable tr").remove();
+                $.ajax({
+                    method: "GET",
+                    url: '/api/inventories?search='+$("#search").val(),
+                    beforeSend: function(){
+                        $("#loadingSection").append(loadingSpinner);
+                    }
+                }).done(function (data) {
+                    $("#spinner").remove();
+                    data.data.forEach(function(item){
+                        let tr = "<tr>"; //start row
+                        tr+="<td>"; // start 1 column
+                        if (item.remarks === undefined) {
+                            tr+= "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
+                        } else {
+                            tr+="<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >" + item.remarks + "</a>";
+                        }
+                        tr+="</td><td>";//start 2nd column
+                        if (item.color_name === "(Not Applicable)") {
+                            tr+= "<i class=\"fas fa-tint-slash\"></i>";
+                        } else {
+                            tr+= item.color_name ;
+                        }
+                        tr += "</td><td>";//start 3nd column
+                        tr +=item.quantity;
+                        tr += "</td><td>";//start 4nd column
+                        tr +=item.new_or_used;
+                        tr += "</td><td>";//start 5nd column
+                        tr += getPic(item);
+                        tr += "</td></tr>";
+                        $('#bodyOfTable').append(tr);
+                    });
+                });
+                function getPic(row) {
+                    let id = row.color_id + row.item.no;
+                    let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +
+                        "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
+                        "    <div class=\"modal-content\">\n" +
+                        "      <div class=\"modal-header\">\n" +
+                        "        <h5 class=\"modal-title\" id=\"modalTitel" + id + "\">Item no " + row.item.no + "</h5>\n" +
+                        "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+                        "          <span aria-hidden=\"true\">&times;</span>\n" +
+                        "        </button>\n" +
+                        "      </div>\n" +
+                        "      <div class=\"modal-body\">\n" +
+                        "        " + row.item.name +
+                        "      </div>\n" +
+                        "      <div class=\"modal-footer\">\n" +
+                        "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
+                        "      </div>\n" +
+                        "    </div>\n" +
+                        "  </div>\n" +
+                        "</div>";
+                    let _type = row.item.type.substr(0, 1);
+
+                    switch (row.item.type) {
+                        case "SET":
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
+                            break;
+                        case "MINIFIG":
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        case "PART":
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        case 'INSTRUCTION':
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        case 'BOOK':
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        case 'SET':
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        case 'GEAR':
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        case 'CATALOG':
+                            return modal + "\n" +
+                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                            break;
+                        default:
+                            return "<i class=\"fas fa-image\"></i>";
+                    }
+
+                }
+                    /*console.log(url);
+                    $("#drawTable").append(table);
+                    $('#table_id').DataTable({searching: false, info: false},{
+                        ajax: {
+                            paging: false,
+                            url: url,
+                            dataSrc: 'data'
+                        },
+                        columns: [
+                            {
+                                data: null,
+                                render: function (data, type, row, meta) {
+                                    if (row.remarks === undefined) {
+                                        return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >geen remark</a>";
+                                    } else {
+                                        return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >" + row.remarks + "</a>";
+                                    }
+                                }
+                            },
+                            {
+                                data: 'color_name',
+                                render: function (data, type, row, meta) {
+                                    if (data === "(Not Applicable)") {
+                                        return "<i class=\"fas fa-tint-slash\"></i>";
+                                    } else {
+                                        return data;
+                                    }
+                                }
+                            },
+                            {data: 'quantity'},
+                            {data: 'new_or_used'},
+                            {
+                                data: 'color_id',
+                                bSortable: false,
+                                bSearchable: false,
+                                render:
+                            }
+                        ]
+                    });*/
+            });
+        });

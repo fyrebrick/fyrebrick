@@ -5,8 +5,12 @@ block styles
             font-size: 41px;
             font-weight: bold;
         }
+
+        [type="search"] {
+            font-size: 41px;
+        }
 block content
-    //h1#pappieBedrag.display-3 Loading...
+    h1=order_id
     hr
     table#table_id.display(data-display-length='-1')
         thead
@@ -17,8 +21,6 @@ block content
                 th.data-class-name Qt
                 th N/U
                 th fotootje
-block nav-items
-    a.nav-item(href='#')
 block scripts
     script.
         $(document).ready(function () {
@@ -72,9 +74,39 @@ block scripts
                     {data:null,
                     render:function(data,type,row,meta){
                         if(row.remarks===undefined){
-                            return '';
+                            return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >geen remark </a>";
                         }else{
-                            return row.remarks;
+                            const remarks = row.remarks;
+                            const eersteLettervanRemark = remarks.substr(0,1);
+                            const amountOfNumbersInRemarks = (remarks.match(/\d/g) || []).length;
+                            const heeftLetterInRemarks  = ((remarks.toLowerCase().match(/[a-z]/g) || []).length>=1 );
+                            let remarkNew;
+                            switch (amountOfNumbersInRemarks) {
+                                case 1:
+                                    if(heeftLetterInRemarks){ //A1
+                                        remarkNew= eersteLettervanRemark+"000"+remarks.substr(1,remarks.length);
+                                    }else{//1
+                                        remarkNew=  "000"+remarks;
+                                    }
+                                    break;
+                                case 2:
+                                    if(heeftLetterInRemarks){ //A12
+                                        remarkNew=  eersteLettervanRemark+"00"+remarks.substr(1,remarks.length);
+                                    }else{
+                                        remarkNew= "00"+row.remarks;
+                                    }
+                                    break;
+                                case 3:
+                                    if (heeftLetterInRemarks) { //A12
+                                        remarkNew= eersteLettervanRemark + "0" + remarks.substr(1,remarks.length);
+                                    } else {
+                                        remarkNew= "0" + row.remarks;
+                                    }
+                                    break;
+                                default:
+                                    remarkNew=row.remarks;
+                            }
+                            return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >"+remarkNew+"</a>";
                         }
                     }
                     },

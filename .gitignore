@@ -104,7 +104,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-
-#manuals
-.env.bak

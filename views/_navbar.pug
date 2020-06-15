@@ -1,6 +1,48 @@
-nav.navbar.navbar-expand-lg.navbar-light.bg-dark
-    h1.text-white
-        a(href='/') Bricklink webservice
-    #navbarNavAltMarkup
-        .navbar-nav
-            block nav-items
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+
+    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+    #navbarNavAltMarkup.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+            li.nav-item
+                a.nav-link.display-4(href='/') Home
+            li.nav-item.dropdown
+                a#stockNavbarDropdownMenuLink.nav-link.dropdown-toggle.display-4(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' ) Stock
+                .dropdown-menu(aria-labelledby='stockNavbarDropdownMenuLink')
+                    a.dropdown-item(href='/inventories')
+                        i.fas.fa-boxes
+                        span Inventory
+                    a.dropdown-item(href='/invest')
+                        i.fas.fa-search
+                        span Investigate
+            li.nav-item.dropdown
+                a#navbarDropdownMenuLink.display-4.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Status
+                .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+                    a.dropdown-item(href='/status/COMPLETED')
+                        i.fas.fa-check-double
+                        span Completed
+                    a.dropdown-item(href='/status/READY')
+                        i.fas.fa-check
+                        span Ready
+                    a.dropdown-item(href='/status/PAID')
+                        i.fas.fa-dollar-sign
+                        span Paid
+                    a.dropdown-item(href='/status/PACKED')
+                        i.fas.fa-box
+                        span Packed
+                    a.dropdown-item(href='/status/RECEIVED')
+                        i.fas.fa-box-open
+                        span Received
+                    a.dropdown-item(href='/status/UPDATED')
+                        i.fas.fa-clipboard-list
+                        span Updated
+            li.nav-item.dropdown
+                a#dropdownaccount.display-4.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')=session.email
+                .dropdown-menu(aria-labelledby='dropdownaccount')
+                    a.dropdown-item(href="/change")
+                        i.fas.fa-wrench
+                        span change your settings
+                    a.dropdown-item(href="/logout")
+                        i.fas.fa-sign-out-alt
+                        span logout
+
