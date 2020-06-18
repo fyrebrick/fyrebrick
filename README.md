@@ -1,9 +1,12 @@
 Bricklink webservice
 --
-This node.js server is a simple tool to use the authentication for the Bricklink API.
+This node.js server is a simple tool to use the authentication for the Bricklink API. Login using your Google account (ensures security) and your Bricklink API keys
 
+Our hosted database only keeps your GoogleId, Google-email address and your Bricklink keys. No analytics, only session cookies. Still in progress. 
 ### How to use
 You can use the api by making a request on `http://[hostname]/api/[api_call]` , all request types are premitted 
+
+Requests on `http://[hostname]/[..]` will give you an overview in html/bootstrap. some function have already been added. (orders, inventory,search inventory, search status)
 
 ### Setup
 You can either run using node.js or docker.
