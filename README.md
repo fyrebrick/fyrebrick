@@ -4,6 +4,7 @@ This node.js server is a simple tool to use the authentication for the Bricklink
 
 ### How to use
 You can use the api by making a request on `http://[hostname]/api/[api_call]` , all request types are premitted 
+Requests on `http://[hostname]/[..]` will give you an overview in html/bootstrap. some function have already been added. (orders, inventory,search inventory, search status)
 
 ### Setup
 You can either run using node.js or docker.
