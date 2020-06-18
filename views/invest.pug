@@ -8,6 +8,10 @@ block styles
         #loadingSection{
             margin-bottom: 15px;
         }
+        .page-link{
+            padding: 10px 30px 10px 30px;
+            font-size: 30px;
+        }
 
 block content
     .container-fluid
@@ -41,10 +45,11 @@ block content
                                 span#last ??
                         li#next.page-item
                             a.page-link(href='#next') Next
-        table.table
+        table.table.table-striped
             thead.thead-dark
                 tr
                     th(scope="col") Remark
+                    th(scope="col") Qty
                     th(scope="col") Foto
             tbody#dynamicTbody
 block scripts
@@ -116,8 +121,8 @@ block scripts
                             $("#current").text(newIndex);
                             drawItems(newIndex);
                         })
-                    }
-                });
+                    }//test
+                });//test
             function drawItems(index){
                 $("#dynamicTbody tr").remove();
                 let tr;
@@ -131,6 +136,8 @@ block scripts
                         } else {
                             tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >" + item.remarks + "</a>";
                         }
+                        tr += "</td><td>";
+                        tr += item.quantity;
                         tr += "</td><td>";
                         tr += getPic(item);
                         tr += "</td></tr>";

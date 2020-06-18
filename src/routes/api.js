@@ -14,6 +14,7 @@ router.all('/:v1', async function(req, res, next) {
         await getJsonInvestigate(req,res);
     }else {
         await getJSON(req, res);
+        //test
     }
 });
 router.all('/:v1/:v2',async  function(req, res, next) {
