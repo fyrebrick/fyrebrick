@@ -18,7 +18,7 @@ router.all('/:v1', async function(req, res, next) {
     }
 });
 router.all('/:v1/:v2',async  function(req, res, next) {
-    if(req.params.v1==="status"){
+    if(req.params.v1==="status"){//n
         await getJSON(req,res,req.params.v2);
     }else{
         await getJSON(req,res);
