@@ -10,7 +10,11 @@ router.all('/', async function(req, res, next) {
 });
 
 router.all('/:v1', async function(req, res, next) {
-    await getJSON(req,res);
+    if(req.params.v1==='invest'){
+        await getJsonInvestigate(req,res);
+    }else {
+        await getJSON(req, res);
+    }
 });
 router.all('/:v1/:v2',async  function(req, res, next) {
     if(req.params.v1==="status"){
@@ -29,12 +33,85 @@ router.all('/:v1/:v2/:v3/:v4/v5', async function(req, res, next) {
     await getJSON(req,res);
 });
 
+ async function getJsonInvestigate   (req,res){
+    let user = await User.findOne({_id:req.session._id});
+    const oauth = new OAuth.OAuth(
+        user.TOKEN_VALUE,
+        user.TOKEN_SECRET,
+        user.CONSUMER_KEY,
+        user.CONSUMER_SECRET,
+        oauth_data.oauth_version,
+        null,
+        oauth_data.oauth_signature_method
+    );
+    let link = 'https://api.bricklink.com/api/store/v1/inventories';
+    oauth.get(
+        link,
+        user.TOKEN_VALUE,
+        user.TOKEN_SECRET, //test user secret
+        function (e, data){
+            const itemList = JSON.parse(data);
+            let investData = {meta:itemList.meta,data:[]};
+            let currentIndexForInvestData = 0;
+            itemList.data.forEach(
+                (item,index)=>{
+                    let addedToInvestDataThisCycle = false;
+                    let addedThisItemToInvestDataThisCycle = false;
+                    //current item, will check if any other item (exluding self) is same, add to investData if so
+                    console.log("Loading... "+(index/(itemList.data.length/100.0)).toFixed(2)+'%');
+                    itemList.data.forEach(
+                        (comparingItem)=>{
+                            if(item.inventory_id!==comparingItem.inventory_id){ //exclude self
+                                if(
+                                    item.item.no===comparingItem.item.no &&
+                                    item.new_or_used===comparingItem.new_or_used &&
+                                    item.color_id===comparingItem.color_id &&
+                                    item.description===comparingItem.description
+                                ){
+                                    let itemNotYetUsedAsComparingItem = true;
+                                    //check if comparingItem already was an Item
+                                    investData.data.forEach((dataOfInvestData)=>{
+                                        dataOfInvestData.forEach((checkItem)=>{
+                                            if(
+                                                item.item.no===checkItem.item.no &&
+                                                item.new_or_used===checkItem.new_or_used &&
+                                                item.color_id===checkItem.color_id &&
+                                                item.description===checkItem.description
+                                            ){
+                                                itemNotYetUsedAsComparingItem=false;
+                                            }
+                                        });
+                                    });
+                                    if(itemNotYetUsedAsComparingItem){
+                                        //if almost the same item, add this item to a new array in data array(investData)
+                                        addedToInvestDataThisCycle = true;
+                                        if(!addedThisItemToInvestDataThisCycle){
+                                            investData.data.push([item]);
+                                            addedThisItemToInvestDataThisCycle=true;
+                                        }
+                                        investData.data[currentIndexForInvestData].push(comparingItem);
+                                    }
+                                }
+                            }
+                        }
+                    );
+                    //next item in inventory list
+                    if(addedToInvestDataThisCycle){
+                        //if something has been added to the investData, the currentIndex will be changed
+                        currentIndexForInvestData++;
+                    }
+                }
+            );
+            res.setHeader('Content-Type', 'application/json');
+            res.send(investData);
+        });
+};
+
 async function getJSON (req,res,status=""){
     let user = await User.findOne({_id:req.session._id});
     console.log(user);
     if(req.params.v1==='inventories'){
         status=req.params.v1;
-        console.log('inventories!');
     }
     const oauth = new OAuth.OAuth(
         user.TOKEN_VALUE,

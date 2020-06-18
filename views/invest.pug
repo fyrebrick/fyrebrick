@@ -1,0 +1,202 @@
+extends layout
+block styles
+    style.
+        td {
+            font-size: 41px;
+            font-weight: bold;
+        }
+        #loadingSection{
+            margin-bottom: 15px;
+        }
+
+block content
+    .container-fluid
+        .row
+            .col
+                span.badge.badge-danger Beta versie
+        .row
+            .col.d-flex.justify-content-center
+                #loadingSection
+        .row
+            .col.d-flex.justify-content-center
+                nav(aria-label='...')
+                    ul.pagination
+                        li#previous.page-item
+                            a.page-link(href="#previous") Previous
+                        li#firstButton.page-item(aria-current='page')
+                            a.page-link(href='#first')
+                                span#first 1
+                        li.page-item.disabled
+                            a.page-link(href='#')
+                                span ...
+                        li#currentButton.page-item.active(aria-current='page')
+                            a.page-link(href='#current')
+                                span#current ??
+                                span.sr-only (current)
+                        li.page-item.disabled
+                            a.page-link(href='#')
+                                span ...
+                        li#lastButton.page-item
+                            a.page-link(href='#last')
+                                span#last ??
+                        li#next.page-item
+                            a.page-link(href='#next') Next
+        table.table
+            thead.thead-dark
+                tr
+                    th(scope="col") Remark
+                    th(scope="col") Foto
+            tbody#dynamicTbody
+block scripts
+    script.
+        $(document).ready(function () {
+            let list;
+            let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary\" type=\"button\" disabled>\n" +
+                "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
+                "  Loading...\n" +
+                "</button>";
+            $('table').on('click', 'img', function (e) {
+                e.preventDefault();
+                if ($(e.target).is('img.img-thumbnail')) {
+                    let modalId = "#modal" + this.id.substr(3, this.id.length);
+                    $(modalId).modal('show');
+                }
+            });
+            $.ajax({
+                method: "GET",
+                url: "/api/invest",
+                beforeSend: function () {
+                    $("#loadingSection").append(loadingSpinner);
+                }
+            })
+                .done(function (data) {
+                    list = data;
+                    $("#spinner").remove();
+                    if(data.data.length===0){
+                        //no data found or investigation found no issues
+                        $("#dynamicTbody").append("<tr>" +
+                                "<td> No data found</td>"+
+                                "<td> No data found</td>"+
+                            "</tr>")
+                        $("#last").text("0");
+                        $("#current").text("0");
+                        $("#first").text("0");
+                    }else{
+                        //show very first data
+                        $("#last").text(data.data.length);
+                        $("#current").text("1");
+                        $("#first").text("1");
+                        drawItems(1);
+                        console.log('done');
+                        ///onclick functions (previous, next, last, first)
+                        $("#previous").click(function(){
+                            let current = Number($("#current").text());
+                            let newIndex = current-1;
+                            if(current>1){
+                                $("#current").text(newIndex);
+                                drawItems(newIndex);
+                            }
+                        });
+                        $("#next").click(function(){
+                            let current = Number($("#current").text());
+                            let newIndex = current+1;
+                            let last = Number($("#last").text());
+                            if(current<last){
+                                $("#current").text(newIndex);
+                                drawItems(newIndex);
+                            }
+                        })
+                        $("#firstButton").click(function(){
+                            let newIndex = Number($("#first").text());
+                            $("#current").text(newIndex);
+                            drawItems(newIndex);
+                        });
+                        $("#lastButton").click(function () {
+                            let newIndex = Number($("#last").text());
+                            $("#current").text(newIndex);
+                            drawItems(newIndex);
+                        })
+                    }
+                });
+            function drawItems(index){
+                $("#dynamicTbody tr").remove();
+                let tr;
+                index = index-1;
+                list.data[index].forEach(
+                    function (item) {
+                        tr += "<tr>";
+                        tr += "<td>";
+                        if (item.remarks === undefined) {
+                            tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
+                        } else {
+                            tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >" + item.remarks + "</a>";
+                        }
+                        tr += "</td><td>";
+                        tr += getPic(item);
+                        tr += "</td></tr>";
+                    }
+                );
+                $('#dynamicTbody').append(tr);
+            }
+            function getPic(row) {
+                let id = row.color_id + row.item.no;
+                let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +
+                    "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
+                    "    <div class=\"modal-content\">\n" +
+                    "      <div class=\"modal-header\">\n" +
+                    "        <h5 class=\"modal-title\" id=\"modalTitel" + id + "\">Item no " + row.item.no + "</h5>\n" +
+                    "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+                    "          <span aria-hidden=\"true\">&times;</span>\n" +
+                    "        </button>\n" +
+                    "      </div>\n" +
+                    "      <div class=\"modal-body\">\n" +
+                    "        " + row.item.name +
+                    "      </div>\n" +
+                    "      <div class=\"modal-footer\">\n" +
+                    "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
+                    "      </div>\n" +
+                    "    </div>\n" +
+                    "  </div>\n" +
+                    "</div>";
+                let _type = row.item.type.substr(0, 1);
+
+                switch (row.item.type) {
+                    case "SET":
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
+                        break;
+                    case "MINIFIG":
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case "PART":
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'INSTRUCTION':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'BOOK':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'SET':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'GEAR':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'CATALOG':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    default:
+                        return "<i class=\"fas fa-image\"></i>";
+                }
+
+            }
+        });
+

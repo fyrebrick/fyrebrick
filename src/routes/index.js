@@ -3,6 +3,7 @@ var router = express.Router();
 const google =require('../middlewares/google');
 const User = require('../models/user');
 const {checkSignIn} = require('../middlewares/index');
+const api = require('./api');
 router.get('/',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
@@ -31,6 +32,9 @@ router.get('/change',checkSignIn,async(req,res,next)=>{
        buttonTitle:"Update your profile",
        user:await User.findOne({_id:req.session._id})
    }) ;
+});
+router.get('/invest',checkSignIn,async(req,res,next)=>{
+   res.render('invest');
 });
 
 router.post('/register', async (req,res,next)=>{

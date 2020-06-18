@@ -28,11 +28,11 @@ html
             .box-inner
               .form-group
                 label(for='consumerKey') Consumer key
-                input#consumerKey.form-control(name="consumerKey" type='text' aria-describedby='consumerKeyHelp' placeholder='Enter consumer key', value=user.CONSUMER_SECRET, required='')
+                input#consumerKey.form-control(name="consumerKey" type='text' aria-describedby='consumerKeyHelp' placeholder='Enter consumer key', value=user.CONSUMER_KEY, required='')
                 small#consumerKeyHelp.form-text.text-muted The consumer key publicly identifies your API account
               .form-group
                 label(for='consumerSecret') Consumer secret
-                input#consumerSecret.form-control(name="consumerSecret", type='text' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=user.CONSUMER_KEY, required='')
+                input#consumerSecret.form-control(name="consumerSecret", type='text' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=user.CONSUMER_SECRET, required='')
                 small#consumerSecretHelp.form-text.text-muted The consumer secret is your confidential API password
               a#next.btn.btn-success.btn-lg.text-white( role='button') next
           #tokenSection(style="display:none;")

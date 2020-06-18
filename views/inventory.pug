@@ -85,6 +85,7 @@ block scripts
                     });
                 });
                 function getPic(row) {
+                    //row param is the item
                     let id = row.color_id + row.item.no;
                     let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +
                         "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
@@ -144,44 +145,5 @@ block scripts
                     }
 
                 }
-                    /*console.log(url);
-                    $("#drawTable").append(table);
-                    $('#table_id').DataTable({searching: false, info: false},{
-                        ajax: {
-                            paging: false,
-                            url: url,
-                            dataSrc: 'data'
-                        },
-                        columns: [
-                            {
-                                data: null,
-                                render: function (data, type, row, meta) {
-                                    if (row.remarks === undefined) {
-                                        return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >geen remark</a>";
-                                    } else {
-                                        return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >" + row.remarks + "</a>";
-                                    }
-                                }
-                            },
-                            {
-                                data: 'color_name',
-                                render: function (data, type, row, meta) {
-                                    if (data === "(Not Applicable)") {
-                                        return "<i class=\"fas fa-tint-slash\"></i>";
-                                    } else {
-                                        return data;
-                                    }
-                                }
-                            },
-                            {data: 'quantity'},
-                            {data: 'new_or_used'},
-                            {
-                                data: 'color_id',
-                                bSortable: false,
-                                bSearchable: false,
-                                render:
-                            }
-                        ]
-                    });*/
             });
         });
