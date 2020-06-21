@@ -54,6 +54,23 @@ block content
             tbody#dynamicTbody
 block scripts
     script.
+        function update(index, items,qty) {
+            //items is array of all the inventory_id's
+            //index is the to index out of items which will be left/used
+            console.log(index,items,qty);
+            $.ajax({
+                method:'POST',
+                url: "/api/invests_update",
+                data:{
+                    index:index,
+                    items:items,
+                    qty:qty
+                }
+            }).done(function (data) {
+                console.log('done');
+                window.alert('geupdate!');
+            })
+        }
         $(document).ready(function () {
             let list;
             let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary\" type=\"button\" disabled>\n" +
@@ -67,6 +84,7 @@ block scripts
                     $(modalId).modal('show');
                 }
             });
+
             $.ajax({
                 method: "GET",
                 url: "/api/invest",
@@ -92,7 +110,6 @@ block scripts
                         $("#current").text("1");
                         $("#first").text("1");
                         drawItems(1);
-                        console.log('done');
                         ///onclick functions (previous, next, last, first)
                         $("#previous").click(function(){
                             let current = Number($("#current").text());
@@ -123,12 +140,26 @@ block scripts
                         })
                     }//test
                 });//test
-            function drawItems(index){
+            function drawItems(i){
                 $("#dynamicTbody tr").remove();
                 let tr;
-                index = index-1;
-                list.data[index].forEach(
-                    function (item) {
+                i = i-1;
+                list.data[i].forEach(
+                    function (item,index,meta) {
+                        console.log(meta)
+                        let inventories ="";
+                        let qtyies = "";
+                        let skipFirst = true;
+                        meta.forEach(function(meta_item){
+                            console.log(meta_item);
+                            if(!skipFirst){
+                                inventories+="&";
+                                qtyies+="&";
+                            }
+                            skipFirst = false;
+                            inventories+=meta_item.inventory_id;
+                            qtyies+=meta_item.quantity;
+                        });
                         tr += "<tr>";
                         tr += "<td>";
                         if (item.remarks === undefined) {
@@ -136,6 +167,7 @@ block scripts
                         } else {
                             tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >" + item.remarks + "</a>";
                         }
+                        tr += '</br><button onclick="update('+String(index)+',\''+inventories+'\',\''+qtyies+'\')" type="button" class="btn btn-outline-secondary">Add items to '+item.remarks+'</button>  ';
                         tr += "</td><td>";
                         tr += item.quantity;
                         tr += "</td><td>";
@@ -145,6 +177,7 @@ block scripts
                 );
                 $('#dynamicTbody').append(tr);
             }
+
             function getPic(row) {
                 let id = row.color_id + row.item.no;
                 let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +

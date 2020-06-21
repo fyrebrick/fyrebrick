@@ -6,18 +6,24 @@ const User = require('../models/user');
 /* GET home page. */
 
 router.all('/', async function(req, res, next) {
+    console.log("test");
     await getJSON(req,res);
 });
-
+console.log('------------------');
+///////////
 router.all('/:v1', async function(req, res, next) {
+    console.log("test");
     if(req.params.v1==='invest'){
         await getJsonInvestigate(req,res);
-    }else {
+    }else if(req.params.v1==='invests_update') {
+        await update(req,res);
+    }else{
         await getJSON(req, res);
         //test
     }
 });
 router.all('/:v1/:v2',async  function(req, res, next) {
+    console.log("test");
     if(req.params.v1==="status"){//n
         await getJSON(req,res,req.params.v2);
     }else{
@@ -25,16 +31,59 @@ router.all('/:v1/:v2',async  function(req, res, next) {
     }
 });
 router.all('/:v1/:v2/:v3', async function(req, res, next) {
+    console.log("test");
     await getJSON(req,res);
 });
 router.all('/:v1/:v2/:v3/:v4', async function(req, res, next) {
+    console.log("test");
     await getJSON(req,res);
 });
 router.all('/:v1/:v2/:v3/:v4/v5', async function(req, res, next) {
+    console.log("test");
     await getJSON(req,res);
 });
-
+async function update (req,res){
+    let user = await User.findOne({_id:req.session._id});
+    console.log(req.body);
+    let items = req.body.items.trim().split("&");
+    let qty = req.body.qty.trim().split("&");
+    let qtyMax = 0; //qtyMax is all qty's except the index one
+    const oauth = new OAuth.OAuth(
+        user.TOKEN_VALUE,
+        user.TOKEN_SECRET,
+        user.CONSUMER_KEY,
+        user.CONSUMER_SECRET,
+        oauth_data.oauth_version,
+        null,
+        oauth_data.oauth_signature_method
+    );
+    qty.forEach((q,index)=>{
+       if(index!=req.body.index){
+           qtyMax+=Number(q);
+           console.log("deleting: "+items[index]);
+           oauth.delete(
+               'https://api.bricklink.com/api/store/v1/inventories/'+items[index],
+               user.TOKEN_VALUE,
+               user.TOKEN_SECRET, //test user secret
+               function (e, data){
+               });
+       }
+    });
+    let body = {quantity:"+"+qtyMax};
+    console.log(body);
+    console.log("updating: "+items[Number(req.body.index)]);
+    oauth.put(
+        'https://api.bricklink.com/api/store/v1/inventories/'+items[Number(req.body.index)],
+        user.TOKEN_VALUE,
+        user.TOKEN_SECRET, //test user secret
+        body,
+        function (e, data){
+        });
+    res.setHeader('Content-Type', 'application/json');
+    res.send({meta:"EMTPY_JSON",data:[]});
+}
  async function getJsonInvestigate   (req,res){
+     console.log("test");
     let user = await User.findOne({_id:req.session._id});
     const oauth = new OAuth.OAuth(
         user.TOKEN_VALUE,
@@ -59,7 +108,6 @@ router.all('/:v1/:v2/:v3/:v4/v5', async function(req, res, next) {
                     let addedToInvestDataThisCycle = false;
                     let addedThisItemToInvestDataThisCycle = false;
                     //current item, will check if any other item (exluding self) is same, add to investData if so
-                    console.log("Loading... "+(index/(itemList.data.length/100.0)).toFixed(2)+'%');
                     itemList.data.forEach(
                         (comparingItem)=>{
                             if(item.inventory_id!==comparingItem.inventory_id){ //exclude self
