@@ -61,23 +61,27 @@ async function update (req,res){
        if(index!=req.body.index){
            qtyMax+=Number(q);
            console.log("deleting: "+items[index]);
+
            oauth.delete(
                'https://api.bricklink.com/api/store/v1/inventories/'+items[index],
                user.TOKEN_VALUE,
                user.TOKEN_SECRET, //test user secret
                function (e, data){
                });
+
        }
     });
-    let body = {quantity:"+"+qtyMax};
-    console.log(body);
+    let post_body = {quantity:"+"+qtyMax};
+    console.log(post_body);
     console.log("updating: "+items[Number(req.body.index)]);
     oauth.put(
         'https://api.bricklink.com/api/store/v1/inventories/'+items[Number(req.body.index)],
         user.TOKEN_VALUE,
         user.TOKEN_SECRET, //test user secret
-        body,
+        post_body='{"quantity":"+'+qtyMax+'"}',
+        post_content_type="application/json",
         function (e, data){
+            console.log(data);
         });
     res.setHeader('Content-Type', 'application/json');
     res.send({meta:"EMTPY_JSON",data:[]});
