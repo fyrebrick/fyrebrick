@@ -22,7 +22,4 @@ You can either run using node.js or docker.
     
     And start the server by running `nmp install;npm start`
     
-- ##### Docker
-    ```bash
-   docker run -dp 3000:3000 snakehead007/bricklink-webservice -e "TOKEN_VALUE=YOUR_TOKEN_VALUE" -e "TOKEN_SECRET=YOUR_TOKEN_SECRET" -e "CONSUMER_SECRET=YOUR_CONSUMER_SECRET" -e "CONSUMER_KEY=YOUR_CONSUMER_KEY"
-    ```
+
