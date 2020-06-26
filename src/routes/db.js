@@ -25,28 +25,16 @@ router.get('/order/:order_id',async (req,res,next)=>{
 
 //updates a specific order from the db
 //body properties can be:
-//item: [Integer] (this will change its boolean value, if not exists will create it)
-//multiple id's can be send too using an array: items = [id1,id2,... ,idn] (when used both, item will be prioritzed)
+//item: [string (inventory_id)] (this will change its boolean value, if not exists will create it)
 //description: [String]
 router.put('/order/:order_id',async (req,res,next)=>{
     let user = await User.findOne({_id:req.session._id});
     let order = await Order.findOne({order_id:req.params.order_id,consumer_key:user.CONSUMER_KEY});
-    if(req.body.items){
-        for (const i of req.body.items) {
-            let index = 0;
-            for (const _i of order.items) {
-               if(i.id===_i.id){
-                    order.items[index].status = !order.items[index].status;
-               }
-               index++;
-            }
-        }
-    }
     if(req.body.item){
         let index = 0;
         let found = false;
         for(const _i of order.items){
-            if(req.body.item===_i.id){
+            if(req.body.item==_i.id){
                 order.items[index].status = !order.items[index].status;
                 found = true;
             }

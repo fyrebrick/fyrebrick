@@ -93,11 +93,12 @@ block scripts
                 "  <span class=\"sr-only\">Loading...</span>\n" +
                 "</div>";
             let check = "<i id=\"check_edit\" class=\"fas fa-check\"></i>";
-            let done =
+            let order_db = null;
             $.ajax({
                 method: "GET",
                 url: "/db/order/#{order_id}"
             }).done(function(data){
+                order_db = data;
                 $("#spinner_description").remove();
                 $("#description").text(data.description);
                 $("#edit_description").val(data.description);
@@ -147,7 +148,16 @@ block scripts
                     console.log("#"+this)
                     $("#"+this.id).prop("checked",state);
                     //update the database
-
+                    //id of checkboxes are like this => "check[id]"
+                    let id = this.id.substr(5,this.id.length);
+                    console.log("id: "+id);
+                    $.ajax({
+                        method: "PUT",
+                        url: "/db/order/#{order_id}",
+                        data:{item:id}
+                    }).done(function (data) {
+                        console.log("done",data);
+                    });
                 }
             }).on('click','img',function(e){
                e.preventDefault();
@@ -305,6 +315,10 @@ block scripts
                 ],
                 initComplete:function(settings,json){
                     //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
+                    console.log('initcomplete! starting checkboxes');
+                    for(const i of order_db.items){
+                        $("#check"+i.id).prop("checked",i.status);
+                    }
                 }
             });
         });
