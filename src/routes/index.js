@@ -69,21 +69,18 @@ router.get('/redirect',async (req,res,next)=>{
     res.redirect('/');
 });
 
-router.get('/orders/:order_id/items',checkSignIn,(req,res,next)=>{
-    console.log("test");
+router.get('/orders/:order_id/items',checkSignIn,async (req,res,next)=>{
    res.render('order',{
       'order_id':req.params.order_id
    })
 });
 
 router.get('/status/:status',checkSignIn,(req,res,next)=>{
-    console.log("test");
     console.log(req.params.status);
     res.render('status',{'status':req.params.status});
 });
 
 router.get('/inventories',checkSignIn,(req,res,next)=>{
-    console.log("test");
     res.render('inventory');
 });
 

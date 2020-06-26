@@ -10,9 +10,73 @@ block styles
             font-size: 41px;
         }
 block content
-    h1=order_id
+    .modal#modal_order(tabindex='-1' role='dialog')
+        .modal-dialog.modal-xl
+            .modal-content
+                .modal-header
+                    h5.modal-title Order details
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    table.table.table-striped
+                        tr
+                            td(scope="row") payment
+                            td#payment
+                                #spinner_payment.spinner-border(role='status')
+                                    span.sr-only Loading...
+                        tr
+                            td(scope="row") status
+                            td#status
+                                #spinner_status.spinner-border(role='status')
+                                    span.sr-only Loading...
+
+                        tr
+                            td(scope="row") Shipping Method
+                            td#shipping_method
+                                #spinner_shipping_method.spinner-border(role='status')
+                                    span.sr-only Loading...
+
+                        tr
+                            td(scope="row") Shipping Cost
+                            td#shipping_cost
+                                #spinner_shipping_cost.spinner-border(role='status')
+                                    span.sr-only Loading...
+
+                        tr
+                            td(scope="row") address
+                            td#address
+                                #spinner_address.spinner-border(role='status')
+                                    span.sr-only Loading..
+                        //tr
+                            td(scope="row") telephone
+                            td#telephone
+                                #spinner_telephone.spinner-border(role='status')
+                                    span.sr-only Loading..
+
+
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+    .d-flex.flex-row-reverse.bd-highlight#update_row(style="display:none;")
+        .p-2.bd-highlight
+            button#edit_description_update.btn.btn-primary(style="display:none;" type="button" value="update") update
+                #spinner_edit_description_update
+    .row
+        .col-4
+            h1
+                a#details(data-toggle="modal" data-target="#modal_order", href="#details")="Order: "+order_id
+        .col-1
+            button#edit_description_button.btn.btn-outline-primary(type='button')
+                i.fas.fa-edit
+        .col-7
+            p#description.lead
+                #spinner_description.spinner-border(role='status')
+                    span.sr-only Loading..
+            .form-group
+                textarea#edit_description.form-control(rows="3", style="display:none;")
+
+
+
     hr
-    /////////////////////////////////
     table#table_id.display(data-display-length='-1')
         thead
             tr
@@ -25,6 +89,54 @@ block content
 block scripts
     script.
         $(document).ready(function () {
+            let spinner = "<div id=\"spinner_edit\" class=\"spinner-border\" role=\"status\">\n" +
+                "  <span class=\"sr-only\">Loading...</span>\n" +
+                "</div>";
+            let check = "<i id=\"check_edit\" class=\"fas fa-check\"></i>";
+            let done =
+            $.ajax({
+                method: "GET",
+                url: "/db/order/#{order_id}"
+            }).done(function(data){
+                $("#spinner_description").remove();
+                $("#description").text(data.description);
+                $("#edit_description").val(data.description);
+            });
+            $("#edit_description_button").click(function(){
+               $("#description").toggle();
+               $("#edit_description").toggle();
+               $("#edit_description_update").toggle();
+            });
+            $("#edit_description_update").click(function(){
+                $.ajax({
+                    method: "PUT",
+                    url: "/db/order/#{order_id}",
+                    data:{
+                        description:$("#edit_description").val()
+                    }
+                }).done(function (data) {
+                    $("#description").text($("#edit_description").val());
+                    $("#description").toggle();
+                    $("#edit_description").toggle();
+                    $("#edit_description_update").toggle();
+                });
+            });
+            $.ajax({
+                method: "GET",
+                url: "/api/orders/#{order_id}"
+            })
+                .done(function (data) {
+                    $("#spinner_payment").remove();
+                    $("#payment").text(data.data.payment.method);
+                    $("#spinner_status").remove();
+                    $("#status").text(data.data.status);
+                    $("#spinner_shipping_method").remove();
+                    $("#shipping_method").text(data.data.shipping.method);
+                    $("#spinner_shipping_cost").remove();
+                    $("#shipping_cost").text(data.data.cost.shipping+" "+data.data.cost.currency_code);
+                    $("#spinner_address").remove();
+                    $("#address").text(data.data.shipping.address.full+" "+data.data.shipping.address.country_code );
+                });
             $('table#table_id').on('mousedown', 'input', function (e) {
                 console.log("test1");
                 e.preventDefault();
@@ -34,6 +146,8 @@ block scripts
                     let state = $(this).is(":checked");
                     console.log("#"+this)
                     $("#"+this.id).prop("checked",state);
+                    //update the database
+
                 }
             }).on('click','img',function(e){
                e.preventDefault();
