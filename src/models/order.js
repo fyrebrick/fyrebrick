@@ -23,6 +23,13 @@ const Order = new mongoose.Schema({
         description:{
             default:"",
             type:String
+        },
+        orders_checked:{
+            type:Number,
+            default:0
+        },
+        orders_total:{
+            type:Number
         }
     },
 );

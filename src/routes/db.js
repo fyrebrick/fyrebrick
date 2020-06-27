@@ -46,9 +46,7 @@ router.put('/order/:order_id',async (req,res,next)=>{
         }
     }
     if(req.body.description){
-        if(req.body.description.trim()!==""){
-            order.description = req.body.description;
-        }
+        order.description = req.body.description;
     }
     //update the order
     await Order.updateOne({order_id:req.params.order_id,consumer_key:user.CONSUMER_KEY},order);

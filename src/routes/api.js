@@ -109,49 +109,51 @@ async function update (req,res){
             let currentIndexForInvestData = 0;
             itemList.data.forEach(
                 (item,index)=>{
-                    let addedToInvestDataThisCycle = false;
-                    let addedThisItemToInvestDataThisCycle = false;
-                    //current item, will check if any other item (exluding self) is same, add to investData if so
-                    itemList.data.forEach(
-                        (comparingItem)=>{
-                            if(item.inventory_id!==comparingItem.inventory_id){ //exclude self
-                                if(
-                                    item.item.no===comparingItem.item.no &&
-                                    item.new_or_used===comparingItem.new_or_used &&
-                                    item.color_id===comparingItem.color_id &&
-                                    item.description===comparingItem.description
-                                ){
-                                    let itemNotYetUsedAsComparingItem = true;
-                                    //check if comparingItem already was an Item
-                                    investData.data.forEach((dataOfInvestData)=>{
-                                        dataOfInvestData.forEach((checkItem)=>{
-                                            if(
-                                                item.item.no===checkItem.item.no &&
-                                                item.new_or_used===checkItem.new_or_used &&
-                                                item.color_id===checkItem.color_id &&
-                                                item.description===checkItem.description
-                                            ){
-                                                itemNotYetUsedAsComparingItem=false;
-                                            }
+                    if(item.item.type==="PART"){
+                        let addedToInvestDataThisCycle = false;
+                        let addedThisItemToInvestDataThisCycle = false;
+                        //current item, will check if any other item (exluding self) is same, add to investData if so
+                        itemList.data.forEach(
+                            (comparingItem)=>{
+                                if(item.inventory_id!==comparingItem.inventory_id){ //exclude self
+                                    if(
+                                        item.item.no===comparingItem.item.no &&
+                                        item.new_or_used===comparingItem.new_or_used &&
+                                        item.color_id===comparingItem.color_id &&
+                                        item.description===comparingItem.description
+                                    ){
+                                        let itemNotYetUsedAsComparingItem = true;
+                                        //check if comparingItem already was an Item
+                                        investData.data.forEach((dataOfInvestData)=>{
+                                            dataOfInvestData.forEach((checkItem)=>{
+                                                if(
+                                                    item.item.no===checkItem.item.no &&
+                                                    item.new_or_used===checkItem.new_or_used &&
+                                                    item.color_id===checkItem.color_id &&
+                                                    item.description===checkItem.description
+                                                ){
+                                                    itemNotYetUsedAsComparingItem=false;
+                                                }
+                                            });
                                         });
-                                    });
-                                    if(itemNotYetUsedAsComparingItem){
-                                        //if almost the same item, add this item to a new array in data array(investData)
-                                        addedToInvestDataThisCycle = true;
-                                        if(!addedThisItemToInvestDataThisCycle){
-                                            investData.data.push([item]);
-                                            addedThisItemToInvestDataThisCycle=true;
+                                        if(itemNotYetUsedAsComparingItem){
+                                            //if almost the same item, add this item to a new array in data array(investData)
+                                            addedToInvestDataThisCycle = true;
+                                            if(!addedThisItemToInvestDataThisCycle){
+                                                investData.data.push([item]);
+                                                addedThisItemToInvestDataThisCycle=true;
+                                            }
+                                            investData.data[currentIndexForInvestData].push(comparingItem);
                                         }
-                                        investData.data[currentIndexForInvestData].push(comparingItem);
                                     }
                                 }
                             }
+                        );
+                        //next item in inventory list
+                        if(addedToInvestDataThisCycle){
+                            //if something has been added to the investData, the currentIndex will be changed
+                            currentIndexForInvestData++;
                         }
-                    );
-                    //next item in inventory list
-                    if(addedToInvestDataThisCycle){
-                        //if something has been added to the investData, the currentIndex will be changed
-                        currentIndexForInvestData++;
                     }
                 }
             );
