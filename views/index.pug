@@ -5,7 +5,6 @@ block content
             tr
                 th.data-class-name Order Id
                 th Date Ordered
-                th Buyer name
                 th Status
                 th progress
 block styles
@@ -41,10 +40,8 @@ block scripts
                         render:function(data,type,row,meta){
                             let d = new Date(data);
                             const options = { year: 'numeric', month: 'long', day: 'numeric'};
-                            return d.toLocaleDateString('nl-BE', options)+" @ "+d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}
+                            return d.toLocaleDateString('en-UK', options)+" @ "+d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}
                     },
-
-                    {data:'buyer_name'},
                     {data:'status',
                         render:function(data,type,row,meta){
                         switch(data){
