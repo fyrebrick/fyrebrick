@@ -7,7 +7,7 @@ block content
                 th Date Ordered
                 th Buyer name
                 th Status
-                /////////////////////////////////
+                th progress
 block styles
     style.
         td {
@@ -25,9 +25,13 @@ block styles
 block scripts
     script.
         $(document).ready(function () {
+            let orders_json,orders_db = null;
             $('#table_id').DataTable({
                 "order": [[ 0, "desc" ]],
-                ajax: {                    url: '/api/orders?direction=in', dataSrc: 'data'                },
+                ajax: {
+                    url: '/api/orders?direction=in',
+                    dataSrc: 'data'
+                },
                 columns:[
                     {                        data:'order_id',
                         "render": function (data, type, row, meta) {
@@ -63,7 +67,41 @@ block scripts
                             default:
                                 return"error"
                         }
-                        }}
-                ]
-            });
+                        }},
+                    {
+                        data:null, bSearchable: false,
+                        render: function (data, type, row, meta) {
+                            return "<div id=\""+row.order_id+"\" data-count=\""+row.unique_count+"\" class=\"\">\n" +
+                                        "<div id=\"c"+row.order_id+"\" class=\"changeMe\">"+
+                                            "<div class=\"spinner-border\" role=\"status\">\n" +
+                                            "  <span class=\"sr-only\">Loading...</span>\n" +
+                                            "</div>"+
+                                        "</div>\n" +
+                                    "</div>";
+                        }
+                    }
+                ], "drawCallback": function (settings, json) {
+                    orders_json = json;
+                    //get order from database third
+                    $(".changeMe").each(function () {
+                        let current = this;
+                        let newC = current.id.substr(1, current.id.length);
+                        $.ajax({
+                            method: "GET",
+                            url:"/db/order/" +newC + "?orders_total=" + $("#"+newC).data("count")
+                        }).done(function (data) {
+                            $("#" + current.id).remove();
+                            if (data.orders_checked <= 0) {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-danger\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            } else if (data.orders_checked < data.orders_total) {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-warning\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            } else if (data.orders_checked === data.orders_total) {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-success\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            } else {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-secondary\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            }
+                        });
+                    });
+                    }
+                });
         });

@@ -9,6 +9,10 @@ block styles
         [type="search"] {
             font-size: 41px;
         }
+        .progress {
+            top: -21px;
+            position: relative;
+        }
 block content
     .modal#modal_order(tabindex='-1' role='dialog')
         .modal-dialog.modal-xl
@@ -74,9 +78,10 @@ block content
             .form-group
                 textarea#edit_description.form-control(rows="3", style="display:none;")
 
-
-
     hr
+    .progress
+        .progress-bar#progress-fill.progress-bar-striped.progress-bar-animated( role='progressbar' style="width: 0%;" )
+        .progress-bar#progress-empty.bg-light(role='progressbar' style='width: 100%')
     table#table_id.display(data-display-length='-1')
         thead
             tr
@@ -85,7 +90,7 @@ block content
                 th Color
                 th.data-class-name Qt
                 th N/U
-                th fotootje
+                th pic
 block scripts
     script.
         $(document).ready(function () {
@@ -94,34 +99,8 @@ block scripts
                 "</div>";
             let check = "<i id=\"check_edit\" class=\"fas fa-check\"></i>";
             let order_db = null;
-            $.ajax({
-                method: "GET",
-                url: "/db/order/#{order_id}"
-            }).done(function(data){
-                order_db = data;
-                $("#spinner_description").remove();
-                $("#description").text(data.description);
-                $("#edit_description").val(data.description);
-            });
-            $("#edit_description_button").click(function(){
-               $("#description").toggle();
-               $("#edit_description").toggle();
-               $("#edit_description_update").toggle();
-            });
-            $("#edit_description_update").click(function(){
-                $.ajax({
-                    method: "PUT",
-                    url: "/db/order/#{order_id}",
-                    data:{
-                        description:$("#edit_description").val()
-                    }
-                }).done(function (data) {
-                    $("#description").text($("#edit_description").val());
-                    $("#description").toggle();
-                    $("#edit_description").toggle();
-                    $("#edit_description_update").toggle();
-                });
-            });
+            let order_json = null;
+            //get order details from api first
             $.ajax({
                 method: "GET",
                 url: "/api/orders/#{order_id}"
@@ -138,37 +117,9 @@ block scripts
                     $("#spinner_address").remove();
                     $("#address").text(data.data.shipping.address.full+" "+data.data.shipping.address.country_code );
                 });
-            $('table#table_id').on('mousedown', 'input', function (e) {
-                console.log("test1");
-                e.preventDefault();
-                console.log("test2");
-                if ($(e.target).is("input.checkers")) {
-                    console.log($(this).is(":checked"));
-                    let state = $(this).is(":checked");
-                    console.log("#"+this)
-                    $("#"+this.id).prop("checked",state);
-                    //update the database
-                    //id of checkboxes are like this => "check[id]"
-                    let id = this.id.substr(5,this.id.length);
-                    console.log("id: "+id);
-                    $.ajax({
-                        method: "PUT",
-                        url: "/db/order/#{order_id}",
-                        data:{item:id}
-                    }).done(function (data) {
-                        console.log("done",data);
-                    });
-                }
-            }).on('click','img',function(e){
-               e.preventDefault();
-               console.log(e);
-               if($(e.target).is('img.img-thumbnail')){
-                   let modalId = "#modal"+this.id.substr(3,this.id.length);
-                   console.log(modalId);
-                   $(modalId).modal('show');
-               }
-            });
+
             let pappieBedrag = 0.00;
+            //get order items for table second
             $('#table_id').DataTable({
                 ajax: {
                     paging: false,
@@ -314,12 +265,91 @@ block scripts
                     }
                 ],
                 initComplete:function(settings,json){
-                    //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
-                    console.log('initcomplete! starting checkboxes');
-                    for(const i of order_db.items){
-                        $("#check"+i.id).prop("checked",i.status);
-                    }
+                    order_json=json;
+                    console.log(json,'json');
+                    //get order from database third
+                    $.ajax({
+                        method: "GET",
+                        url:"/db/order/#{order_id}?orders_total="+order_json.data.length
+                    }).done(function (data) {
+                        console.log(data,"data");
+                        order_db = data;
+                        //update description
+                        $("#spinner_description").remove();
+                        $("#description").text(data.description);
+                        $("#edit_description").val(data.description);
+                        $("#edit_description_button").click(function () {
+                            $("#description").toggle();
+                            $("#edit_description").toggle();
+                            $("#edit_description_update").toggle();
+                        });
+                        //update progress bar
+                        progress_bar(order_db.orders_checked,order_db.orders_total)
+                        $("#edit_description_update").click(function () {
+                            $.ajax({
+                                method: "PUT",
+                                url: "/db/order/#{order_id}",
+                                data: {
+                                    description: $("#edit_description").val()
+                                }
+                            }).done(function (data) {
+                                $("#description").text($("#edit_description").val());
+                                $("#description").toggle();
+                                $("#edit_description").toggle();
+                                $("#edit_description_update").toggle();
+                            });
+                        });
+                        $('table#table_id').on('mousedown', 'input', function (e) {
+                            e.preventDefault();
+                            if ($(e.target).is("input.checkers")) {
+                                console.log($(this).is(":checked"));
+                                let state = $(this).is(":checked");
+
+                                $("#" + this.id).prop("checked", state);
+                                //update the database
+                                //id of checkboxes are like this => "check[id]"
+                                let id = this.id.substr(5, this.id.length);
+                                $.ajax({
+                                    method: "PUT",
+                                    url: "/db/order/#{order_id}",
+                                    data: {item: id}
+                                }).done(function (data) {
+                                    console.log("done", data);
+                                    //progress bar updated
+                                    if(state){
+                                        if(order_db.orders_checked!=0){
+                                            order_db.orders_checked--;
+                                        }
+                                    }else{
+                                        order_db.orders_checked++;
+                                    }
+                                    progress_bar(order_db.orders_checked,order_db.orders_total);
+                                });
+                            }
+                        }).on('click', 'img', function (e) {
+                            e.preventDefault();
+                            if ($(e.target).is('img.img-thumbnail')) {
+                                let modalId = "#modal" + this.id.substr(3, this.id.length);
+                                console.log(modalId);
+                                $(modalId).modal('show');
+                            }
+                        });
+                        //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
+                        console.log('initcomplete! starting checkboxes');
+                        for (const i of order_db.items) {
+                            $("#check" + i.id).prop("checked", i.status);
+                        }
+                    });
+
                 }
             });
+            function progress_bar (orders_checked,orders_total){
+                let fill_percent = Number(((orders_checked / orders_total) * 100));
+                let empty_percent = Number((100 - fill_percent))
+                console.log(fill_percent, empty_percent);
+                $("#progress-fill").width(fill_percent + "%");
+                $("#progress-fill").text(orders_checked+"/"+orders_total);
+                $("#progress-empty").width(empty_percent + "%");
+            };
         });
 
