@@ -6,24 +6,20 @@ const User = require('../models/user');
 /* GET home page. */
 
 router.all('/', async function(req, res, next) {
-    console.log("test");
     await getJSON(req,res);
 });
-console.log('------------------');
-///////////
 router.all('/:v1', async function(req, res, next) {
-    console.log("test");
     if(req.params.v1==='invest'){
         await getJsonInvestigate(req,res);
     }else if(req.params.v1==='invests_update') {
         await update(req,res);
+    }else if(req.params.v1==='invests_combine'){
+        await update(req,res,true);
     }else{
         await getJSON(req, res);
-        //test
     }
 });
 router.all('/:v1/:v2',async  function(req, res, next) {
-    console.log("test");
     if(req.params.v1==="status"){
         await getJSON(req,res,false,"",req.params.v2);
     }else{
@@ -31,23 +27,25 @@ router.all('/:v1/:v2',async  function(req, res, next) {
     }
 });
 router.all('/:v1/:v2/:v3', async function(req, res, next) {
-    console.log("test");
     await getJSON(req,res);
 });
 router.all('/:v1/:v2/:v3/:v4', async function(req, res, next) {
-    console.log("test");
     await getJSON(req,res);
 });
 router.all('/:v1/:v2/:v3/:v4/v5', async function(req, res, next) {
-    console.log("test");
     await getJSON(req,res);
 });
-async function update (req,res){
+async function update (req,res,combine=false){
     let user = await User.findOne({_id:req.session._id});
-    console.log(req.body);
     let items = req.body.items.trim().split("&");
     let qty = req.body.qty.trim().split("&");
     let qtyMax = 0; //qtyMax is all qty's except the index one
+    let remarks = "";
+    let newRemark = "";
+    if(combine){
+        remarks = req.body.remarks.trim().split("&");
+        newRemark = req.body.newRemark;
+    }
     const oauth = new OAuth.OAuth(
         user.TOKEN_VALUE,
         user.TOKEN_SECRET,
@@ -61,7 +59,9 @@ async function update (req,res){
        if(index!=req.body.index){
            qtyMax+=Number(q);
            console.log("deleting: "+items[index]);
-
+           if(combine){
+               newRemark+="/"+remarks[index];
+           }
            oauth.delete(
                'https://api.bricklink.com/api/store/v1/inventories/'+items[index],
                user.TOKEN_VALUE,
@@ -71,14 +71,17 @@ async function update (req,res){
 
        }
     });
-    let post_body = {quantity:"+"+qtyMax};
+    let post_body = '{"quantity":"+'+qtyMax+'"}';
+    if(combine){
+        post_body='{"quantity":"+'+qtyMax+'","remarks":"'+newRemark+'"}';
+    }
     console.log(post_body);
     console.log("updating: "+items[Number(req.body.index)]);
     oauth.put(
         'https://api.bricklink.com/api/store/v1/inventories/'+items[Number(req.body.index)],
         user.TOKEN_VALUE,
         user.TOKEN_SECRET, //test user secret
-        post_body='{"quantity":"+'+qtyMax+'"}',
+        post_body=post_body,
         post_content_type="application/json",
         function (e, data){
             console.log(data);
@@ -87,7 +90,6 @@ async function update (req,res){
     res.send({meta:"EMTPY_JSON",data:[]});
 }
  async function getJsonInvestigate   (req,res){
-     console.log("test");
     let user = await User.findOne({_id:req.session._id});
     const oauth = new OAuth.OAuth(
         user.TOKEN_VALUE,

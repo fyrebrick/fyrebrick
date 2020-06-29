@@ -70,6 +70,24 @@ block scripts
                 window.alert('success!');
             })
         }
+        function combine(index, items, qty,remarks,newRemark) {
+            //items is array of all the inventory_id's
+            //index is the to index out of items which will be left/used
+            console.log(index, items, qty);
+            $.ajax({
+                method: 'POST',
+                url: "/api/invests_combine",
+                data: {
+                    index: index,
+                    items: items,
+                    qty: qty,
+                    remarks:remarks,
+                    newRemark:newRemark
+                }
+            }).done(function (data) {
+                window.alert('success!');
+            })
+        }
         $(document).ready(function () {
             let list;
             let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary\" type=\"button\" disabled>\n" +
@@ -148,16 +166,18 @@ block scripts
                         console.log(meta)
                         let inventories ="";
                         let qtyies = "";
+                        let remarks = "";
                         let skipFirst = true;
                         meta.forEach(function(meta_item){
-                            console.log(meta_item);
                             if(!skipFirst){
                                 inventories+="&";
                                 qtyies+="&";
+                                remarks+="&";
                             }
                             skipFirst = false;
                             inventories+=meta_item.inventory_id;
                             qtyies+=meta_item.quantity;
+                            remarks+=meta_item.remarks;
                         });
                         tr += "<tr>";
                         tr += "<td>";
@@ -166,7 +186,8 @@ block scripts
                         } else {
                             tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >" + item.remarks + "</a>";
                         }
-                        tr += '</br><button onclick="update('+String(index)+',\''+inventories+'\',\''+qtyies+'\')" type="button" class="btn btn-outline-secondary">Add items to '+item.remarks+'</button>  ';
+                        tr += '</br><button onclick="update('+String(index)+',\''+inventories+'\',\''+qtyies+'\')" type="button" class="btn btn-outline-primary">Add to '+item.remarks+'</button>  ';
+                        tr += '</br></hr><button onclick="combine('+String(index)+',\''+inventories+'\',\''+qtyies+'\',\''+remarks+'\',\''+item.remarks+'\')" type="button" class="btn btn-outline-info">Combine to '+item.remarks+'</button>';
                         tr += "</td><td>";
                         tr += item.quantity;
                         tr += "</td><td>";
