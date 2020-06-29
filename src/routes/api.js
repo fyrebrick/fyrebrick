@@ -276,9 +276,10 @@ async function getJSON (req,res,onlyJson=false,linkOveride="",status=""){
                 let search = req.query.search;
                 let newData = [];
                 obj.data.forEach((o)=>{
-                    if(o.remarks===search){
+                    if(o.remarks){
+                    if(o.remarks.toLowerCase().includes(search.toLowerCase())){
                         newData.push(o);
-                    }
+                    }}
                 });
                 let j = {
                     "meta":obj.meta,
