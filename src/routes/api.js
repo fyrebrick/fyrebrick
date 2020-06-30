@@ -15,6 +15,8 @@ router.all('/:v1', async function(req, res, next) {
         await update(req,res);
     }else if(req.params.v1==='invests_combine'){
         await update(req,res,true);
+    }else if(req.params.v1==="change_quantity"){
+        await changeValue(req,res);
     }else{
         await getJSON(req, res);
     }
@@ -35,6 +37,35 @@ router.all('/:v1/:v2/:v3/:v4', async function(req, res, next) {
 router.all('/:v1/:v2/:v3/:v4/v5', async function(req, res, next) {
     await getJSON(req,res);
 });
+async function changeValue(req,res){
+    let sign = req.body.sign;
+    let value = req.body.value;
+    let id = req.body.id;
+    let user = await User.findOne({_id:req.session._id});
+    const oauth = new OAuth.OAuth(
+        user.TOKEN_VALUE,
+        user.TOKEN_SECRET,
+        user.CONSUMER_KEY,
+        user.CONSUMER_SECRET,
+        oauth_data.oauth_version,
+        null,
+        oauth_data.oauth_signature_method
+    );
+    let post_body = '{"quantity":"'+sign+value+'"}';
+    console.log(post_body);
+    console.log("updating: "+id);
+    oauth.put(
+        'https://api.bricklink.com/api/store/v1/inventories/'+id,
+        user.TOKEN_VALUE,
+        user.TOKEN_SECRET, //test user secret
+        post_body=post_body,
+        post_content_type="application/json",
+        function (e, data){
+            console.log(data);
+        });
+    res.setHeader('Content-Type', 'application/json');
+    res.send({meta:"EMTPY_JSON",data:[]});
+}
 async function update (req,res,combine=false){
     let user = await User.findOne({_id:req.session._id});
     let items = req.body.items.trim().split("&");

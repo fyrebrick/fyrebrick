@@ -12,6 +12,31 @@ block styles
             height: 65px;
         }
         .dataTables_filter, .dataTables_info { display: none; }
+        .buttonBig{
+            width:200px;
+            height:80px;
+            font-size:20px;
+        }
+        .buttonModal {
+            margin-left: 25px;
+            margin-right: 25px;
+            font-size: 31px !important;
+            flex:auto;
+            postition:relative;
+        }
+        #inputIndicator, #qtyInput {
+            height: 60px;
+            font-size:30px;
+        }
+        #inputIndicator {
+            width: 58px;
+            padding-left: 21px;
+        }
+        .qtyNumber{
+            margin-left:10px;
+            font-size:20px;
+            font-weight: 600;
+         }
 block content
     .row
         .col-2
@@ -20,6 +45,30 @@ block content
             div.form-inline.float-right
                 input#search.form-control.mr-sm-2(type='search' placeholder='Search on remark' aria-label='Search')
                 button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
+    #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
+        .modal-dialog.modal-xl
+            .modal-content
+                .modal-header
+                    p#qtyId(style='display:none;')
+                    h5#qtyTitle.modal-title Add or remove quantity to this item
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    .form
+                        .form-group
+                            p.lead#qtyLabelCurrent(for="qtyInput") Current :
+                                span#qtyNumberCurrent.qtyNumber 0
+                            p.lead#qtyLabelNext(for="qtyInput") Updated :
+                                span.qtyNumber#qtyNumberNext ?
+                            .input-group
+                                .input-group-prepend
+                                    span#inputIndicator.input-group-text ?
+                                input#qtyInput.form-control(type="number", step="1" min="0", placeholder="Quantity to add or remove")
+                        .row
+                            button#qtyButtonAdd.buttonBig.buttonModal.btn.btn-success(type="button") Add
+                            button#qtyButtonRemove.buttonBig.buttonModal.btn.btn-danger(type="button") Remove
+                .modal-footer
+                    button#qtyButtonSubmit.buttonBig.btn.btn-secondary(type="submit") update
     #drawTable
         table#table_id.table.table-striped
             thead.thead-dark
@@ -30,7 +79,6 @@ block content
                     th(scope="col") N/U
                     th(scope="col") Fotootje
             tbody#bodyOfTable
-                //test
 block scripts
     script.
         $(document).ready(function () {
@@ -46,7 +94,64 @@ block scripts
                     let modalId = "#modal" + this.id.substr(3, this.id.length);
                     $(modalId).modal('show');
                 }
+            }).on('click','a',function(e){
+                e.preventDefault();
+                if($(e.target).is(".qty")){
+                    let data = $(this).data(); //name, id, qty
+                    $("#qtyTitle").text("Add or remove quantity to item \""+ data.name+"\"");
+                    $("#qtyNumberCurrent").text(data.qty);
+                    $("#qtyId").text(data.id);
+                    $("#qtyModal").modal('show');
+                }
             });
+            $("#qtyButtonSubmit").click(function(){
+                $.ajax({
+                    method: "POST",
+                    url: '/api/change_quantity',
+                    data:{
+                        sign:$("#inputIndicator").text(),
+                        value:$("#qtyInput").val(),
+                        id:$("#qtyId").text()
+                    },
+                }).done(function (data) {
+                    $("#qtyModal").modal('hide');
+                });
+            })
+            $("#qtyButtonAdd").click(function(){
+                $(this).removeClass("btn-success");
+                $(this).addClass("btn-outline-success");
+                $("#qtyButtonRemove").removeClass("btn-outline-danger");
+                $("#qtyButtonRemove").addClass("btn-danger");
+                $("#inputIndicator").text("+");
+                $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text())+Number($("#qtyInput").val()));
+            })
+            $("#qtyButtonRemove").click(function () {
+                $(this).removeClass("btn-danger");
+                $(this).addClass("btn-outline-danger");
+                $("#qtyButtonAdd").removeClass("btn-outline-success");
+                $("#qtyButtonAdd").addClass("btn-success");
+                $("#inputIndicator").text("-");
+                let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
+                if(next<=0){
+                    $("#qtyNumberNext").text("0");
+                }else{
+                    $("#qtyNumberNext").text(next);
+                }
+            })
+            $("#qtyInput").keyup(function(){
+                let sign = $("#inputIndicator").text();
+                if(sign==="+"){
+                    $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
+                }else if(sign==="-"){
+                    let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
+                    if (next <= 0) {
+                        $("#qtyNumberNext").text("0");
+                    } else {
+                        $("#qtyNumberNext").text(next);
+                    }
+                }
+
+            })
             let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary\" type=\"button\" disabled>\n" +
                 "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
                 "  Loading...\n" +
@@ -76,9 +181,9 @@ block scripts
                             tr+= item.color_name ;
                         }
                         tr += "</td><td>";//start 3nd column
-                        tr +=item.quantity;
+                        tr += "<a href='#qtyModalShow' class='qty' data-name='"+item.item.name+"' data-id='"+item.inventory_id+"' data-qty='"+item.quantity+"' >"+item.quantity+"</div>";
                         tr += "</td><td>";//start 4nd column
-                        tr +=item.new_or_used;
+                        tr += item.new_or_used
                         tr += "</td><td>";//start 5nd column
                         tr += getPic(item);
                         tr += "</td></tr>";
