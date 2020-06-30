@@ -13,7 +13,61 @@ block styles
             top: -21px;
             position: relative;
         }
+
+        .buttonBig {
+            width: 200px;
+            height: 80px;
+            font-size: 20px;
+        }
+
+        .buttonModal {
+            margin-left: 25px;
+            margin-right: 25px;
+            font-size: 31px !important;
+            flex: auto;
+            postition: relative;
+        }
+
+        #inputIndicator, #qtyInput {
+            height: 60px;
+            font-size: 30px;
+        }
+
+        #inputIndicator {
+            width: 58px;
+            padding-left: 21px;
+        }
+
+        .qtyNumber {
+            margin-left: 10px;
+            font-size: 20px;
+            font-weight: 600;
+        }
 block content
+    #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
+        .modal-dialog.modal-xl
+            .modal-content
+                .modal-header
+                    p#qtyId(style='display:none;')
+                    h5#qtyTitle.modal-title Add or remove quantity to this item
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    .form
+                        .form-group
+                            p.lead#qtyLabelCurrent(for="qtyInput") Current :
+                                span#qtyNumberCurrent.qtyNumber 0
+                            p.lead#qtyLabelNext(for="qtyInput") Updated :
+                                span.qtyNumber#qtyNumberNext ?
+                            .input-group
+                                .input-group-prepend
+                                    span#inputIndicator.input-group-text ?
+                                input#qtyInput.form-control(type="number", step="1" min="0", placeholder="Quantity to add or remove")
+                        .row
+                            button#qtyButtonAdd.buttonBig.buttonModal.btn.btn-success(type="button") Add
+                            button#qtyButtonRemove.buttonBig.buttonModal.btn.btn-danger(type="button") Remove
+                .modal-footer
+                    button#qtyButtonSubmit.buttonBig.btn.btn-secondary(type="submit") update
     .modal#modal_order(tabindex='-1' role='dialog')
         .modal-dialog.modal-xl
             .modal-content
@@ -101,6 +155,54 @@ block scripts
             let order_db = null;
             let order_json = null;
             //get order details from api first
+            $("#qtyButtonSubmit").click(function () {
+                $.ajax({
+                    method: "POST",
+                    url: '/api/change_quantity',
+                    data: {
+                        sign: $("#inputIndicator").text(),
+                        value: $("#qtyInput").val(),
+                        id: $("#qtyId").text()
+                    },
+                }).done(function (data) {
+                    $("#qtyModal").modal('hide');
+                });
+            })
+            $("#qtyButtonAdd").click(function () {
+                $(this).removeClass("btn-success");
+                $(this).addClass("btn-outline-success");
+                $("#qtyButtonRemove").removeClass("btn-outline-danger");
+                $("#qtyButtonRemove").addClass("btn-danger");
+                $("#inputIndicator").text("+");
+                $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
+            })
+            $("#qtyButtonRemove").click(function () {
+                $(this).removeClass("btn-danger");
+                $(this).addClass("btn-outline-danger");
+                $("#qtyButtonAdd").removeClass("btn-outline-success");
+                $("#qtyButtonAdd").addClass("btn-success");
+                $("#inputIndicator").text("-");
+                let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
+                if (next <= 0) {
+                    $("#qtyNumberNext").text("0");
+                } else {
+                    $("#qtyNumberNext").text(next);
+                }
+            })
+            $("#qtyInput").keyup(function () {
+                let sign = $("#inputIndicator").text();
+                if (sign === "+") {
+                    $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
+                } else if (sign === "-") {
+                    let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
+                    if (next <= 0) {
+                        $("#qtyNumberNext").text("0");
+                    } else {
+                        $("#qtyNumberNext").text(next);
+                    }
+                }
+
+            })
             $.ajax({
                 method: "GET",
                 url: "/api/orders/#{order_id}"
@@ -133,7 +235,6 @@ block scripts
                         render: function (data, type, row, meta) {
                             if(row.remarks!==undefined){
                                 let l = row.remarks.substr(0, 1).toLowerCase();
-                                console.log(row);
                                 const de = /[a-d,A-D]\d{1,}/gm;
                                 const ute = row.remarks;
                                 if (de.exec(ute)) {
@@ -192,11 +293,16 @@ block scripts
                             if(data==="(Not Applicable)"){
                                 return "<i class=\"fas fa-tint-slash\"></i>";
                             }else{
-                                return data;
+                                return setColor(data);
                             }
                         }
                     },
-                    {data:'quantity'},
+                    {
+                        data:'quantity',
+                        render: function (data,type,row,meta){
+                            return "<a href='#qtyModalShow' class='qty' data-name='"+row.item.name+"' data-id='"+row.inventory_id+"' data-qty='"+row.quantity+"' >"+row.quantity+"</div>"
+                        }
+                    },
                     {data:'new_or_used'},
                     {
                         data:'color_id',
@@ -266,13 +372,13 @@ block scripts
                 ],
                 initComplete:function(settings,json){
                     order_json=json;
-                    console.log(json,'json');
+                    //console.log(json,'json');
                     //get order from database third
                     $.ajax({
                         method: "GET",
                         url:"/db/order/#{order_id}?orders_total="+order_json.data.length
                     }).done(function (data) {
-                        console.log(data,"data");
+                        //console.log(data,"data");
                         order_db = data;
                         //update description
                         $("#spinner_description").remove();
@@ -302,7 +408,7 @@ block scripts
                         $('table#table_id').on('mousedown', 'input', function (e) {
                             e.preventDefault();
                             if ($(e.target).is("input.checkers")) {
-                                console.log($(this).is(":checked"));
+                                //console.log($(this).is(":checked"));
                                 let state = $(this).is(":checked");
 
                                 $("#" + this.id).prop("checked", state);
@@ -314,7 +420,7 @@ block scripts
                                     url: "/db/order/#{order_id}",
                                     data: {item: id}
                                 }).done(function (data) {
-                                    console.log("done", data);
+                                    //console.log("done", data);
                                     //progress bar updated
                                     if(state){
                                         if(order_db.orders_checked!=0){
@@ -330,12 +436,22 @@ block scripts
                             e.preventDefault();
                             if ($(e.target).is('img.img-thumbnail')) {
                                 let modalId = "#modal" + this.id.substr(3, this.id.length);
-                                console.log(modalId);
+                                //console.log(modalId);
                                 $(modalId).modal('show');
                             }
+                        }).on('click', 'a', function (e) {
+                            e.preventDefault();
+                            if ($(e.target).is(".qty")) {
+                                let data = $(this).data(); //name, id, qty
+                                $("#qtyTitle").text("Add or remove quantity to item \"" + data.name + "\"");
+                                $("#qtyNumberCurrent").text(data.qty);
+                                $("#qtyId").text(data.id);
+                                $("#qtyModal").modal('show');
+                            }
                         });
+
                         //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
-                        console.log('initcomplete! starting checkboxes');
+                        //console.log('initcomplete! starting checkboxes');
                         for (const i of order_db.items) {
                             $("#check" + i.id).prop("checked", i.status);
                         }
@@ -346,223 +462,225 @@ block scripts
             function progress_bar (orders_checked,orders_total){
                 let fill_percent = Number(((orders_checked / orders_total) * 100));
                 let empty_percent = Number((100 - fill_percent))
-                console.log(fill_percent, empty_percent);
+                //console.log(fill_percent, empty_percent);
                 $("#progress-fill").width(fill_percent + "%");
                 $("#progress-fill").text(orders_checked+"/"+orders_total);
                 $("#progress-empty").width(empty_percent + "%");
             };
 
             function setColor(color_name) {
-                let css;
+                let css = "<span class=\"badge\" ";
                 switch (color_name) {
                     case "transparent":
-                        css = {"background-color": "transparent"};
+                        css += "style='background-color:transparent'";
                         break;
                     case "Black":
-                        css = {"background-color": "#212121", "color": "#FFF"};
+                        css += "style='background-color:#212121;color:#FFF'";
                         break;
                     case "Blue":
-                        css = {"background-color": "#0057A6", "color": "#FFF"};
+                        css += "style='background-color:#0057A6;color:#FFF'";
                         break;
                     case "Bright Green":
-                        css = {"background-color": "#10CB31", "color": "#000"};
+                        css += "style='background-color:#10CB31;color:#000'";
                         break;
                     case "Bright Light Blue":
-                        css = {"background-color": "#9FC3E9", "color": "#000"};
+                        css += "style='background-color:#9FC3E9;color:#000'";
                         break;
                     case "Bright Light Orange":
-                        css = {"background-color": "#F7BA30", "color": "#000"};
+                        css += "style='background-color:#F7BA30;color:#000'";
                         break;
                     case "Bright Light Yellow":
-                        css = {"background-color": "#F3E055", "color": "#000"};
+                        css += "style='background-color:#F3E055;color:#000'";
                         break;
                     case "Bright Pink":
-                        css = {"background-color": "#FFBBFF", "color": "#000"};
+                        css += "style='background-color:#FFBBFF;color:#000'";
                         break;
                     case "Brown":
-                        css = {"background-color": "#3399FF", "color": "#FFF"};
+                        css += "style='background-color:#3399FF;color:#FFF'";
                         break;
                     case "Dark Azure":
-                        css = {"background-color": "#3399FF", "color": "#FFF"};
+                        css += "style='background-color:#3399FF;color:#FFF'";
                         break;
                     case "Dark Blue":
-                        css = {"background-color": "#143044", "color": "#FFF"};
+                        css += "style='background-color:#143044;color:#FFF'";
                         break;
                     case "Dark Bluish Gray":
-                        css = {"background-color": "#595D60", "color": "#FFF"};
+                        css += "style='background-color:#595D60;color:#FFF'";
                         break;
                     case "Dark Gray":
-                        css = {"background-color": "#6B5A5A", "color": "#FFF"};
+                        css += "style='background-color:#6B5A5A;color:#FFF'";
                         break;
                     case "Dark Green":
-                        css = {"background-color": "#2E5543", "color": "#FFF"};
+                        css += "style='background-color:#2E5543;color:#FFF'";
                         break;
                     case "Dark Orange":
-                        css = {"background-color": "#B35408", "color": "#FFF"};
+                        css += "style='background-color:#B35408;color:#FFF'";
                         break;
                     case "Dark Pink":
-                        css = {"background-color": "#C87080", "color": "#FFF"};
+                        css += "style='background-color:#C87080;color:#FFF'";
                         break;
                     case "Dark Purple":
-                        css = {"background-color": "#5F2683", "color": "#FFF"};
+                        css += "style='background-color:#5F2683;color:#FFF'";
                         break;
                     case "Dark Red":
-                        css = {"background-color": "#6A0E15", "color": "#FFF"};
+                        css += "style='background-color:#6A0E15;color:#FFF'";
                         break;
                     case "Dark Tan":
-                        css = {"background-color": "#907450", "color": "#FFF"};
+                        css += "style='background-color:#907450;color:#FFF'";
                         break;
                     case "Dark Turquoise":
-                        css = {"background-color": "#008A80", "color": "#FFF"};
+                        css += "style='background-color:#008A80;color:#FFF'";
                         break;
                     case "Green":
-                        css = {"background-color": "#00642E", "color": "#FFF"};
+                        css += "style='background-color:#00642E;color:#FFF'";
                         break;
                     case "Lavender":
-                        css = {"background-color": "#B18CBF", "color": "#FFF"};
+                        css += "style='background-color:#B18CBF;color:#FFF'";
                         break;
                     case "Light Aqua":
-                        css = {"background-color": "#CCFFFF", "color": "#000"};
+                        css += "style='background-color:#CCFFFF;color:#000'";
                         break;
                     case "Light Blue":
-                        css = {"background-color": "#B4D2E3", "color": "#000"};
+                        css += "style='background-color:#B4D2E3;color:#000'";
                         break;
                     case "Light Bluish Gray":
-                        css = {"background-color": "#AFB5C7", "color": "#000"};
+                        css += "style='background-color:#AFB5C7;color:#000'";
                         break;
                     case "Light Gray":
-                        css = {"background-color": "#9C9C9C", "color": "#000"};
+                        css += "style='background-color:#9C9C9C;color:#000'";
                         break;
                     case "Light Lime":
-                        css = {"background-color": "#EBEE8F", "color": "#000"};
+                        css += "style='background-color:#EBEE8F;color:#000'";
                         break;
                     case "Light Nougat":
-                        css = {"background-color": "#FECCB0", "color": "#000"};
+                        css += "style='background-color:#FECCB0;color:#000'";
                         break;
                     case "Light Pink":
-                        css = {"background-color": "#FFE1FF", "color": "#000"};
+                        css += "style='background-color:#FFE1FF;color:#000'";
                         break;
                     case "Light Purple":
-                        css = {"background-color": "#DA70D6", "color": "#000"};
+                        css += "style='background-color:#DA70D6;color:#000'";
                         break;
                     case "Light Yellow":
-                        css = {"background-color": "#FFE383", "color": "#000"};
+                        css += "style='background-color:#FFE383;color:#000'";
                         break;
                     case "Lime":
-                        css = {"background-color": "#A6CA55", "color": "#000"};
+                        css += "style='background-color:#A6CA55;color:#000'";
                         break;
                     case "Maersk Blue":
-                        css = {"background-color": "#6BADD6", "color": "#000"};
+                        css += "style='background-color:#6BADD6;color:#000'";
                         break;
                     case "Magenta":
-                        css = {"background-color": "#B52952", "color": "#FFF"};
+                        css += "style='background-color:#B52952;color:#FFF'";
                         break;
                     case "Medium Azure":
-                        css = {"background-color": "#42C0FB", "color": "#000"};
+                        css += "style='background-color:#42C0FB;color:#000'";
                         break;
                     case "Medium Blue":
-                        css = {"background-color": "#61AFFF", "color": "#000"};
+                        css += "style='background-color:#61AFFF;color:#000'";
                         break;
                     case "Medium Lavender":
-                        css = {"background-color": "#885E9E", "color": "#FFF"};
+                        css += "style='background-color:#885E9E;color:#FFF'";
                         break;
                     case "Medium Lime":
-                        css = {"background-color": "#BDC618", "color": "#000"};
+                        css += "style='background-color:#BDC618;color:#000'";
                         break;
                     case "Medium Nougat":
-                        css = {"background-color": "#E3A05B", "color": "#000"};
+                        css += "style='background-color:#E3A05B;color:#000'";
                         break;
                     case "Medium Orange":
-                        css = {"background-color": "#FFA531", "color": "#000"};
+                        css += "style='background-color:#FFA531;color:#000'";
                         break;
                     case "Medium Violet":
-                        css = {"background-color": "#9391E4", "color": "#000"};
+                        css += "style='background-color:#9391E4;color:#000'";
                         break;
                     case "Nougat":
-                        css = {"background-color": "#FFAF7D", "color": "#000"};
+                        css += "style='background-color:#FFAF7D;color:#000'";
                         break;
                     case "Olive Green":
-                        css = {"background-color": "#7C9051", "color": "#FFF"};
+                        css += "style='background-color:#7C9051;color:#FFF'";
                         break;
                     case "Orange":
-                        css = {"background-color": "#FF7E14", "color": "#FFF"};
+                        css += "style='background-color:#FF7E14;color:#FFF'";
                         break;
                     case "Pink":
-                        css = {"background-color": "#FFC0CB", "color": "#000"};
+                        css += "style='background-color:#FFC0CB;color:#000'";
                         break;
                     case "Purple":
-                        css = {"background-color": "#A5499C", "color": "#FFF"};
+                        css += "style='background-color:#A5499C;color:#FFF'";
                         break;
                     case "Red":
-                        css = {"background-color": "#B30006", "color": "#FFF"};
+                        css += "style='background-color:#B30006;color:#FFF'";
                         break;
                     case "Reddish Brown":
-                        css = {"background-color": "#89351D", "color": "#FFF"};
+                        css += "style='background-color:#89351D;color:#FFF'";
                         break;
                     case "Sand Blue":
-                        css = {"background-color": "#5A7184", "color": "#FFF"};
+                        css += "style='background-color:#5A7184;color:#FFF'";
                         break;
                     case "Sand Green":
-                        css = {"background-color": "#76A290", "color": "#FFF"};
+                        css += "style='background-color:#76A290;color:#FFF'";
                         break;
                     case "Sand Red":
-                        css = {"background-color": "#8C6B6B", "color": "#FFF"};
+                        css += "style='background-color:#8C6B6B;color:#FFF'";
                         break;
                     case "Tan":
-                        css = {"background-color": "#DEC69C", "color": "#000"};
+                        css += "style='background-color:#DEC69C;color:#000'";
                         break;
                     case "Very Light Orange":
-                        css = {"background-color": "#E6C05D", "color": "#000"};
+                        css += "style='background-color:#E6C05D;color:#000'";
                         break;
                     case "White":
-                        css = {"background-color": "#FFFFFF", "color": "#000"};
+                        css += "style='background-color:#FFFFFF;color:#000'";
                         break;
                     case "Yellow":
-                        css = {"background-color": "#F7D117", "color": "#000"};
+                        css += "style='background-color:#F7D117;color:#000'";
                         break;
                     case "Yellowish Green":
-                        css = {"background-color": "#DFEEA5", "color": "#000"};
+                        css += "style='background-color:#DFEEA5;color:#000'";
                         break;
                     case "Trans-Clear":
-                        css = {"background-color": "#EEEEEE", "color": "#000"};
+                        css += "style='background-color:#EEEEEE;color:#000'";
                         break;
                     case "Trans-Dark Blue":
-                        css = {"background-color": "#00296B", "color": "#FFF"};
+                        css += "style='background-color:#00296B;color:#FFF'";
                         break;
                     case "Trans-Light Blue":
-                        css = {"background-color": "#68BCC5", "color": "#000"};
+                        css += "style='background-color:#68BCC5;color:#000'";
                         break;
                     case "Trans-Light Orange":
-                        css = {"background-color": "#E99A3A", "color": "#000"};
+                        css += "style='background-color:#E99A3A;color:#000'";
                         break;
                     case "Trans-Neon Green":
-                        css = {"background-color": "#C0F500", "color": "#000"};
+                        css += "style='background-color:#C0F500;color:#000'";
                         break;
                     case "Trans-Neon Orange":
-                        css = {"background-color": "#FF4231", "color": "#FFF"};
+                        css += "style='background-color:#FF4231;color:#FFF'";
                         break;
                     case "Trans-Orange":
-                        css = {"background-color": "#D04010", "color": "#FFF"};
+                        css += "style='background-color:#D04010;color:#FFF'";
                         break;
                     case "Trans-Yellow":
-                        css = {"background-color": "#EBF72D", "color": "#000"};
+                        css += "style='background-color:#EBF72D;color:#000'";
                         break;
                     case "Chrome Gold":
-                        css = {"background-color": "#F1F2E1", "color": "#000"};
+                        css += "style='background-color:#F1F2E1;color:#000'";
                         break;
                     case "Chrome Silver":
-                        css = {"background-color": "#DCDCDC", "color": "#000"};
+                        css += "style='background-color:#DCDCDC;color:#000'";
                         break;
                     case "Pearl Light Gray":
-                        css = {"background-color": "#ACB7C0", "color": "#000"};
+                        css += "style='background-color:#ACB7C0;color:#000'";
                         break;
                     case "Metallic Gold":
-                        css = {"background-color": "#B8860B", "color": "#FFF"};
+                        css += "style='background-color:#B8860B;color:#FFF'";
                         break;
                     case "Milky White":
-                        css = {"background-color": "#D4D3DD", "color": "#000"};
+                        css += "style='background-color:#D4D3DD;color:#000'";
                         break;
                 }
+                css += ">"+color_name+"</span>";
+                console.log(css);
                 return css;
             }
         });
