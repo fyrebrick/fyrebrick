@@ -439,7 +439,7 @@ block scripts
                                 //console.log(modalId);
                                 $(modalId).modal('show');
                             }
-                        }).on('click', 'a', function (e) {
+                        }).on('click', '.qty', function (e) {
                             e.preventDefault();
                             if ($(e.target).is(".qty")) {
                                 let data = $(this).data(); //name, id, qty
@@ -662,6 +662,9 @@ block scripts
                         break;
                     case "Trans-Yellow":
                         css += "style='background-color:#EBF72D;color:#000'";
+                        break;
+                    case "Trans-Red":
+                        css += "style='background-color: #9C0010;color:#FFF !important'";
                         break;
                     case "Chrome Gold":
                         css += "style='background-color:#F1F2E1;color:#000'";

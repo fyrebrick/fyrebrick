@@ -154,7 +154,7 @@ block scripts
                     let modalId = "#modal" + this.id.substr(3, this.id.length);
                     $(modalId).modal('show');
                 }
-            }).on('click', 'a', function (e) {
+            }).on('click', '.qty', function (e) {
                 e.preventDefault();
                 if ($(e.target).is(".qty")) {
                     let data = $(this).data(); //name, id, qty
