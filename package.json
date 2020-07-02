@@ -7,21 +7,21 @@
   },
   "dependencies": {
     "body-parser": "latest",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "dotenv": "^8.2.0",
-    "express": "~4.16.1",
+    "cookie-parser": "1.4.5",
+    "debug": "2.6.9",
+    "dotenv": "8.2.0",
+    "express": "4.16.4",
     "express-flash": "0.0.2",
-    "googleapis": "^52.1.0",
-    "hpp": "^0.2.3",
-    "http-errors": "~1.6.3",
-    "mongoose": "^5.9.18",
-    "morgan": "~1.9.1",
-    "oauth": "^0.9.15",
-    "path": "^0.12.7",
+    "googleapis": "52.1.0",
+    "hpp": "0.2.3",
+    "http-errors": "1.6.3",
+    "mongoose": "5.9.18",
+    "morgan": "1.9.1",
+    "oauth": "0.9.15",
+    "path": "0.12.7",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
-    "express-session": "^1.17.1"
+    "express-session": "1.17.1"
   }
 }
