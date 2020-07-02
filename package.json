@@ -19,7 +19,7 @@
     "morgan": "1.9.1",
     "oauth": "0.9.15",
     "path": "0.12.7",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.4"
   },
   "devDependencies": {
     "express-session": "1.17.1"
