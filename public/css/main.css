@@ -76,3 +76,7 @@ td {
     font-size: 41px;
     font-weight: bold;
 }
+.modal-content{
+    min-width: 200%;
+    margin-left: -50%;
+}
