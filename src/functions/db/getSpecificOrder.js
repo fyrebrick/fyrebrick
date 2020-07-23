@@ -25,6 +25,6 @@ exports.default = async (orders_total,user,order_id) =>
         }
         order.orders_checked = orders_checked;
         await Order.updateOne({order_id:order_id,consumer_key:user.CONSUMER_KEY},order);
-        return newOrder;
+        return order;
     }
 }

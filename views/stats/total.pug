@@ -1,0 +1,55 @@
+
+
+
+extends ../layout
+block content
+    .container-fluid
+        canvas#myChart
+        .list-group
+            a.list-group-item.list-group-item-action.active(href='#myChart') Amount of total bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Amount of total unique bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Most common bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Most common brick colours
+            a.list-group-item.list-group-item-action.disabled(href='#') Most sold bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Most sold brick colours
+block scripts
+    script(src='https://cdn.jsdelivr.net/npm/chart.js@2.8.0')
+    script.
+        window.onload = function () {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            let data = [#{data.total_bricks}];
+            function getLabels() {
+                let array = new Array(data.length);
+                for(let i=data.length;i>0;i--){
+                    let date = new Date;
+                    date.setMinutes(0);
+                    date.setHours(date.getHours()-(i-1));
+                    const options = {year: 'numeric', month: 'long', day: 'numeric'};
+                    let stringDate = date.toLocaleDateString('en-UK', options) + " " + date.toLocaleTimeString('nl-BE', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    console.log(stringDate);
+                    console.log(i);
+                    array[data.length-i] = stringDate;
+                }
+                console.log(array);
+                return array;
+            }
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: getLabels(),
+                    datasets: [{
+                        label: 'Total bricks',
+                        borderColor: 'rgb(255,99,132)',
+                        data: data
+                    }]
+                },
+
+                // Configuration options go here
+                options: {}
+            });
+        }
+
+

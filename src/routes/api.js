@@ -9,6 +9,7 @@ const combineInventoryIds = require('../functions/bricklink/combineInventoryIds'
 const getJSON = require('../functions/bricklink/getJson');
 
 router.all('/', async function(req, res, next) {
+    res.setHeader('Content-Type', 'application/json');
     (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
         res.send(data);
     })
@@ -40,6 +41,7 @@ router.all('/:v1', async function(req, res, next) {
 });
 
 router.all('/:v1/:v2',async  function(req, res, next) {
+    res.setHeader('Content-Type', 'application/json');
     if(req.params.v1==="status"){
         await getJSON(req,res,false,"",req.params.v2);
         (await getJSON)(req,res,await User.findOne({_id:req.session._id}),false,"",req.params.v2).then((data)=>{
@@ -53,18 +55,24 @@ router.all('/:v1/:v2',async  function(req, res, next) {
 });
 
 router.all('/:v1/:v2/:v3', async function(req, res, next) {
+
+    res.setHeader('Content-Type', 'application/json');
     (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
         res.send(data);
     })
 });
 
 router.all('/:v1/:v2/:v3/:v4', async function(req, res, next) {
+
+    res.setHeader('Content-Type', 'application/json');
     (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
         res.send(data);
     })
 });
 
 router.all('/:v1/:v2/:v3/:v4/v5', async function(req, res, next) {
+
+    res.setHeader('Content-Type', 'application/json');
     (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
         res.send(data);
     })

@@ -1,11 +1,22 @@
 extends layout
 block styles
     style.
+        body{
+            width: max-content;
+        }
+        img{
+            min-height:200px !important;
+            min-width: 200px !important;
+        }
+        tbody tr td:nth-child(2) a {
+            font-size-adjust: initial;
+            font-size: 26px;
+            text-align: center;
+        }
         td {
             font-size: 41px;
             font-weight: bold;
         }
-
         [type="search"] {
             font-size: 41px;
         }
@@ -13,13 +24,23 @@ block styles
             top: -21px;
             position: relative;
         }
-
+        tbody tr td:nth-child(1) {
+            margin-top: 27px;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        .spinner-box {
+            background-color: #fff;
+            z-index: 20;
+            border-radius: 55px;
+            opacity: 0.7;
+            position: relative;
+        }
         .buttonBig {
             width: 200px;
             height: 80px;
             font-size: 20px;
         }
-
         .buttonModal {
             margin-left: 25px;
             margin-right: 25px;
@@ -32,12 +53,10 @@ block styles
             height: 60px;
             font-size: 30px;
         }
-
         #inputIndicator {
             width: 58px;
             padding-left: 21px;
         }
-
         .qtyNumber {
             margin-left: 10px;
             font-size: 20px;
@@ -208,16 +227,17 @@ block scripts
                 url: "/api/orders/#{order_id}"
             })
                 .done(function (data) {
+                    const json = JSON.parse(data);
                     $("#spinner_payment").remove();
-                    $("#payment").text(data.data.payment.method);
+                    $("#payment").text(json.data.payment.method);
                     $("#spinner_status").remove();
-                    $("#status").text(data.data.status);
+                    $("#status").text(json.data.status);
                     $("#spinner_shipping_method").remove();
-                    $("#shipping_method").text(data.data.shipping.method);
+                    $("#shipping_method").text(json.data.shipping.method);
                     $("#spinner_shipping_cost").remove();
-                    $("#shipping_cost").text(data.data.cost.shipping+" "+data.data.cost.currency_code);
+                    $("#shipping_cost").text(json.data.cost.shipping+" "+json.data.cost.currency_code);
                     $("#spinner_address").remove();
-                    $("#address").text(data.data.shipping.address.full+" "+data.data.shipping.address.country_code );
+                    $("#address").text(json.data.shipping.address.full+" "+json.data.shipping.address.country_code );
                 });
 
             let pappieBedrag = 0.00;
@@ -329,44 +349,49 @@ block scripts
                                 "  </div>\n" +
                                 "</div>";
                             let _type=row.item.type.substr(0,1);
-
+                                let returnValue;
                             switch (row.item.type) {
                                 case "SET":
-                                    return modal + "\n" +
+                                    returnValue = modal + "\n" +
                                         "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
                                     break;
                                 case "MINIFIG":
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/"+row.color_id+"/"+row.item.no+".png\"" + " alt=\"\"> ";
                                     break;
                                 case "PART":
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/"+data+"/"+row.item.no+".png\"" + " alt=\"\"> ";
                                     break;
                                 case 'INSTRUCTION':
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
                                     break;
                                 case 'BOOK':
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
                                     break;
                                 case 'SET':
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
                                     break;
                                 case 'GEAR':
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
                                     break;
                                 case 'CATALOG':
-                                    return modal + "\n" +
+                                    returnValue =  modal + "\n" +
                                         "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
                                     break;
                                 default:
-                                    return "<i class=\"fas fa-image\"></i>";
+                                    returnValue =  "<i class=\"fas fa-image\"></i>";
                             }
-
+                            return returnValue + "<div class=\"spinner-box\" id=\"spinner-box-"+row.inventory_id+"\">" +
+                                                    "<div id=\"spinner-"+row.inventory_id+"\" class=\"spinner-border spinner-img\" role=\"status\">\n" +
+                                                        "  <span class=\"sr-only\">Loading...</span>\n" +
+                                                   "</div>" +
+                                                "</div>" ;
+                            return returnValue;
                         }
                     }
                 ],
@@ -378,9 +403,27 @@ block scripts
                         method: "GET",
                         url:"/db/order/#{order_id}?orders_total="+order_json.data.length
                     }).done(function (data) {
-                        //console.log(data,"data");
+                        $(".spinner-img").each(function(index){
+                            let currentSpinnerImgId = this.id.substr("spinner-".length);
+                            let fullId = this.id;
+                            console.log(currentSpinnerImgId);
+                            $.ajax({
+                                method: "GET",
+                                url: "/api/inventories/"+currentSpinnerImgId
+                            }).done(function (data) {
+                                let quantity;
+                                console.log(data);
+                                if(!data.data){
+                                        quantity = 0;
+                                }else{
+                                    quantity = data.data.quantity;
+                                }
+                                console.log(quantity)
+                                $("#spinner-"+currentSpinnerImgId).remove();
+                                $("#spinner-box-"+currentSpinnerImgId).text(quantity);
+                            });
+                        });
                         order_db = data;
-                        //update description
                         $("#spinner_description").remove();
                         $("#description").text(data.description);
                         $("#edit_description").val(data.description);
@@ -390,19 +433,22 @@ block scripts
                             $("#edit_description_update").toggle();
                         });
                         //update progress bar
-                        progress_bar(order_db.orders_checked,order_db.orders_total)
+                        progress_bar(order_db.orders_checked,order_db.orders_total);
                         $("#edit_description_update").click(function () {
                             $.ajax({
                                 method: "PUT",
                                 url: "/db/order/#{order_id}",
                                 data: {
                                     description: $("#edit_description").val()
+                                },
+                                fail:function(data){
+                                    console.log(data)
                                 }
                             }).done(function (data) {
-                                $("#description").text($("#edit_description").val());
                                 $("#description").toggle();
                                 $("#edit_description").toggle();
                                 $("#edit_description_update").toggle();
+                                $("#description").text($("#edit_description").val());
                             });
                         });
                         $('table#table_id').on('mousedown', 'input', function (e) {
@@ -410,7 +456,7 @@ block scripts
                             if ($(e.target).is("input.checkers")) {
                                 //console.log($(this).is(":checked"));
                                 let state = $(this).is(":checked");
-
+                                let currentId = this.id;
                                 $("#" + this.id).prop("checked", state);
                                 //update the database
                                 //id of checkboxes are like this => "check[id]"
@@ -418,10 +464,14 @@ block scripts
                                 $.ajax({
                                     method: "PUT",
                                     url: "/db/order/#{order_id}",
-                                    data: {item: id}
+                                    data: {item: id},
+                                    error:function(){
+                                        location.reload();
+                                    }
                                 }).done(function (data) {
                                     //console.log("done", data);
                                     //progress bar updated
+                                    console.log(data);
                                     if(state){
                                         if(order_db.orders_checked!=0){
                                             order_db.orders_checked--;
@@ -462,7 +512,7 @@ block scripts
             function progress_bar (orders_checked,orders_total){
                 let fill_percent = Number(((orders_checked / orders_total) * 100));
                 let empty_percent = Number((100 - fill_percent))
-                //console.log(fill_percent, empty_percent);
+                console.log(fill_percent, empty_percent);
                 $("#progress-fill").width(fill_percent + "%");
                 $("#progress-fill").text(orders_checked+"/"+orders_total);
                 $("#progress-empty").width(empty_percent + "%");

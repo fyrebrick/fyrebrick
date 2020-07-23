@@ -4,6 +4,7 @@ const google =require('../middlewares/google');
 const User = require('../models/user');
 const {checkSignIn} = require('../middlewares/index');
 const api = require('./api');
+
 router.get('/',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){

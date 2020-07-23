@@ -46,7 +46,9 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                     resolve({meta: "EMTPY_JSON", data: []});
                     return;
                 case "inventories":
-                    link = inventoryLink;
+                    if(req.query.search){
+                        link = inventoryLink;
+                    }
                     break;
                 case "":
                     break;
@@ -71,9 +73,6 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                                 "buyer_name": obj.meta.description
                             }]
                         };
-                        if (onlyJson) {
-                            return j;
-                        }
                         resolve(j);
                         return;
                     }
@@ -97,29 +96,24 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                                 "meta": obj.meta,
                                 "data": obj.data[0]
                             };
-                            if (onlyJson) {
-                                return j;
-                            }
                             resolve(j);
+                            return;
                         }
-                    } else if (req.params.v1 === "inventories") {
-                        let search = req.query.search;
-                        let newData = [];
-                        obj.data.forEach((o) => {
-                            if (o.remarks) {
-                                if (o.remarks.toLowerCase().includes(search.toLowerCase())) {
-                                    newData.push(o);
+                    } else if (req.params.v1 === "inventories" && req.query.search) {
+                            let search = req.query.search;
+                            let newData = [];
+                            obj.data.forEach((o) => {
+                                if (o.remarks) {
+                                    if (o.remarks.toLowerCase().includes(search.toLowerCase())) {
+                                        newData.push(o);
+                                    }
                                 }
-                            }
-                        });
-                        let j = {
-                            "meta": obj.meta,
-                            "data": newData
-                        };
-                        if (onlyJson) {
-                            return j;
-                        }
-                        resolve(j);
+                            });
+                            let j = {
+                                "meta": obj.meta,
+                                "data": newData
+                            };
+                            resolve(j);
                     } else if (status && status !== "inventories") {
                         statusObj = {meta: obj.meta, data: []};
                         obj.data.forEach((order) => {
@@ -127,15 +121,11 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                                 statusObj.data.push(order);
                             }
                         });
-                        if (onlyJson) {
-                            return statusObj;
-                        }
                         resolve(statusObj);
+                        return;
                     } else {
-                        if (onlyJson) {
-                            return data;
-                        }
                         resolve(data);
+                        return;
                     }
                 });
         }

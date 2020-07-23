@@ -24,7 +24,8 @@ router.get('/order/:order_id',async (req,res,next)=>{
 router.put('/order/:order_id',async (req,res,next)=>{
     let user = await User.findOne({_id:req.session._id});
     let order = await Order.findOne({order_id:req.params.order_id,consumer_key:user.CONSUMER_KEY});
-    await db_updateSpecificOrder(order,user,req.body.item,req.params.order_id,req.body.description);
+    await db_updateSpecificOrder.default(order,user,req.body.item,req.params.order_id,req.body.description);
+    res.send({}); //have to send something back, front end relies on a check if completed. (progress bar and description button)
 });
 
 module.exports = router;

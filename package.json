@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./app.js"
+    "start": "node ./app.js",
+    "docker": "docker build -t snakehead007/bricklink-webservice . && docker push snakehead007/bricklink-webservice"
   },
   "dependencies": {
     "body-parser": "latest",
@@ -17,6 +18,7 @@
     "http-errors": "1.6.3",
     "mongoose": "5.9.18",
     "morgan": "1.9.1",
+    "node-schedule": "^1.3.2",
     "oauth": "0.9.15",
     "path": "0.12.7",
     "pug": "2.0.0-beta11"

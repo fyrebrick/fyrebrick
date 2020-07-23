@@ -45,10 +45,12 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
             li.nav-item.dropdown
                 a#dropdownaccount.display-4.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')=session.email
                 .dropdown-menu(aria-labelledby='dropdownaccount')
+                    a.dropdown-item(href="/stats")
+                        i.fas.fa-chart-line
+                        span Statistics
                     a.dropdown-item(href="/change")
                         i.fas.fa-wrench
                         span change your settings
                     a.dropdown-item(href="/logout")
                         i.fas.fa-sign-out-alt
                         span logout
-
