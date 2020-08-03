@@ -3,10 +3,10 @@ block content
     .container-fluid
         canvas#myChart
         .list-group
-            a.list-group-item.list-group-item-action(href='#') Amount of total bricks
+            a.list-group-item.list-group-item-action(href='/stats/total') Amount of total bricks
             a.list-group-item.list-group-item-action.disabled(href='#') Amount of total unique bricks
             a.list-group-item.list-group-item-action.disabled(href='#') Most common bricks
-            a.list-group-item.list-group-item-action.active(href='#myChart') Most common brick colours
+            a.list-group-item.list-group-item-action(href='#myChart') Most common brick colours
             a.list-group-item.list-group-item-action.disabled(href='#') Most sold bricks
             a.list-group-item.list-group-item-action.disabled(href='#') Most sold brick colours
 block scripts
@@ -14,38 +14,42 @@ block scripts
     script.
         window.onload = function () {
             var ctx = document.getElementById('myChart').getContext('2d');
-            let stringJson = "#{data}";
-            let fixedJson = stringJson.replaceAll('&quot;','"');
-            let olddata = JSON.parse(fixedJson);
-            let data = [];
-            olddata.forEach((a) => {
-                data.push(a.sort((a, b) => (a.quantity > b.quantity) ? 1 : -1));
-            });
-            let allData = [];
-            data.forEach((d)=>{
-                d.forEach((_d)=>{
-                    let foundCurrentDataColour = false;
-                    allData.forEach((a,index) => {
-                        if (a.label===_d.color_name) {
-                            foundCurrentDataColour = true;
-                            allData[index].data.push(_d.quantity);
-                        }
-                    })
-                    if(!foundCurrentDataColour){
-                        allData.push({
-                            label: _d.color_name,
-                            fill: false,
-                            borderColor: getColorCode(_d.color_name),
-                            data: [_d.quantity]
-                        })
-                    }
+            function getData(top,hours,skips=0) {
+                let stringJson = "#{data}";
+                let fixedJson = stringJson.replaceAll('&quot;', '"');
+                let olddata = JSON.parse(fixedJson);
+                let data = [];
+                olddata.forEach((a) => {
+                    data.push(a.sort((a, b) => (a.quantity > b.quantity) ? 1 : -1));
                 });
-            });
-            console.log(allData[1].data.length);
-            function getLabels() {
+                let allData = [];
+                data.forEach((d) => {
+                    d.forEach((_d) => {
+                        let foundCurrentDataColour = false;
+                        allData.forEach((a, index) => {
+                            if (a.label === _d.color_name) {
+                                foundCurrentDataColour = true;
+                                allData[index].data.push(_d.quantity);
+                            }
+                        })
+                        if (!foundCurrentDataColour) {
+                            allData.push({
+                                label: _d.color_name,
+                                fill: false,
+                                borderColor: getColorCode(_d.color_name),
+                                data: [_d.quantity]
+                            })
+                        }
+                    });
+                });
+                if(allData[0].length<=48){
+
+                    allData.forEach((o)=>{
+
+                    });
+                }
                 let array = new Array(allData[1].data.length);
-                for (let i = array.length; i > 0; i--) {
-                    console.log(allData[1].data.length,array,i)
+                for (let i = hours; i > 0; i--) {
                     let date = new Date;
                     date.setMinutes(0);
                     date.setHours(date.getHours() - (i - 1));
@@ -56,15 +60,16 @@ block scripts
                     });
                     array[array.length - i] = stringDate;
                 }
-                return array;
+                allData.splice(top, allData.length);
+                return {
+                    labels: array,
+                    datasets: allData
+                };
             }
-            allData.splice(20, allData.length);
+            allData.splice(5, allData.length); //top 5 data
             var chart = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: getLabels(),
-                    datasets: allData
-                },
+                data: getData(5,48),
 
                 // Configuration options go here
                 options: {}
