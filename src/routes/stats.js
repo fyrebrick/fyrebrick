@@ -2,6 +2,7 @@ const User = require('../models/user');
 const getTotal = require('../functions/stats/getStats');
 var express = require('express');
 var router = express.Router();
+let crunch = require('../functions/stats/crunch');
 
 router.get('/',async (req,res,next)=>{
     res.render('stats/index');
@@ -21,8 +22,9 @@ router.get('/total_unique',async (req,res,next)=>{
 
 router.get('/common_brick_colours',async (req,res,next)=>{
     let data = await getTotal.default(await User.findOne({_id:req.session._id}));
+    let chartData = crunch.common_brick_colours(data.most_common_brick_colours,5,48);
     res.render('stats/common_brick_colours',{
-        data:JSON.stringify(data.most_common_brick_colours)
+        data:JSON.stringify(chartData)
     });
 });
 
