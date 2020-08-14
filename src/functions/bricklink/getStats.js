@@ -30,17 +30,6 @@ exports.default = async (user)=> {
                             most_common_bricks:[0],
                             most_common_brick_colours:[]
                         };
-
-                        //most_common_bricks:[{
-                        //  item.name:
-                        //  quantity:
-                        // },...]
-
-                        //most_common_brick_colours:[{
-                        //  color_name:
-                        //  quantity:
-                        // },...]
-
                         obj.data.forEach((item)=>{
                            value.total_bricks += item.quantity;
                            let brick_colour_not_found = true;

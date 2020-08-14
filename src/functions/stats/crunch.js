@@ -3,14 +3,20 @@ let other = require('./other');
 exports.common_brick_colours = (_data,top,hours,skips=0) => {
     let olddata = _data;
     let sortedData = [];
+
     //sorting
     olddata.forEach((a) => {
         sortedData.push(a.sort((a, b) => (a.quantity > b.quantity) ? 1 : -1));
     });
+    console.log(sortedData);
+
+
+    //limit allData for amount of given hours to view
+    let limitedArray = sortedData.slice(sortedData.length-hours);
 
     // pushing all data with same colour_name
     let allData = [];
-    sortedData.forEach((d) => {
+    limitedArray.forEach((d) => {
         d.forEach((_d) => {
             let foundCurrentDataColour = false;
             allData.forEach((a, index) => {
@@ -29,13 +35,12 @@ exports.common_brick_colours = (_data,top,hours,skips=0) => {
             }
         });
     });
-    console.log(sortedData);
-    //limit allData for amount of given hours to view
-    let limitedArray = sortedData.slice(sortedData.length-hours);
+    console.log(allData);
 
     //creating array with stringDates as label for chart
-    let array = new Array(hours);
-    for (let i = hours; i > 0; i--) {
+    let i = (hours>olddata.length)?olddata.length:hours;
+    let array = new Array(i);
+    for (i ; i > 0; i--) {
         let date = new Date;
         date.setMinutes(0);
         date.setHours(date.getHours() - (i - 1));
@@ -48,9 +53,9 @@ exports.common_brick_colours = (_data,top,hours,skips=0) => {
     }
 
     //top x chosen
-    allData.splice(top, allData.length);
+    console.log(allData);
     return {
         labels: array,
-        datasets: limitedArray
+        datasets: allData.splice(allData.length-top)
     };
 }
