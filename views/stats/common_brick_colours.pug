@@ -1,7 +1,26 @@
 extends ../layout
 block content
     .container-fluid
-        canvas#myChart
+        h3.display-4.text-center Most common brick colours
+        .row
+            .col-6
+                label.sr-only(for='selectTop') Top amount of Colours
+                .input-group.mb-2
+                    .input-group-prepend
+                        .input-group-text Top
+                    input#selectTop.form-control(type='number' min='1' max='81' step='1' value='5' placeholder='Amount of colours')
+            .col-6
+                label.sr-only(for='selectHours') Amount of hours shown
+                .input-group.mb-2
+                    .input-group-prepend
+                        .input-group-text Last # hours
+                    input#selectHours.form-control(type='number' min='1' max='999' step='1' value='48' placeholder='Amount of hours')
+        .row
+            .col
+                button#showChart.btn.btn-primary(type='button') Show chart
+        hr
+        .chartHere
+            canvas#myChart
         .list-group
             a.list-group-item.list-group-item-action(href='/stats/total') Amount of total bricks
             a.list-group-item.list-group-item-action.disabled(href='#') Amount of total unique bricks
@@ -19,6 +38,24 @@ block scripts
                 data: JSON.parse("#{data}".replaceAll('&quot;', '"')),
                 // Configuration options go here
                 options: {}
+            });
+            $('#showChart').click(function(){
+               let hours = Number($("#selectHours").val());
+               let top = Number($("#selectTop").val());
+                $.post("/stats/update/common_brick_colours", {top:top,hours:hours})
+                    .done(function (data) {
+                        $("#myChart").remove();
+                        $(".chartjs-size-monitor").remove();
+                        $(".chartHere").append("<canvas id='myChart'></canvas>")
+                        let ctx = $("canvas")[0].getContext('2d');
+                        var chart = new Chart(ctx, {
+                            type: 'line',
+                            data: data,
+                            // Configuration options go here
+                            options: {}
+                        });
+
+                    });
             });
         }
 

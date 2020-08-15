@@ -3,7 +3,8 @@ let other = require('./other');
 exports.common_brick_colours = (_data,top,hours,skips=0) => {
     let olddata = _data;
     let sortedData = [];
-
+    top = Number(top);
+    hours = Number(hours);
     //sorting
     olddata.forEach((a) => {
         sortedData.push(a.sort((a, b) => (a.quantity > b.quantity) ? 1 : -1));

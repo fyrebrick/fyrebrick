@@ -28,6 +28,14 @@ router.get('/common_brick_colours',async (req,res,next)=>{
     });
 });
 
+router.post('/update/common_brick_colours',async (req,res,next)=>{
+    let data = await getStats.default(await User.findOne({_id:req.session._id}));
+    let chartData = crunch.common_brick_colours(data.most_common_brick_colours,req.body.top,req.body.hours);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(chartData);
+});
+
+
 
 
 module.exports = router;
