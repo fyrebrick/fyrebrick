@@ -61,6 +61,10 @@ block scripts
                                 return "<i class=\"fas fa-clipboard-list data-status\"></i>";
                             case 'PENDING':
                                 return "<i class=\"fas fa-hourglass data-status\"></i>";
+                            case 'CANCELLED':
+                                return "<i class=\"fas fa-ban data-status\"></i>";
+                            case 'PURGED':
+                                return "<i class=\"fas fa-window-close data-status\"></i>";
                             default:
                                 return"error"
                         }

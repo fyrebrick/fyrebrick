@@ -4,7 +4,7 @@ const User = require('../models/user');
 const getStats = require('../functions/bricklink/getStats');
 exports.default = ()=>{
     let cron_value = '59 23 * * *';
-    schedule.scheduleJob('* * * * *',async()=>{
+    schedule.scheduleJob('0 * * * *',async()=>{
         let all_stats = await Stats.find();
         for (const stats of all_stats) {
             let user = await User.findOne({CONSUMER_KEY: stats.consumer_key});

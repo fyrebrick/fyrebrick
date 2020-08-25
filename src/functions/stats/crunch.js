@@ -9,7 +9,6 @@ exports.common_brick_colours = (_data,top,hours,skips=0) => {
     olddata.forEach((a) => {
         sortedData.push(a.sort((a, b) => (a.quantity > b.quantity) ? 1 : -1));
     });
-    console.log(sortedData);
 
 
     //limit allData for amount of given hours to view
@@ -36,8 +35,6 @@ exports.common_brick_colours = (_data,top,hours,skips=0) => {
             }
         });
     });
-    console.log(allData);
-
     //creating array with stringDates as label for chart
     let i = (hours>olddata.length)?olddata.length:hours;
     let array = new Array(i);
@@ -54,7 +51,6 @@ exports.common_brick_colours = (_data,top,hours,skips=0) => {
     }
 
     //top x chosen
-    console.log(allData);
     return {
         labels: array,
         datasets: allData.splice(allData.length-top)
