@@ -50,6 +50,6 @@ exports.default = async (user)=> {
                     }
                 }
             );
-        };
+        }
     });
-}
+};

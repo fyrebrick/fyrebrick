@@ -7,7 +7,10 @@ const changeValueOfInventoryId = require("../functions/bricklink/changeValueOfIn
 const addToInventoryIds = require("../functions/bricklink/addToInventoryIds");
 const combineInventoryIds = require('../functions/bricklink/combineInventoryIds');
 const getJSON = require('../functions/bricklink/getJson');
-
+const getUrl = require('../functions/scrape/getUrls');
+const https = require('https');
+const jsdom = require("jsdom");
+const Stores = require('../models/stores');
 router.all('/', async function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
     (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
@@ -47,6 +50,17 @@ router.all('/:v1/:v2',async  function(req, res, next) {
         (await getJSON)(req,res,await User.findOne({_id:req.session._id}),false,"",req.params.v2).then((data)=>{
             res.send(data);
         })
+    }else if(req.params.v1==="store"){
+        let data = (await Stores.findOne({})).main;
+        if(req.params.v2==="n4totalLots"){
+            res.send(data.sort((a, b) => (a.n4totalLots < b.n4totalLots) ? 1 : -1));
+        }else if(req.params.v2==="n4totalItems"){
+            res.send(data.sort((a, b) => (a.n4totalItems < b.n4totalItems) ? 1 : -1));
+        }else if (req.params.v2==="n4totalViews"){
+            res.send(data.sort((a, b) => (a.n4totalViews < b.n4totalViews) ? 1 : -1));
+        }else {
+            res.send(data);
+        }
     }else{
         (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
             res.send(data);
