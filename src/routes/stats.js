@@ -3,7 +3,7 @@ const getStats = require('../functions/stats/getStats');
 var express = require('express');
 var router = express.Router();
 let crunch = require('../functions/stats/crunch');
-
+const Stores = require('../models/stores');
 router.get('/',async (req,res,next)=>{
     res.render('stats/index');
 });
@@ -27,6 +27,21 @@ router.get('/common_brick_colours',async (req,res,next)=>{
         data:JSON.stringify(chartData)
     });
 });
+
+router.get('/stores',async (req,res,next)=>{
+    let data = (await Stores.findOne({}));
+    if(data) {
+        data = data.main;
+        res.render('stats/stores_list',{
+            stores:data.sort((a, b) => (a.n4totalLots < b.n4totalLots) ? 1 : -1)
+        });
+    }else{
+        res.render('stats/stores_list',{
+            stores:[]
+        });
+    }
+});
+
 
 router.post('/update/common_brick_colours',async (req,res,next)=>{
     let data = await getStats.default(await User.findOne({_id:req.session._id}));
