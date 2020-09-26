@@ -2,9 +2,15 @@ let schedule = require('node-schedule');
 const Stats = require('../models/stats');
 const User = require('../models/user');
 const getStats = require('../functions/bricklink/getStats');
-exports.default = ()=>{
-    let cron_value = '59 23 * * *';
-    schedule.scheduleJob('0 * * * *',async()=>{
+const getStores = require('../functions/bricklink/getStores');
+const Stores = require('../models/stores');
+exports.default = async ()=>{
+
+    let every_minute = '* * * * * ';
+    let every_day_once = '59 23 * * *';
+    let every_hour_once = '0 * * * *';
+
+    schedule.scheduleJob(every_hour_once,async()=>{
         let all_stats = await Stats.find();
         for (const stats of all_stats) {
             let user = await User.findOne({CONSUMER_KEY: stats.consumer_key});
@@ -22,6 +28,20 @@ exports.default = ()=>{
                 }
             }));
         }
-    })
+    });
+    schedule.scheduleJob(every_day_once,async()=> {
+            let data = await getStores.default().catch((err)=>{
+                console.trace(err);
+            }).then((data) => {
+                return data
+            });
+            let store = await Stores.findOne({});
+            if(store){
+                await Stores.updateOne({},{main:data});
+            }else{
+                let saveme = new Stores({main:data});
+                saveme.save();
+            }
+      }
+    )
 };
-

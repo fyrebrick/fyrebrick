@@ -1,0 +1,127 @@
+extends ../layout
+block styles
+    style.
+        td {
+            font-size: 41px;
+            font-weight: bold;
+        }
+
+        .badge-primary {
+            padding: 20px;
+        }
+
+        [type="search"] {
+            font-size: 41px;
+        }
+block content
+    .container-fluid
+        h3.display-4.text-center Top list of Bricklink stores
+        table#table_id.display
+            thead
+                tr
+                    th.data-class-name Store
+                    th Items
+                    th Lots
+                    th Views
+                    th Totaal per Lots
+        .list-group
+            each store, index in stores
+                if store.username==="desmetm"
+                    a.list-group-item.list-group-item-action.active(href='https://store.bricklink.com/'+store.username+'?p='+store.username)=index+") "+store.name
+                        li="Lots: "+store.n4totalLots
+                else
+                    a.list-group-item.list-group-item-action(href='https://store.bricklink.com/'+store.username+'?p='+store.username)=index+") "+store.name
+        .list-group
+            a.list-group-item.list-group-item-action.active(href='#') Top list of Bricklink stores
+            a.list-group-item.list-group-item-action(href='/stats/total') Amount of total bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Amount of total unique bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Most common bricks
+            a.list-group-item.list-group-item-action(href='#myChart') Most common brick colours
+            a.list-group-item.list-group-item-action.disabled(href='#') Most sold bricks
+            a.list-group-item.list-group-item-action.disabled(href='#') Most sold brick colours
+
+block scripts
+    script.
+        $(document).ready(function () {
+            let orders_json,orders_db = null;
+            $('#table_id').DataTable({
+                "order": [[ 0, "desc" ]],
+                ajax: {
+                    url: '/api/store/no_sort',
+                    dataSrc: 'data'
+                },
+                columns:[
+                    {                        data:'order_id',
+                        "render": function (data, type, row, meta) {
+                            return "<a href=\"\/orders\/"+data+"\/items\" id=\"order_id\""+data+"\" class=\"badge badge-primary\" >" + data + "</a>";}
+                    },
+                    {                        data:'date_ordered',
+                        render:function(data,type,row,meta){
+                            let d = new Date(data);
+                            const options = { year: 'numeric', month: 'long', day: 'numeric'};
+                            return d.toLocaleDateString('en-UK', options)+" @ "+d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}
+                    },
+                    {data:'status',
+                        render:function(data,type,row,meta){
+                            switch(data){
+                                case 'COMPLETED':
+                                    return "<i class=\"fas fa-check-double data-status\"></i>";
+                                case 'READY':
+                                    return "<i class=\"fas fa-check data-status\"></i>";
+                                case 'PAID':
+                                    return "<i class=\"fas fa-dollar-sign data-status\"></i>";
+                                case 'PACKED':
+                                    return "<i class=\"fas fa-box data-status\"></i>";
+                                case 'SHIPPED':
+                                    return "<i class=\"fas fa-shipping-fast data-status\"></i>";
+                                case 'RECEIVED':
+                                    return "<i class=\"fas fa-box-open data-status\"></i>";
+                                case 'UPDATED':
+                                    return "<i class=\"fas fa-clipboard-list data-status\"></i>";
+                                case 'PENDING':
+                                    return "<i class=\"fas fa-hourglass data-status\"></i>";
+                                case 'CANCELLED':
+                                    return "<i class=\"fas fa-ban data-status\"></i>";
+                                case 'PURGED':
+                                    return "<i class=\"fas fa-window-close data-status\"></i>";
+                                default:
+                                    return"error"
+                            }
+                        }},
+                    {
+                        data:null, bSearchable: false,
+                        render: function (data, type, row, meta) {
+                            return "<div id=\""+row.order_id+"\" data-count=\""+row.unique_count+"\" class=\"\">\n" +
+                                "<div id=\"c"+row.order_id+"\" class=\"changeMe\">"+
+                                "<div class=\"spinner-border\" role=\"status\">\n" +
+                                "  <span class=\"sr-only\">Loading...</span>\n" +
+                                "</div>"+
+                                "</div>\n" +
+                                "</div>";
+                        }
+                    }
+                ], "drawCallback": function (settings, json) {
+                    orders_json = json;
+                    //get order from database third
+                    $(".changeMe").each(function () {
+                        let current = this;
+                        let newC = current.id.substr(1, current.id.length);
+                        $.ajax({
+                            method: "GET",
+                            url:"/db/order/" +newC + "?orders_total=" + $("#"+newC).data("count")
+                        }).done(function (data) {
+                            $("#" + current.id).remove();
+                            if (data.orders_checked <= 0) {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-danger\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            } else if (data.orders_checked < data.orders_total) {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-warning\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            } else if (data.orders_checked === data.orders_total) {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-success\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            } else {
+                                $("#" + newC).append("<span class=\"badge badge-pill badge-secondary\">" + data.orders_checked + "/" + data.orders_total + "</span>");
+                            }
+                        });
+                    });
+                }
+            });
+        });
