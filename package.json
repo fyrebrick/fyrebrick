@@ -10,7 +10,7 @@
     "after-load": "^1.0.4",
     "body-parser": "latest",
     "cookie-parser": "1.4.5",
-    "debug": "2.6.9",
+    "debug": "4.2.0",
     "dotenv": "8.2.0",
     "express": "4.16.4",
     "express-flash": "0.0.2",
