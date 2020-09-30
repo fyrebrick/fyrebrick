@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./app.js",
-    "docker": "docker build -t snakehead007/bricklink-webservice . && docker push snakehead007/bricklink-webservice"
+    "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest"
   },
   "dependencies": {
     "after-load": "1.0.4",

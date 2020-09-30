@@ -1,5 +1,7 @@
 const path = require('path');
+
 require('dotenv').config(path.resolve(process.cwd(), '.env'));
+
 const {load} = require('./src/loaders/index');
 const express = require('express');
 const apiRoutes = require('./src/routes/api');
@@ -16,7 +18,7 @@ const start = async () => {
   console .log("[INFO]: Server started");
   app.use('/',mainRoutes);
   app.use('/settings',checkSignIn,settingsRoutes);
-  app.use('/db',checkSignIn,dbRoutes)
+  app.use('/db',checkSignIn,dbRoutes);
   app.use('/api',checkSignIn,apiRoutes);
   app.use('/stats',checkSignIn,statsRoutes);
   statsUpdater.default();

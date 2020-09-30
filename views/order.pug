@@ -2,7 +2,7 @@ extends layout
 block styles
     style.
         body{
-            width: max-content;
+            width: 100%;
         }
         img{
             min-height:200px !important;
@@ -155,12 +155,13 @@ block content
     .progress
         .progress-bar#progress-fill.progress-bar-striped.progress-bar-animated( role='progressbar' style="width: 0%;" )
         .progress-bar#progress-empty.bg-light(role='progressbar' style='width: 100%')
+    .custom-control.custom-switch
+        input#filterSwitch.custom-control-input(type='checkbox')
+        label.custom-control-label(for='filterSwitch') Filter out checked items
     table#table_id.display(data-display-length='-1')
         thead
             tr
-                th
-                    label checks
-                    input(type="checkbox")
+                th Check
                 th Remark
                 th Color
                 th.data-class-name Qt
@@ -175,6 +176,19 @@ block scripts
             let check = "<i id=\"check_edit\" class=\"fas fa-check\"></i>";
             let order_db = null;
             let order_json = null;
+            $("#filterSwitch").click(function(){
+               if($("#filterSwitch").is(":checked")){
+                   //filter out checks
+                   $(".checkers").each(function(index){
+                       if($(".checkers").is(":checked")){
+                            $(this).parent().parent().parent().remove();
+                       }
+                   });
+               }else{
+                   //reload page bruh
+                   location.reload();
+               }
+            });
             //get order details from api first
             $("#qtyButtonSubmit").click(function () {
                 $.ajax({
