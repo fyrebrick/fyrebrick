@@ -62,6 +62,24 @@ block styles
             font-size: 20px;
             font-weight: 600;
         }
+        #filterSwitchDiv{
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        #filterSwitchLbl{
+            top: -9px;
+            font-size: 150%;
+            display: inline;
+            margin-left: 80px;
+            margin-top: -19px;
+            position: relative;
+        }
+        #filterSwitch{
+            left: 71px;
+            position: absolute;
+        }
+
 block content
     #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
         .modal-dialog.modal-xl
@@ -155,9 +173,9 @@ block content
     .progress
         .progress-bar#progress-fill.progress-bar-striped.progress-bar-animated( role='progressbar' style="width: 0%;" )
         .progress-bar#progress-empty.bg-light(role='progressbar' style='width: 100%')
-    .custom-control.custom-switch
-        input#filterSwitch.custom-control-input(type='checkbox')
-        label.custom-control-label(for='filterSwitch') Filter out checked items
+    #filterSwitchDiv
+        span#filterSwitchLbl(for='filterSwitch') Filter out checked items
+        input#filterSwitch(type='checkbox')
     table#table_id.display(data-display-length='-1')
         thead
             tr
@@ -180,7 +198,8 @@ block scripts
                if($("#filterSwitch").is(":checked")){
                    //filter out checks
                    $(".checkers").each(function(index){
-                       if($(".checkers").is(":checked")){
+                       if($(this).is(":checked")){
+                           console.log(this);
                             $(this).parent().parent().parent().remove();
                        }
                    });

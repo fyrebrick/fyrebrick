@@ -7,7 +7,7 @@ const Stores = require('../models/stores');
 exports.default = async ()=>{
 
     let every_minute = '* * * * * ';
-    let every_day_once = '59 23 * * *';
+    let every_day_once = '50 23 * * *';
     let every_hour_once = '0 * * * *';
 
     schedule.scheduleJob(every_hour_once,async()=>{
@@ -30,18 +30,21 @@ exports.default = async ()=>{
         }
     });
     schedule.scheduleJob(every_day_once,async()=> {
-            let data = await getStores.default().catch((err)=>{
-                console.trace(err);
-            }).then((data) => {
-                return data
-            });
-            let store = await Stores.findOne({});
-            if(store){
-                await Stores.updateOne({},{main:data});
-            }else{
-                let saveme = new Stores({main:data});
-                saveme.save();
-            }
+        let data = await getStores.default().catch((err)=>{
+            console.trace(err);
+        }).then((data) => {
+            return data
+        });
+        let store = await Stores.findOne({});
+        if(store){
+            await Stores.updateOne({},{main:data});
+        }else{
+            let saveme = new Stores({main:data});
+            saveme.save();
+        }
+
+        //new_used_bricks stats
+        //let data_2 = await getStores.
       }
     )
 };

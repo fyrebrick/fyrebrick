@@ -39,7 +39,12 @@ const User = new mongoose.Schema({
         CONSUMER_KEY : String,
         CONSUMER_SECRET : String,
         TOKEN_SECRET : String,
-        TOKEN_VALUE : String
+        TOKEN_VALUE : String,
+        TOKENS:[{
+            ip:String,
+            SECRET:String,
+            VALUE:String
+            }]
     },
 );
 
