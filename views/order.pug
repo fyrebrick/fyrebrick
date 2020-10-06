@@ -181,6 +181,7 @@ block content
             tr
                 th Check
                 th Remark
+                th Desc.
                 th Color
                 th.data-class-name Qt
                 th N/U
@@ -341,6 +342,15 @@ block scripts
                             return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >"+remarkNew+"</a>";
                         }
                     }
+                    },
+                    {data: null,
+                        render: function(data,type,row,meta){
+                            if(row.description){
+                                return row.description;
+                            }else{
+                                return "";
+                            }
+                        }
                     },
                     {
                         data:'color_name',

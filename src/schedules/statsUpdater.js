@@ -45,6 +45,6 @@ exports.default = async ()=>{
 
         //new_used_bricks stats
         //let data_2 = await getStores.
-      }
+     }
     )
 };

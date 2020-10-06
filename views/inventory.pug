@@ -37,14 +37,38 @@ block styles
             font-size:20px;
             font-weight: 600;
          }
+        .redRow{
+            border: 3px solid darkred;
+            outline: none;
+            box-shadow: 0 0 10px darkred;
+        }
+        .redRow td{
+            background-color: hsla(0, 100%, 27%, 0.25);
+        }
+        .checkboxChangeRemarks{
+            top: 30px;
+            position: relative;
+        }
+        .greenRow{
+            border: 3px solid darkgreen;
+            outline: none;
+            box-shadow: 0 0 10px darkgreen;
+        }
+
+        .greenRow td {
+            background-color: hsla(120, 100%, 20%, 0.25);
+        }
+
 block content
     .row
         .col-2
             #loadingSection
         .col-10
-            div.form-inline.float-right
+            div.form-inline.float-right#mainButtonRows
                 input#search.form-control.mr-sm-2(type='search' placeholder='Search on remark' aria-label='Search')
-                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
+                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0.mr-2(type='submit') Search
+                button#activateChangeRemarkButton.btn.btn-outline-secondary.my-2.mr-2.my-sm-0(type='submit') Change remark
+
     #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
         .modal-dialog.modal-xl
             .modal-content
@@ -69,9 +93,25 @@ block content
                             button#qtyButtonRemove.buttonBig.buttonModal.btn.btn-danger(type="button") Remove
                 .modal-footer
                     button#qtyButtonSubmit.buttonBig.btn.btn-secondary(type="submit") update
+    #changeRemarkModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
+        .modal-dialog.modal-xl
+            .modal-content
+                .modal-header
+                    h5#changeRemarkTitle.modal-title Change selected Inventory lots' remark
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    .form
+                        .form-group
+                            .input-group
+                                .input-group-prepend
+                                    span#labelUpdateRemark.input-group-text Input the remark to update
+                                input#inputUpdateRemark.form-control(type="text", placeholder="...")
+                .modal-footer
+                    button#changeRemarkFinish.buttonBig.btn.btn-secondary(type="submit") update
     #drawTable
         table#table_id.table.table-striped
-            thead.thead-dark
+            thead#headOfTable.thead-dark
                 tr
                     th(scope="col") Remark
                     th(scope="col") Colour
@@ -81,7 +121,86 @@ block content
             tbody#bodyOfTable
 block scripts
     script.
+        function showModalChangeRemark() {
+            $("#changeRemarkModal").modal('show');
+        }
+
         $(document).ready(function () {
+            //change remarks feature
+            let stateofChangeRemarkButton = false;
+            let searchValue = "";
+            let showUpdateButton = false;
+
+            function revertOutOfChangeRemarkState() {
+                $("#activateChangeRemarkButton").removeClass("btn-primary").addClass("btn-outline-secondary");
+                $("#checkHeader").remove();
+                $(".checkRow").remove();
+                $("#updateButton").remove();
+                $("#changeRemarkModal").modal('hide');
+                try {
+                    showUpdateButton = false;
+                    searchValue = "";
+                    stateofChangeRemarkButton = false;
+                } catch (e) {
+                }
+                ;
+            };
+
+            $("#activateChangeRemarkButton").click(function(){
+               if(stateofChangeRemarkButton){
+                   //deactive change remark state
+                   if($("#checkHeader").html()===" Check"){ //be sure that not already deleted
+                       revertOutOfChangeRemarkState();
+                   }
+                   //removes red glowing rows
+                   $("#bodyOfTable tr").removeClass("redRow");
+
+               }else if(!stateofChangeRemarkButton && searchValue.trim()){
+                   //ACTIVE change remark state
+                    $(this).removeClass("btn-outline-secondary").addClass("btn-primary"); //looks like function is active
+                    //add extra collumn
+                    $("#headOfTable tr").prepend("<th id='checkHeader' scope='col' > Check</th>")
+                   $("#bodyOfTable tr").each(function(){
+                        let idOfCurrentRow = $(this).attr('id');
+                        $(this).prepend("<td class='checkRow'><div class=\"custom-control custom-checkbox\">\n" +
+                            "  <input type=\"checkbox\" class=\"checkboxChangeRemarks\" name=\""+idOfCurrentRow+"\">" +
+                            "</div></td>")
+                   });
+
+               }
+                stateofChangeRemarkButton = !stateofChangeRemarkButton;
+            });
+
+            $("#changeRemarkFinish").click(function(){ //button was pressed to change remarks
+                //gather all selected inventoryId's
+                let ids = [];
+                $(".checkboxChangeRemarks").each(function(){
+                    if(this.checked){ids.push($(this).attr('name'));};
+                });
+                let newRemarkName = $("#inputUpdateRemark").val().toUpperCase();
+                let body = {
+                    ids:JSON.stringify(ids),
+                    newRemarkName:newRemarkName
+                };
+                console.log(body);
+                //api call here
+                $.ajax({
+                    method: "PUT",
+                    url: '/api/change_remark',
+                    data: body,
+                }).done(function (data) {
+                    $(".redRow").removeClass("redRow").addClass("greenRow");
+                    revertOutOfChangeRemarkState();
+                    ///TODO: show message based on success
+                });
+                //end api call
+
+
+            })
+
+            //end change remarks feature
+
+            //preventDefaults
             $('table#table_id').on('mousedown', 'input', function (e) {
                 e.preventDefault();
                 if ($(e.target).is("input.checkers")) {
@@ -104,6 +223,25 @@ block scripts
                     $("#qtyModal").modal('show');
                 }
             });
+            $("div").on('change','.checkboxChangeRemarks',function (e) {
+                e.preventDefault();
+                if($(e.target).is(".checkboxChangeRemarks")) {
+                    let checked = this.checked;
+                    if (checked) {
+                        $(this).parent().parent().parent().addClass("redRow");
+                        if(!showUpdateButton){
+                            //start showing update button
+                            $("#mainButtonRows").append("<button onclick='showModalChangeRemark()' type=\"button\" id=\"updateButton\" class=\"btn btn-success\">Update</button>")
+                            showUpdateButton = true;
+                        }
+                    } else {
+                        $(this).parent().parent().parent().removeClass("redRow");
+                    }
+                }
+            });
+            //end preventdefaults
+
+
             $("#qtyButtonSubmit").click(function(){
                 $.ajax({
                     method: "POST",
@@ -157,7 +295,9 @@ block scripts
                 "  Loading...\n" +
                 "</button>"
             $("#searchButton").on("click", function() {
-                    $("#bodyOfTable tr").remove();
+                $("#search").val($("#search").val().toUpperCase());
+                $("#bodyOfTable tr").remove();
+                revertOutOfChangeRemarkState();
                 $.ajax({
                     method: "GET",
                     url: '/api/inventories?search='+$("#search").val(),
@@ -167,8 +307,8 @@ block scripts
                 }).done(function (data) {
                     $("#spinner").remove();
                     data.data.forEach(function(item){
-                        let tr = "<tr>"; //start row
-                        tr+="<td>"; // start 1 column
+                        let tr = "<tr id="+item.inventory_id+">"; //start row
+                        tr+="<td >"; // start 1 column
                         if (item.remarks === undefined) {
                             tr+= "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
                         } else {
@@ -188,6 +328,7 @@ block scripts
                         tr += getPic(item);
                         tr += "</td></tr>";
                         $('#bodyOfTable').append(tr);
+                        searchValue = $("#search").val();
                     });
                 });
                 function getPic(row) {

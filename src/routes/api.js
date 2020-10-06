@@ -6,6 +6,7 @@ const investigateInventory = require("../functions/bricklink/investigateInventor
 const changeValueOfInventoryId = require("../functions/bricklink/changeValueOfInventoryId");
 const addToInventoryIds = require("../functions/bricklink/addToInventoryIds");
 const combineInventoryIds = require('../functions/bricklink/combineInventoryIds');
+const changeRemark = require('../functions/bricklink/changeRemark');
 const getJSON = require('../functions/bricklink/getJson');
 const getUrl = require('../functions/scrape/getUrls');
 const https = require('https');
@@ -34,6 +35,12 @@ router.all('/:v1', async function(req, res, next) {
         });
     }else if(req.params.v1==="change_quantity"){
         (await changeValueOfInventoryId)(req.body.sign,req.body.value,req.body.id,await User.findOne({_id:req.session._id})).then((data)=>{
+            res.send(data);
+        })
+    }else if(req.params.v1==="change_remark"){
+        console.log(await User.findOne({_id:req.session._id}));
+        console.log(req.body);
+        (await changeRemark)(req.body.ids,req.body.newRemarkName,await User.findOne({_id:req.session._id})).then((data)=>{
             res.send(data);
         })
     }else{

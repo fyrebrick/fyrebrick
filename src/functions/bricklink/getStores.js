@@ -21,7 +21,6 @@ exports.default = async ()=>{
                    await getStoreInfo(store).then((data)=>{
                        stats.push(data);
                        if(stats.length===allStores.length){try{
-
                            stats.sort((a, b) => (a.n4totalLots < b.n4totalLots) ? 1 : -1);
                        }catch(err){
                            console.trace(err);

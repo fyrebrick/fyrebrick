@@ -42,6 +42,47 @@ router.get('/stores',async (req,res,next)=>{
     }
 });
 
+router.get('/stores/items',async (req,res,next)=>{
+    let data = (await Stores.findOne({}));
+    if(data) {
+        data = data.main;
+        res.render('stats/stores/items',{
+            stores:data.sort((a, b) => (a.n4totalItems < b.n4totalItems) ? 1 : -1)
+        });
+    }else{
+        res.render('stats/stores/items',{
+            stores:[]
+        });
+    }
+});
+
+router.get('/stores/lots',async (req,res,next)=>{
+    let data = (await Stores.findOne({}));
+    if(data) {
+        data = data.main;
+        res.render('stats/stores/lots',{
+            stores:data.sort((a, b) => (a.n4totalLots < b.n4totalLots) ? 1 : -1)
+        });
+    }else{
+        res.render('stats/stores/lots',{
+            stores:[]
+        });
+    }
+});
+
+router.get('/stores/views',async (req,res,next)=>{
+    let data = (await Stores.findOne({}));
+    if(data) {
+        data = data.main;
+        res.render('stats/stores/views',{
+            stores:data.sort((a, b) => (a.n4totalViews < b.n4totalViews) ? 1 : -1)
+        });
+    }else{
+        res.render('stats/stores/views',{
+            stores:[]
+        });
+    }
+});
 
 router.post('/update/common_brick_colours',async (req,res,next)=>{
     let data = await getStats.default(await User.findOne({_id:req.session._id}));
