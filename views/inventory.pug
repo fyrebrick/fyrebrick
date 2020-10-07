@@ -60,17 +60,19 @@ block styles
         }
 
 block content
-    .row
+    .row.justify-content-between
         .col-2
             #loadingSection
-        .col-10
-            div.form-inline.float-right#mainButtonRows
-                input#search.form-control.mr-sm-2(type='search' placeholder='Search on remark' aria-label='Search')
-                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0.mr-2(type='submit') Search
-                button#activateChangeRemarkButton.btn.btn-outline-secondary.my-2.mr-2.my-sm-0(type='submit') Change remark
+        .col
+            input#search.form-control(type='search' placeholder='Search' aria-label='Search')
+        .col-auto.align-self-end.mre-auto
+            .btn-group(role='group' aria-label='Group of action buttons')#mainButtonRows
+                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
+                button#activateChangeRemarkButton.btn.btn-outline-secondary.my-2.my-sm-0(type='submit') Change remark
+    hr
 
     #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
-        .modal-dialog.modal-xl
+        .modal-dialog.modal-sm
             .modal-content
                 .modal-header
                     p#qtyId(style='display:none;')
@@ -130,23 +132,21 @@ block scripts
             let stateofChangeRemarkButton = false;
             let searchValue = "";
             let showUpdateButton = false;
-
+            let amountChecked = 0;
             function revertOutOfChangeRemarkState() {
                 $("#activateChangeRemarkButton").removeClass("btn-primary").addClass("btn-outline-secondary");
                 $("#checkHeader").remove();
                 $(".checkRow").remove();
                 $("#updateButton").remove();
                 $("#changeRemarkModal").modal('hide');
-                try {
-                    showUpdateButton = false;
-                    searchValue = "";
-                    stateofChangeRemarkButton = false;
-                } catch (e) {
-                }
-                ;
+                showUpdateButton = false;
+                stateofChangeRemarkButton = false;
+                amountChecked = 0;
+                $("#showAmountChecked").remove();
             };
 
             $("#activateChangeRemarkButton").click(function(){
+                console.log(stateofChangeRemarkButton,searchValue);
                if(stateofChangeRemarkButton){
                    //deactive change remark state
                    if($("#checkHeader").html()===" Check"){ //be sure that not already deleted
@@ -154,6 +154,7 @@ block scripts
                    }
                    //removes red glowing rows
                    $("#bodyOfTable tr").removeClass("redRow");
+
 
                }else if(!stateofChangeRemarkButton && searchValue.trim()){
                    //ACTIVE change remark state
@@ -166,9 +167,8 @@ block scripts
                             "  <input type=\"checkbox\" class=\"checkboxChangeRemarks\" name=\""+idOfCurrentRow+"\">" +
                             "</div></td>")
                    });
-
+                   stateofChangeRemarkButton = true;
                }
-                stateofChangeRemarkButton = !stateofChangeRemarkButton;
             });
 
             $("#changeRemarkFinish").click(function(){ //button was pressed to change remarks
@@ -191,6 +191,8 @@ block scripts
                 }).done(function (data) {
                     $(".redRow").removeClass("redRow").addClass("greenRow");
                     revertOutOfChangeRemarkState();
+                    $(".greenRow").fadeOut( 1000,function(){
+                    });
                     ///TODO: show message based on success
                 });
                 //end api call
@@ -227,16 +229,24 @@ block scripts
                 e.preventDefault();
                 if($(e.target).is(".checkboxChangeRemarks")) {
                     let checked = this.checked;
+                    console.log('change detected');
                     if (checked) {
                         $(this).parent().parent().parent().addClass("redRow");
+                        amountChecked++;
                         if(!showUpdateButton){
                             //start showing update button
                             $("#mainButtonRows").append("<button onclick='showModalChangeRemark()' type=\"button\" id=\"updateButton\" class=\"btn btn-success\">Update</button>")
+                            $("#loadingSection").append("<button id=\"showAmountChecked\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" +
+                                "</button>");
                             showUpdateButton = true;
                         }
                     } else {
                         $(this).parent().parent().parent().removeClass("redRow");
+                        amountChecked--;
                     }
+                    let correctChecked = (amountChecked/3);
+                    console.log(correctChecked,amountChecked)
+                    $("#showAmountChecked").text(correctChecked+" selected");
                 }
             });
             //end preventdefaults
@@ -290,11 +300,12 @@ block scripts
                 }
 
             })
-            let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary\" type=\"button\" disabled>\n" +
+            let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" +
                 "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
                 "  Loading...\n" +
                 "</button>"
             $("#searchButton").on("click", function() {
+                searchValue = ""
                 $("#search").val($("#search").val().toUpperCase());
                 $("#bodyOfTable tr").remove();
                 revertOutOfChangeRemarkState();
