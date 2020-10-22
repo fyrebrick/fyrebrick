@@ -502,7 +502,6 @@ block scripts
                             if ($(e.target).is("input.checkers")) {
                                 //console.log($(this).is(":checked"));
                                 let state = $(this).is(":checked");
-                                let currentId = this.id;
                                 $("#" + this.id).prop("checked", state);
                                 //update the database
                                 //id of checkboxes are like this => "check[id]"
@@ -512,12 +511,18 @@ block scripts
                                     url: "/db/order/#{order_id}",
                                     data: {item: id},
                                     error:function(){
-                                        location.reload();
+                                        if (window.alert("Checkbox gave an error. please reload.")) {
+                                            location.reload();
+                                        }
+                                    },
+                                    fail:function(){
+                                        if(window.alert("Checkbox failed. please reload.")){
+                                            location.reload();
+                                        }
                                     }
                                 }).done(function (data) {
                                     //console.log("done", data);
                                     //progress bar updated
-                                    console.log(data);
                                     if(state){
                                         if(order_db.orders_checked!=0){
                                             order_db.orders_checked--;
