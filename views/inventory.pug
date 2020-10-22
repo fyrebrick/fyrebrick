@@ -58,7 +58,10 @@ block styles
         .greenRow td {
             background-color: hsla(120, 100%, 20%, 0.25);
         }
-
+        .singleInputButton{
+            top: 19px;
+            position: relative;
+        }
 block content
     .row.justify-content-between
         .col-2
@@ -68,11 +71,11 @@ block content
         .col-auto.align-self-end.mre-auto
             .btn-group(role='group' aria-label='Group of action buttons')#mainButtonRows
                 button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
-                button#activateChangeRemarkButton.btn.btn-outline-secondary.my-2.my-sm-0(type='submit') Change remark
+                button#activateChangeRemarkButton.btn.btn-lg.btn-outline-secondary.my-2.my-sm-0(type='submit') Change remark
     hr
 
     #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
-        .modal-dialog.modal-sm
+        .modal-dialog.modal-xl
             .modal-content
                 .modal-header
                     p#qtyId(style='display:none;')
@@ -123,317 +126,358 @@ block content
             tbody#bodyOfTable
 block scripts
     script.
-        function showModalChangeRemark() {
-            $("#changeRemarkModal").modal('show');
-        }
-
-        $(document).ready(function () {
-            //change remarks feature
-            let stateofChangeRemarkButton = false;
-            let searchValue = "";
-            let showUpdateButton = false;
-            let amountChecked = 0;
-            function revertOutOfChangeRemarkState() {
-                $("#activateChangeRemarkButton").removeClass("btn-primary").addClass("btn-outline-secondary");
-                $("#checkHeader").remove();
-                $(".checkRow").remove();
-                $("#updateButton").remove();
-                $("#changeRemarkModal").modal('hide');
-                showUpdateButton = false;
-                stateofChangeRemarkButton = false;
-                amountChecked = 0;
-                $("#showAmountChecked").remove();
-            };
-
-            $("#activateChangeRemarkButton").click(function(){
-                console.log(stateofChangeRemarkButton,searchValue);
-               if(stateofChangeRemarkButton){
-                   //deactive change remark state
-                   if($("#checkHeader").html()===" Check"){ //be sure that not already deleted
-                       revertOutOfChangeRemarkState();
-                   }
-                   //removes red glowing rows
-                   $("#bodyOfTable tr").removeClass("redRow");
-
-
-               }else if(!stateofChangeRemarkButton && searchValue.trim()){
-                   //ACTIVE change remark state
-                    $(this).removeClass("btn-outline-secondary").addClass("btn-primary"); //looks like function is active
-                    //add extra collumn
-                    $("#headOfTable tr").prepend("<th id='checkHeader' scope='col' > Check</th>")
-                   $("#bodyOfTable tr").each(function(){
-                        let idOfCurrentRow = $(this).attr('id');
-                        $(this).prepend("<td class='checkRow'><div class=\"custom-control custom-checkbox\">\n" +
-                            "  <input type=\"checkbox\" class=\"checkboxChangeRemarks\" name=\""+idOfCurrentRow+"\">" +
-                            "</div></td>")
-                   });
-                   stateofChangeRemarkButton = true;
-               }
-            });
-
-            $("#changeRemarkFinish").click(function(){ //button was pressed to change remarks
-                //gather all selected inventoryId's
-                let ids = [];
-                $(".checkboxChangeRemarks").each(function(){
-                    if(this.checked){ids.push($(this).attr('name'));};
-                });
-                let newRemarkName = $("#inputUpdateRemark").val().toUpperCase();
-                let body = {
-                    ids:JSON.stringify(ids),
-                    newRemarkName:newRemarkName
-                };
-                console.log(body);
-                //api call here
-                $.ajax({
-                    method: "PUT",
-                    url: '/api/change_remark',
-                    data: body,
-                }).done(function (data) {
-                    $(".redRow").removeClass("redRow").addClass("greenRow");
-                    revertOutOfChangeRemarkState();
-                    $(".greenRow").fadeOut( 1000,function(){
-                    });
-                    ///TODO: show message based on success
-                });
-                //end api call
-
-
-            })
-
-            //end change remarks feature
-
-            //preventDefaults
-            $('table#table_id').on('mousedown', 'input', function (e) {
-                e.preventDefault();
-                if ($(e.target).is("input.checkers")) {
-                    let state = $(this).is(":checked");
-                    $("#" + this.id).prop("checked", state);
-                }
-            }).on('click', 'img', function (e) {
-                e.preventDefault();
-                if ($(e.target).is('img.img-thumbnail')) {
-                    let modalId = "#modal" + this.id.substr(3, this.id.length);
-                    $(modalId).modal('show');
-                }
-            }).on('click','.qty',function(e){
-                e.preventDefault();
-                if($(e.target).is(".qty")){
-                    let data = $(this).data(); //name, id, qty
-                    $("#qtyTitle").text("Add or remove quantity to item \""+ data.name+"\"");
-                    $("#qtyNumberCurrent").text(data.qty);
-                    $("#qtyId").text(data.id);
-                    $("#qtyModal").modal('show');
-                }
-            });
-            $("div").on('change','.checkboxChangeRemarks',function (e) {
-                e.preventDefault();
-                if($(e.target).is(".checkboxChangeRemarks")) {
-                    let checked = this.checked;
-                    console.log('change detected');
-                    if (checked) {
-                        $(this).parent().parent().parent().addClass("redRow");
-                        amountChecked++;
-                        if(!showUpdateButton){
-                            //start showing update button
-                            $("#mainButtonRows").append("<button onclick='showModalChangeRemark()' type=\"button\" id=\"updateButton\" class=\"btn btn-success\">Update</button>")
-                            $("#loadingSection").append("<button id=\"showAmountChecked\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" +
-                                "</button>");
-                            showUpdateButton = true;
-                        }
-                    } else {
-                        $(this).parent().parent().parent().removeClass("redRow");
-                        amountChecked--;
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
+            document.getElementById("changeRemarkFinish").addEventListener("click",changeRemarkFinish);
+            document.getElementById('search')
+                .addEventListener('keyup', function (e) {
+                    if (e.code === 'Enter') {
+                        document.getElementById("searchButton").click();
                     }
-                    let correctChecked = (amountChecked/3);
-                    console.log(correctChecked,amountChecked)
-                    $("#showAmountChecked").text(correctChecked+" selected");
-                }
-            });
-            $("input").on('enterKey',".inputRemarks",function(e){
-                e.preventDefault();
-                if($(e.target).is('.inputRemarks')){
-                    let id = $(this).prop('id').substr(1);
-                    let newRemarkName = $(this).innerText;
-                    console.log(id,newRemarkName);
-                    $.ajax({
-                        method: "POST",
-                        url: '/api/change_one_remark',
-                        data: {
-                            ids:"['"+id+"']",
-                            newRemarkName:newRemarkName
-                        },
-                    }).beforeSend(function(data){
-                        let spin = "<div class=\"spinner-border\" id=\"S"+id+"\" role=\"status\">\n" +
-                            "  <span class=\"sr-only\">Loading...</span>\n" +
-                            "</div>";
-                    }).done(function (data) {
-                        window.alert('done')
-                    });
-                }
-            })
-            //end preventdefaults
-
-
-            $("#qtyButtonSubmit").click(function(){
-                $.ajax({
-                    method: "POST",
-                    url: '/api/change_quantity',
-                    data:{
-                        sign:$("#inputIndicator").text(),
-                        value:$("#qtyInput").val(),
-                        id:$("#qtyId").text()
-                    },
-                }).done(function (data) {
-                    $("#qtyModal").modal('hide');
                 });
-            })
-            $("#qtyButtonAdd").click(function(){
-                $(this).removeClass("btn-success");
-                $(this).addClass("btn-outline-success");
-                $("#qtyButtonRemove").removeClass("btn-outline-danger");
-                $("#qtyButtonRemove").addClass("btn-danger");
-                $("#inputIndicator").text("+");
-                $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text())+Number($("#qtyInput").val()));
-            })
-            $("#qtyButtonRemove").click(function () {
-                $(this).removeClass("btn-danger");
-                $(this).addClass("btn-outline-danger");
-                $("#qtyButtonAdd").removeClass("btn-outline-success");
-                $("#qtyButtonAdd").addClass("btn-success");
-                $("#inputIndicator").text("-");
+            document.getElementById("searchButton").addEventListener('click',search);
+        });
+        let stateofChangeRemarkButton = false;
+        let searchValue = "";
+        let showUpdateButton = false;
+        let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" + "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" + "  Loading...\n" + "</button>";
+        let amountChecked = 0;
+        function listenersWhenSearchIsComplete (){
+            console.log("called listenersWhenSearchIsComplete()");
+            document.querySelectorAll(".singleInputButton").forEach(function (item) {
+                item.addEventListener('click', singleInputButton);
+            });
+            document.querySelectorAll("img").forEach(function (item) {
+                item.addEventListener('click', imgThumbnail);
+            });
+            document.querySelectorAll(".qty").forEach(function (item) {
+                item.addEventListener('click', qty);
+            });
+            document.getElementById("qtyButtonSubmit").addEventListener("click", qtyButtonSumbit)
+            document.getElementById("qtyButtonAdd").addEventListener("click", qtyButtonAdd)
+            document.getElementById("qtyButtonRemove").addEventListener("click", qtyButtonRemove)
+            document.getElementById("qtyInput").addEventListener('keyup', qtyInput)
+        }
+        function listenersWhenUpdating(){
+            document.querySelectorAll(".checkers").forEach(function (item) {
+                item.addEventListener('click', checkers);
+            });
+            document.querySelectorAll(".checkboxChangeRemarks").forEach(function (item) {
+                item.addEventListener('change', checkboxChangeRemarks);
+            });
+        }
+        function activateChangeRemarkButton () {
+            console.log("called activateChangeRemarkButton()");
+            console.log(stateofChangeRemarkButton, searchValue);
+            if (stateofChangeRemarkButton) {
+                //deactive change remark state
+                if ($("#checkHeader").html() === " Check") { //be sure that not already deleted
+                    revertOutOfChangeRemarkState();
+                }
+                //removes red glowing rows
+                $("#bodyOfTable tr").removeClass("redRow");
+            } else if (!stateofChangeRemarkButton && searchValue.trim()) {
+                //ACTIVE change remark state
+                $(this).removeClass("btn-outline-secondary").addClass("btn-primary"); //looks like function is active
+                //add extra collumn
+                $("#headOfTable tr").prepend("<th id='checkHeader' scope='col' > Check</th>")
+                $("#bodyOfTable tr").each(function () {
+                    let idOfCurrentRow = $(this).attr('id');
+                    $(this).prepend("<td class='checkRow'><div class=\"custom-control custom-checkbox\">\n" +
+                        "  <input type=\"checkbox\" class=\"checkboxChangeRemarks\" name=\"" + idOfCurrentRow + "\">" +
+                        "</div></td>")
+                });
+                stateofChangeRemarkButton = true;
+            }
+            listenersWhenUpdating();
+        }
+        function qtyInput() {
+            console.log("called qtyInput()");
+            let sign = $("#inputIndicator").text();
+            if (sign === "+") {
+                $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
+            } else if (sign === "-") {
                 let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
-                if(next<=0){
+                if (next <= 0) {
                     $("#qtyNumberNext").text("0");
-                }else{
+                } else {
                     $("#qtyNumberNext").text(next);
                 }
-            })
-            $("#qtyInput").keyup(function(){
-                let sign = $("#inputIndicator").text();
-                if(sign==="+"){
-                    $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
-                }else if(sign==="-"){
-                    let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
-                    if (next <= 0) {
-                        $("#qtyNumberNext").text("0");
-                    } else {
-                        $("#qtyNumberNext").text(next);
-                    }
-                }
+            }
 
-            })
-            let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" +
-                "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
-                "  Loading...\n" +
-                "</button>"
-            $("#searchButton").on("click", function() {
-                searchValue = ""
-                $("#search").val($("#search").val().toUpperCase());
-                $("#bodyOfTable tr").remove();
-                revertOutOfChangeRemarkState();
+        }
+        function qtyButtonRemove() {
+            console.log("called qtyButtonRemove()");
+            $(this).removeClass("btn-danger");
+            $(this).addClass("btn-outline-danger");
+            $("#qtyButtonAdd").removeClass("btn-outline-success");
+            $("#qtyButtonAdd").addClass("btn-success");
+            $("#inputIndicator").text("-");
+            let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
+            if (next <= 0) {
+                $("#qtyNumberNext").text("0");
+            } else {
+                $("#qtyNumberNext").text(next);
+            }
+        }
+        function qtyButtonAdd() {
+            console.log("called qtyButtonadd()");
+            $(this).removeClass("btn-success");
+            $(this).addClass("btn-outline-success");
+            $("#qtyButtonRemove").removeClass("btn-outline-danger");
+            $("#qtyButtonRemove").addClass("btn-danger");
+            $("#inputIndicator").text("+");
+            $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
+        }
+        function showModalChangeRemark() {
+            console.log("called showModalChangeRemark()");
+            $("#changeRemarkModal").modal('show');
+        }
+        function singleInputButton(e) {
+            e.preventDefault();
+            console.log("called singleInputButton()");
+            //if ($(e.target).is('.singleInputButton')) {
+                let id = $(this).prop('id').substr(1).trim();
+                let newRemarkName = $("#R" + id).val();
+                console.log("id: \"" + id + "\"");
+                console.log("remarks: " + newRemarkName);
+                let thisButton = $(this);
                 $.ajax({
-                    method: "GET",
-                    url: '/api/inventories?search='+$("#search").val(),
-                    beforeSend: function(){
-                        $("#loadingSection").append(loadingSpinner);
+                    method: "POST",
+                    url: '/api/change_one_remark',
+                    data: {
+                        ids: "['" + id + "']",
+                        newRemarkName: newRemarkName
+                    },
+                    beforeSend: function (data) {
+                        let spin = "<div class=\"spinner-border text-light\" id=\"S" + id + "\" role=\"status\">\n" +
+                            "  <span class=\"sr-only\">Loading...</span>\n" +
+                            "</div>";
+                        $(thisButton).empty();
+                        $(thisButton).append(spin);
                     }
                 }).done(function (data) {
-                    $("#spinner").remove();
-                    data.data.forEach(function(item){
-                        let tr = "<tr id="+item.inventory_id+">"; //start row
-                        tr+="<td >"; // start 1 column
-
-
-                        if (item.remarks === undefined) {
-                            tr+= "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
-                        } else {
-                            tr+="<input type=\"text\" class=\"form-control inputRemarks\" id=\"R"+item.inventory_id+"\" placeholder=\""+item.remarks+"\">"
-                        }
-                        tr+="</td><td>";//start 2nd column
-
-
-                        if (item.color_name === "(Not Applicable)") {
-                            tr+= "<i class=\"fas fa-tint-slash\"></i>";
-                        } else {
-                            tr+= item.color_name ;
-                        }
-                        tr += "</td><td>";//start 3nd column
-
-
-                        tr += "<a href='#qtyModalShow' class='qty' data-name='"+item.item.name+"' data-id='"+item.inventory_id+"' data-qty='"+item.quantity+"' >"+item.quantity+"</div>";
-                        tr += "</td><td>";//start 4nd column
-
-
-                        tr += item.new_or_used
-                        tr += "</td><td>";//start 5nd column
-
-
-                        tr += getPic(item);
-                        tr += "</td></tr>";
-                        $('#bodyOfTable').append(tr);
-                        searchValue = $("#search").val();
-                    });
-                });
-                function getPic(row) {
-                    //row param is the item
-                    let id = row.color_id + row.item.no;
-                    let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +
-                        "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
-                        "    <div class=\"modal-content\">\n" +
-                        "      <div class=\"modal-header\">\n" +
-                        "        <h5 class=\"modal-title\" id=\"modalTitel" + id + "\">Item no " + row.item.no + "</h5>\n" +
-                        "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
-                        "          <span aria-hidden=\"true\">&times;</span>\n" +
-                        "        </button>\n" +
-                        "      </div>\n" +
-                        "      <div class=\"modal-body\">\n" +
-                        "        " + row.item.name +
-                        "      </div>\n" +
-                        "      <div class=\"modal-footer\">\n" +
-                        "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
-                        "      </div>\n" +
-                        "    </div>\n" +
-                        "  </div>\n" +
-                        "</div>";
-                    let _type = row.item.type.substr(0, 1);
-
-                    switch (row.item.type) {
-                        case "SET":
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
-                            break;
-                        case "MINIFIG":
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case "PART":
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'INSTRUCTION':
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'BOOK':
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'SET':
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'GEAR':
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'CATALOG':
-                            return modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        default:
-                            return "<i class=\"fas fa-image\"></i>";
-                    }
-
+                    let done = "<i class=\"far fa-check-circle fa-2x\"></i>";
+                    $(thisButton).empty();
+                    $(thisButton).append(done);
+                    $("#R" + id).addClass("is-valid");
+                })
+        }
+        function checkers(e) {
+            e.preventDefault();
+            console.log("called checkers()");
+            if ($(e.target).is("input.checkers")) {
+                let state = $(this).is(":checked");
+                $("#" + this.id).prop("checked", state);
+            }
+        }
+        function imgThumbnail(e) {
+            e.preventDefault();
+            console.log("called imgThumbnail()");
+            if ($(e.target).is('img.img-thumbnail')) {
+                let modalId = "#modal" + this.id.substr(3, this.id.length);
+                $(modalId).modal('show');
+            }
+        }
+        function search(e) {
+            e.preventDefault()
+            console.log("called search()");
+            console.log('searching...');
+            searchValue = ""
+            $("#search").val($("#search").val().toUpperCase());
+            $("#bodyOfTable tr").remove();
+            revertOutOfChangeRemarkState();
+            $.ajax({
+                method: "GET",
+                url: '/api/inventories?search=' + $("#search").val(),
+                beforeSend: function () {
+                    $("#loadingSection").append(loadingSpinner);
                 }
+            }).done(function (data) {
+                $("#spinner").remove();
+                data.data.forEach(function (item) {
+                    let tr = "<tr id=" + item.inventory_id + ">"; //start row
+                    tr += "<td >"; // start 1 column
+                    if (item.remarks === undefined) {
+                        tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
+                    } else {
+                        tr += "<input type=\"text\" class=\"form-control inputRemarks\" id=\"R" + item.inventory_id + "\" placeholder=\"" + item.remarks + "\" value=\"" + item.remarks + "\">\n" +
+                            "<button type=\"button\" id='B" + item.inventory_id + "' class=\"singleInputButton btn btn-success\">" +
+                            "<i class=\"fas fa-cloud-upload-alt fa-2x\"></i>" +
+                            "</button>";
+                    }
+                    tr += "</td><td>";//start 2nd column
+                    if (item.color_name === "(Not Applicable)") {
+                        tr += "<i class=\"fas fa-tint-slash\"></i>";
+                    } else {
+                        tr += item.color_name;
+                    }
+                    tr += "</td><td>";//start 3nd column
+                    tr += "<a href='#qtyModalShow' class='qty' data-name='" + item.item.name + "' data-id='" + item.inventory_id + "' data-qty='" + item.quantity + "' >" + item.quantity + "</div>";
+                    tr += "</td><td>";//start 4nd column
+                    tr += item.new_or_used
+                    tr += "</td><td>";//start 5nd column
+                    tr += getPic(item);
+                    tr += "</td></tr>";
+                    $('#bodyOfTable').append(tr);
+                    searchValue = $("#search").val();
+                    listenersWhenSearchIsComplete();
+                });
             });
-        });
+
+            function getPic(row) {
+                console.log("called getPic()");
+                //row param is the item
+                let id = row.color_id + row.item.no;
+                let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +
+                    "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
+                    "    <div class=\"modal-content\">\n" +
+                    "      <div class=\"modal-header\">\n" +
+                    "        <h5 class=\"modal-title\" id=\"modalTitel" + id + "\">Item no " + row.item.no + "</h5>\n" +
+                    "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
+                    "          <span aria-hidden=\"true\">&times;</span>\n" +
+                    "        </button>\n" +
+                    "      </div>\n" +
+                    "      <div class=\"modal-body\">\n" +
+                    "        " + row.item.name +
+                    "      </div>\n" +
+                    "      <div class=\"modal-footer\">\n" +
+                    "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
+                    "      </div>\n" +
+                    "    </div>\n" +
+                    "  </div>\n" +
+                    "</div>";
+                let _type = row.item.type.substr(0, 1);
+
+                switch (row.item.type) {
+                    case "SET":
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
+                        break;
+                    case "MINIFIG":
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case "PART":
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'INSTRUCTION':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'BOOK':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'SET':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'GEAR':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    case 'CATALOG':
+                        return modal + "\n" +
+                            "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + row.color_id + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
+                        break;
+                    default:
+                        return "<i class=\"fas fa-image\"></i>";
+                }
+
+            }
+        };
+        function revertOutOfChangeRemarkState() {
+            console.log("called revertOutOfChangeRemarkState()");
+            $("#activateChangeRemarkButton").removeClass("btn-primary").addClass("btn-outline-secondary");
+            $("#checkHeader").remove();
+            $(".checkRow").remove();
+            $("#updateButton").remove();
+            $("#changeRemarkModal").modal('hide');
+            showUpdateButton = false;
+            stateofChangeRemarkButton = false;
+            amountChecked = 0;
+            $("#showAmountChecked").remove();
+        };
+        function qty(e) {
+            e.preventDefault();
+            console.log("called qty()");
+            if ($(e.target).is(".qty")) {
+                let data = $(this).data(); //name, id, qty
+                $("#qtyTitle").text("Add or remove quantity to item \"" + data.name + "\"");
+                $("#qtyNumberCurrent").text(data.qty);
+                $("#qtyId").text(data.id);
+                $("#qtyModal").modal('show');
+            }
+        }
+        function checkboxChangeRemarks(e) {
+            e.preventDefault();
+            console.log("called checkboxChangeRemarks()");
+            if ($(e.target).is(".checkboxChangeRemarks")) {
+                let checked = this.checked;
+                console.log('change detected');
+                if (checked) {
+                    $(this).parent().parent().parent().addClass("redRow");
+                    amountChecked++;
+                    if (!showUpdateButton) {
+                        //start showing update button
+                        $("#mainButtonRows").append("<button onclick='showModalChangeRemark()' type=\"button\" id=\"updateButton\" class=\"btn btn-success\">Update</button>")
+                        $("#loadingSection").append("<button id=\"showAmountChecked\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" +
+                            "</button>");
+                        showUpdateButton = true;
+                    }
+                } else {
+                    $(this).parent().parent().parent().removeClass("redRow");
+                    amountChecked--;
+                }
+                let correctChecked = (amountChecked);
+                console.log(correctChecked, amountChecked)
+                $("#showAmountChecked").text(correctChecked + " selected");
+            }
+        }
+        function qtyButtonSumbit() {
+            console.log("called qtyButtonSumbit()");
+            $.ajax({
+                method: "POST",
+                url: '/api/change_quantity',
+                data: {
+                    sign: $("#inputIndicator").text(),
+                    value: $("#qtyInput").val(),
+                    id: $("#qtyId").text()
+                },
+            }).done(function (data) {
+                $("#qtyModal").modal('hide');
+            });
+        }
+        function changeRemarkFinish() { //button was pressed to change remarks
+            //gather all selected inventoryId's
+            let ids = [];
+            $(".checkboxChangeRemarks").each(function () {
+                if (this.checked) {
+                    ids.push($(this).attr('name'));
+                }
+                ;
+            });
+            let newRemarkName = $("#inputUpdateRemark").val().toUpperCase();
+            let body = {
+                ids: JSON.stringify(ids),
+                newRemarkName: newRemarkName
+            };
+            console.log(body);
+            //api call here
+            $.ajax({
+                method: "PUT",
+                url: '/api/change_remark',
+                data: body,
+            }).done(function (data) {
+                $(".redRow").removeClass("redRow").addClass("greenRow");
+                revertOutOfChangeRemarkState();
+                $(".greenRow").fadeOut(1000, function () {
+                });
+                ///TODO: show message based on success
+            });
+            //end api call
+
+
+        }
