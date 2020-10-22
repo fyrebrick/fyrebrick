@@ -249,6 +249,28 @@ block scripts
                     $("#showAmountChecked").text(correctChecked+" selected");
                 }
             });
+            $("input").on('enterKey',".inputRemarks",function(e){
+                e.preventDefault();
+                if($(e.target).is('.inputRemarks')){
+                    let id = $(this).prop('id').substr(1);
+                    let newRemarkName = $(this).innerText;
+                    console.log(id,newRemarkName);
+                    $.ajax({
+                        method: "POST",
+                        url: '/api/change_one_remark',
+                        data: {
+                            ids:"['"+id+"']",
+                            newRemarkName:newRemarkName
+                        },
+                    }).beforeSend(function(data){
+                        let spin = "<div class=\"spinner-border\" id=\"S"+id+"\" role=\"status\">\n" +
+                            "  <span class=\"sr-only\">Loading...</span>\n" +
+                            "</div>";
+                    }).done(function (data) {
+                        window.alert('done')
+                    });
+                }
+            })
             //end preventdefaults
 
 
@@ -320,22 +342,32 @@ block scripts
                     data.data.forEach(function(item){
                         let tr = "<tr id="+item.inventory_id+">"; //start row
                         tr+="<td >"; // start 1 column
+
+
                         if (item.remarks === undefined) {
                             tr+= "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
                         } else {
-                            tr+="<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >" + item.remarks + "</a>";
+                            tr+="<input type=\"text\" class=\"form-control inputRemarks\" id=\"R"+item.inventory_id+"\" placeholder=\""+item.remarks+"\">"
                         }
                         tr+="</td><td>";//start 2nd column
+
+
                         if (item.color_name === "(Not Applicable)") {
                             tr+= "<i class=\"fas fa-tint-slash\"></i>";
                         } else {
                             tr+= item.color_name ;
                         }
                         tr += "</td><td>";//start 3nd column
+
+
                         tr += "<a href='#qtyModalShow' class='qty' data-name='"+item.item.name+"' data-id='"+item.inventory_id+"' data-qty='"+item.quantity+"' >"+item.quantity+"</div>";
                         tr += "</td><td>";//start 4nd column
+
+
                         tr += item.new_or_used
                         tr += "</td><td>";//start 5nd column
+
+
                         tr += getPic(item);
                         tr += "</td></tr>";
                         $('#bodyOfTable').append(tr);

@@ -12,6 +12,8 @@ const statsRoutes = require('./src/routes/stats');
 const {checkSignIn} = require('./src/middlewares/index');
 const app = express();
 const statsUpdater = require('./src/schedules/statsUpdater');
+const bricklinkPlus = require("bricklink-plus");
+
 const start = async () => {
   if (!process.env.PORT) throw new Error(".env file not found, or wrong path");
   await load(app);

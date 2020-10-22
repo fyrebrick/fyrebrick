@@ -124,12 +124,13 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                         resolve(statusObj);
                         return;
                     } else {
+                        console.log("getJSON!");
                         resolve(data);
                         return;
                     }
                 });
         }
-        ;
+
     });
-}
+};
 module.exports = getJson;

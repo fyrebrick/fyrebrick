@@ -11,6 +11,8 @@ const getJSON = require('../functions/bricklink/getJson');
 const getUrl = require('../functions/scrape/getUrls');
 const https = require('https');
 const jsdom = require("jsdom");
+const bricklinkPlus = require("bricklink-plus");
+
 const Stores = require('../models/stores');
 router.all('/', async function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
@@ -38,9 +40,19 @@ router.all('/:v1', async function(req, res, next) {
             res.send(data);
         })
     }else if(req.params.v1==="change_remark"){
-        console.log(await User.findOne({_id:req.session._id}));
-        console.log(req.body);
         (await changeRemark)(req.body.ids,req.body.newRemarkName,await User.findOne({_id:req.session._id})).then((data)=>{
+            res.send(data);
+        })
+    }else if(req.params.v1==="orders_limit"){
+        let user = await User.findOne({_id:req.session._id});
+        bricklinkPlus.setup({
+            TOKEN_VALUE:user.TOKEN_VALUE,
+            TOKEN_SECRET:user.TOKEN_SECRET,
+            CONSUMER_SECRET:user.CONSUMER_SECRET,
+            CONSUMER_KEY:user.CONSUMER_KEY
+        });
+        bricklinkPlus.api.order.getOrders({status:"pending,updated,processing,ready,paid,packed"}).then((data)=>{
+            console.log(data);
             res.send(data);
         })
     }else{

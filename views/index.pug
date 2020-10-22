@@ -28,7 +28,7 @@ block scripts
             $('#table_id').DataTable({
                 "order": [[ 0, "desc" ]],
                 ajax: {
-                    url: '/api/orders?direction=in',
+                    url: '/api/orders_limit?direction=in',
                     dataSrc: 'data'
                 },
                 columns:[
