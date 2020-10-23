@@ -130,6 +130,14 @@ block scripts
             document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
             document.getElementById("changeRemarkFinish").addEventListener("click",changeRemarkFinish);
             document.getElementById('search')
+                .addEventListener('onsearch', function (e) {
+                        document.getElementById("searchButton").click();
+                });
+            document.getElementById('onsumbit')
+                .addEventListener('onsearch', function (e) {
+                    document.getElementById("searchButton").click();
+                });
+            document.getElementById('search')
                 .addEventListener('keyup', function (e) {
                     if (e.code === 'Enter') {
                         document.getElementById("searchButton").click();
@@ -153,10 +161,10 @@ block scripts
             document.querySelectorAll(".qty").forEach(function (item) {
                 item.addEventListener('click', qty);
             });
-            document.getElementById("qtyButtonSubmit").addEventListener("click", qtyButtonSumbit)
-            document.getElementById("qtyButtonAdd").addEventListener("click", qtyButtonAdd)
-            document.getElementById("qtyButtonRemove").addEventListener("click", qtyButtonRemove)
-            document.getElementById("qtyInput").addEventListener('keyup', qtyInput)
+            document.getElementById("qtyButtonSubmit").addEventListener("click", qtyButtonSumbit);
+            document.getElementById("qtyButtonAdd").addEventListener("click", qtyButtonAdd);
+            document.getElementById("qtyButtonRemove").addEventListener("click", qtyButtonRemove);
+            document.getElementById("qtyInput").addEventListener('keyup', qtyInput);
         }
         function listenersWhenUpdating(){
             document.querySelectorAll(".checkers").forEach(function (item) {

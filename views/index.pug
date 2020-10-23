@@ -24,8 +24,14 @@ block styles
 block scripts
     script.
         $(document).ready(function () {
+            if (performance.navigation.type == 2) {
+                location.reload(true);
+            }
             let orders_json,orders_db = null;
             $('#table_id').DataTable({
+
+
+
                 "order": [[ 0, "desc" ]],
                 ajax: {
                     url: '/api/orders_limit?direction=in',
