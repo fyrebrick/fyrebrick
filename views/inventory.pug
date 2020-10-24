@@ -1,6 +1,12 @@
 extends layout
 block styles
     style.
+        #checkAllInput  {
+            width: 8% !important;
+            position: relative;
+            bottom: 2px;
+            left: 35%;
+        }
         td {
             font-size: 41px;
             font-weight: bold;
@@ -144,6 +150,9 @@ block scripts
                 });
             document.getElementById("searchButton").addEventListener('click',search);
         });
+        let checkAll = '<div id="checkAllDiv" class=" custom-checkbox">\n'
+            +'          <input id="checkAllInput" type="checkbox" class="checkAllbox">\n'
+            +'          </div>\n';
         let stateofChangeRemarkButton = false;
         let searchValue = "";
         let showUpdateButton = false;
@@ -166,11 +175,36 @@ block scripts
             document.getElementById("qtyInput").addEventListener('keyup', qtyInput);
         }
         function listenersWhenUpdating(){
+            document.getElementById("checkAllInput").addEventListener('click', checkAllBox);
             document.querySelectorAll(".checkers").forEach(function (item) {
                 item.addEventListener('click', checkers);
             });
             document.querySelectorAll(".checkboxChangeRemarks").forEach(function (item) {
                 item.addEventListener('change', checkboxChangeRemarks);
+                item.addEventListener('click',updateCheckBoxAll);
+            });
+        }
+        function updateCheckBoxAll(){
+            let onTrue = 0;
+            let onFalse = 0;
+            document.querySelectorAll(".checkboxChangeRemarks").forEach(function(checkbox,index,array){
+               if(checkbox.checked){
+                   onTrue++;
+               }else{
+                   onFalse++;
+               }
+            });
+            if(onTrue===0){ //nothing is checked
+                document.getElementById("checkAllInput").checked = false;
+            }else if(onFalse===0){
+                document.getElementById("checkAllInput").checked = true;
+            }else{
+                $('#checkAllInput').prop('indeterminate', true)
+            }
+        }
+        function checkAllBox(){
+            document.querySelectorAll(".checkboxChangeRemarks").forEach(function(checkbox){
+               checkbox.checked = document.getElementById("checkAllInput").checked;
             });
         }
         function activateChangeRemarkButton () {
@@ -187,7 +221,7 @@ block scripts
                 //ACTIVE change remark state
                 $(this).removeClass("btn-outline-secondary").addClass("btn-primary"); //looks like function is active
                 //add extra collumn
-                $("#headOfTable tr").prepend("<th id='checkHeader' scope='col' > Check</th>")
+                $("#headOfTable tr").prepend("<th id='checkHeader' scope='col' > "+checkAll+"</th>")
                 $("#bodyOfTable tr").each(function () {
                     let idOfCurrentRow = $(this).attr('id');
                     $(this).prepend("<td class='checkRow'><div class=\"custom-control custom-checkbox\">\n" +
