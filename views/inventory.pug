@@ -133,10 +133,9 @@ block scripts
                 .addEventListener('onsearch', function (e) {
                         document.getElementById("searchButton").click();
                 });
-            document.getElementById('onsumbit')
-                .addEventListener('onsearch', function (e) {
-                    document.getElementById("searchButton").click();
-                });
+            this.addEventListener('onsubmit', function (e) {
+                document.getElementById("searchButton").click();
+            });
             document.getElementById('search')
                 .addEventListener('keyup', function (e) {
                     if (e.code === 'Enter') {
