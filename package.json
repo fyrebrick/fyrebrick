@@ -17,7 +17,7 @@
     "googleapis": "61.0.0",
     "hpp": "0.2.3",
     "http": "0.0.1-security",
-    "http-errors": "1.6.3",
+    "http-errors": "1.8.0",
     "https": "1.0.0",
     "jquery": "3.5.1",
     "jsdom": "16.4.0",
