@@ -14,7 +14,7 @@
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-flash": "0.0.2",
-    "googleapis": "62.0.0",
+    "googleapis": "63.0.0",
     "hpp": "0.2.3",
     "http": "0.0.1-security",
     "http-errors": "1.8.0",
