@@ -107,3 +107,4 @@ dist
 #manual
 .env.develop
 .env
+/node_modules
