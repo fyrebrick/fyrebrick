@@ -23,6 +23,13 @@ router.all('/', async function(req, res, next) {
 
 router.all('/:v1', async function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
+    let user = await User.findOne({_id:req.session._id});
+    await bricklinkPlus.auth.setup({
+        TOKEN_VALUE: user.TOKEN_VALUE,
+        TOKEN_SECRET: user.TOKEN_SECRET,
+        CONSUMER_KEY: user.CONSUMER_KEY,
+        CONSUMER_SECRET: user.CONSUMER_SECRET
+    })
     if(req.params.v1==='invest'){
         (await investigateInventory)(await User.findOne({_id:req.session._id})).then((investData)=>{
             res.send(investData);
@@ -35,26 +42,36 @@ router.all('/:v1', async function(req, res, next) {
         (await combineInventoryIds)(req.body.items,req.body.qty,req.body.index,req.body.remarks,req.body.newRemark,await User.findOne({_id:req.session._id})).then((data)=>{
             res.send(data);
         });
-    }else if(req.params.v1==="change_quantity"){
-        (await changeValueOfInventoryId)(req.body.sign,req.body.value,req.body.id,await User.findOne({_id:req.session._id})).then((data)=>{
-            res.send(data);
-        })
     }else if(req.params.v1==="change_remark"){
         (await changeRemark)(req.body.ids,req.body.newRemarkName,await User.findOne({_id:req.session._id})).then((data)=>{
-            res.send(data);
-        })
-    }else if(req.params.v1==="orders_limit"){
-        let user = await User.findOne({_id:req.session._id});
-        bricklinkPlus.setup({
-            TOKEN_VALUE:user.TOKEN_VALUE,
-            TOKEN_SECRET:user.TOKEN_SECRET,
-            CONSUMER_SECRET:user.CONSUMER_SECRET,
-            CONSUMER_KEY:user.CONSUMER_KEY
-        });
-        bricklinkPlus.api.order.getOrders({status:"pending,updated,processing,ready,paid,packed"}).then((data)=>{
             console.log(data);
             res.send(data);
         })
+    }else if(req.params.v1==="change_single_remarks"){
+        await bricklinkPlus.api.inventory.updateInventory(req.body.id,{remarks:req.body.newRemarkName}).then((data) => {
+            console.log(data);
+            res.send(data);
+        });
+    }else if(req.params.v1==="change_quantity"){
+        await bricklinkPlus.api.inventory.updateInventory(req.body.id,{quantity:req.body.newQuantity}).then((data) => {
+            console.log(data);
+            res.send(data);
+        });
+    }else if(req.params.v1==="change_used"){
+        await bricklinkPlus.api.inventory.updateInventory(req.body.id,{new_or_used:req.body.newUsed}).then((data) => {
+            console.log(data);
+            res.send(data);
+        });
+    }else if(req.params.v1==="change_colour"){
+        await bricklinkPlus.api.inventory.updateInventory(req.body.id,{color_name:req.body.newColour}).then((data) => {
+            console.log(data);
+            res.send(data);
+        });
+    }else if(req.params.v1==="orders_limit"){
+        await bricklinkPlus.api.order.getOrders({status: "pending,updated,processing,ready,paid,packed"}).then((data) => {
+            console.log(data);
+            res.send(data);
+        });
     }else{
         (await getJSON)(req,res,await User.findOne({_id:req.session._id})).then((data)=>{
             res.send(data);

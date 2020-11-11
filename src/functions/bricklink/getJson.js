@@ -104,9 +104,16 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                             let newData = [];
                             obj.data.forEach((o) => {
                                 if (o.remarks) {
-                                    if (o.remarks.toLowerCase().includes(search.toLowerCase())) {
-                                        newData.push(o);
+                                    if(req.query.exact==="Y"){
+                                        if (o.remarks.toLowerCase()===search.toLowerCase()) {
+                                            newData.push(o);
+                                        }
+                                    }else{
+                                        if (o.remarks.toLowerCase().includes(search.toLowerCase())) {
+                                            newData.push(o);
+                                        }
                                     }
+
                                 }
                             });
                             let j = {
