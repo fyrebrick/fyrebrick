@@ -68,6 +68,18 @@ block styles
             top: 19px;
             position: relative;
         }
+        #scanOptionButton{
+            padding-right: 40px;
+        }
+        #scanOption{
+            -ms-transform: scale(3) !important;
+            -moz-transform: scale(3) !important;
+            -webkit-transform: scale(3) !important;
+            -o-transform: scale(3) !important;
+            padding: 25px;
+            position: relative;
+            left: 21px;
+        }
 block content
     .row.justify-content-between
         .col-2
@@ -78,6 +90,8 @@ block content
             .btn-group(role='group' aria-label='Group of action buttons')#mainButtonRows
                 button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
                 button#activateChangeRemarkButton.btn.btn-lg.btn-outline-secondary.my-2.my-sm-0(type='submit') Change remark
+                button#scanOptionButton.btn.btn-lg.btn-outline-secondary.my-2.my-sm-0 Exact Search
+                    input#scanoption(type="checkbox" value="true" )
     hr
 
     #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
@@ -124,6 +138,7 @@ block content
         table#table_id.table.table-striped
             thead#headOfTable.thead-dark
                 tr
+                    th(scope='col' id='scanOptionCol') Link
                     th(scope="col") Remark
                     th(scope="col") Colour
                     th.data-class-name(scope="col") Qt
@@ -135,10 +150,13 @@ block scripts
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
             document.getElementById("changeRemarkFinish").addEventListener("click",changeRemarkFinish);
-            document.getElementById('search')
-                .addEventListener('onsearch', function (e) {
+            document.getElementById('search').addEventListener('onsearch', function (e) {
                         document.getElementById("searchButton").click();
                 });
+            document.getElementById('search').addEventListener('click', function (e) {
+                document.getElementById('search').focus();
+                document.getElementById('search').select();
+            });
             this.addEventListener('onsubmit', function (e) {
                 document.getElementById("searchButton").click();
             });
@@ -146,6 +164,8 @@ block scripts
                 .addEventListener('keyup', function (e) {
                     if (e.code === 'Enter') {
                         document.getElementById("searchButton").click();
+                        document.getElementById('search').focus();
+                        document.getElementById('search').select();
                     }
                 });
             document.getElementById("searchButton").addEventListener('click',search);
@@ -153,16 +173,70 @@ block scripts
         let checkAll = '<div id="checkAllDiv" class=" custom-checkbox">\n'
             +'          <input id="checkAllInput" type="checkbox" class="checkAllbox">\n'
             +'          </div>\n';
+        let colorSelect = "<select class=\"custom-select\" id=\"colorSelect\"><option data-tab=\"All\" value=\"0\" data-name=\"(Not Applicable)\" data-rgb=\"transparent\" style=\"&quot;background-color&quot;: transparent\">&nbsp; &nbsp;(Not Applicable)</option><option data-tab=\"All\" value=\"11\" selected=\"\" data-name=\"Black\" data-rgb=\"#212121\" style=\"&quot;background-color&quot;: #212121,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp; &nbsp;Black</option><option data-tab=\"All\" value=\"7\" data-name=\"Blue\" data-rgb=\"#0057A6\" style=\"&quot;background-color&quot;: #0057A6,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Blue</option><option data-tab=\"All\" value=\"36\" data-name=\"Bright Green\" data-rgb=\"#10CB31\" style=\"&quot;background-color&quot;: #,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Bright Green</option><option data-tab=\"All\" value=\"105\" data-name=\"Bright Light Blue\" data-rgb=\"#9FC3E9\" style=\"&quot;background-color&quot;: #9FC3E9,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Bright Light Blue</option><option data-tab=\"All\" value=\"110\" data-name=\"Bright Light Orange\" data-rgb=\"#F7BA30\" style=\"&quot;background-color&quot;: #F7BA30,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Bright Light Orange</option><option data-tab=\"All\" value=\"103\" data-name=\"Bright Light Yellow\" data-rgb=\"#F3E055\" style=\"&quot;background-color&quot;: #F3E055,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Bright Light Yellow</option><option data-tab=\"All\" value=\"104\" data-name=\"Bright Pink\" data-rgb=\"#FFBBFF\" style=\"&quot;background-color&quot;: #FFBBFF,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Bright Pink</option><option data-tab=\"All\" value=\"8\" data-name=\"Brown\" data-rgb=\"#532115\" style=\"&quot;background-color&quot;: #532115,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Brown</option><option data-tab=\"All\" value=\"153\" data-name=\"Dark Azure\" data-rgb=\"#3399FF\" style=\"&quot;background-color&quot;: #3399FF,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Azure</option><option data-tab=\"All\" value=\"63\" data-name=\"Dark Blue\" data-rgb=\"#143044\" style=\"&quot;background-color&quot;: #143044,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Blue</option><option data-tab=\"All\" value=\"85\" data-name=\"Dark Bluish Gray\" data-rgb=\"#595D60\" style=\"&quot;background-color&quot;: #595D60,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Bluish Gray</option><option data-tab=\"All\" value=\"10\" data-name=\"Dark Gray\" data-rgb=\"#6B5A5A\" style=\"&quot;background-color&quot;: #6B5A5A,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Gray</option><option data-tab=\"All\" value=\"80\" data-name=\"Dark Green\" data-rgb=\"#2E5543\" style=\"&quot;background-color&quot;: #2E5543,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Green</option><option data-tab=\"All\" value=\"68\" data-name=\"Dark Orange\" data-rgb=\"#B35408\" style=\"&quot;background-color&quot;: #B35408,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Orange</option><option data-tab=\"All\" value=\"47\" data-name=\"Dark Pink\" data-rgb=\"#C87080\" style=\"&quot;background-color&quot;: #C87080,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Pink</option><option data-tab=\"All\" value=\"89\" data-name=\"Dark Purple\" data-rgb=\"#5F2683\" style=\"&quot;background-color&quot;: #5F2683,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Purple</option><option data-tab=\"All\" value=\"59\" data-name=\"Dark Red\" data-rgb=\"#6A0E15\" style=\"&quot;background-color&quot;: #6A0E15,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Red</option><option data-tab=\"All\" value=\"69\" data-name=\"Dark Tan\" data-rgb=\"#907450\" style=\"&quot;background-color&quot;: #907450,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Tan</option><option data-tab=\"All\" value=\"39\" data-name=\"Dark Turquoise\" data-rgb=\"#008A80\" style=\"&quot;background-color&quot;: #008A80,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Dark Turquoise</option><option data-tab=\"All\" value=\"6\" data-name=\"Green\" data-rgb=\"#00642E\" style=\"&quot;background-color&quot;: #00642E,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Green</option><option data-tab=\"All\" value=\"154\" data-name=\"Lavender\" data-rgb=\"#B18CBF\" style=\"&quot;background-color&quot;: #B18CBF,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Lavender</option><option data-tab=\"All\" value=\"152\" data-name=\"Light Aqua\" data-rgb=\"#CCFFFF\" style=\"&quot;background-color&quot;: #CCFFFF,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Aqua</option><option data-tab=\"All\" value=\"62\" data-name=\"Light Blue\" data-rgb=\"#B4D2E3\" style=\"&quot;background-color&quot;: #B4D2E3,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Blue</option><option data-tab=\"All\" value=\"86\" data-name=\"Light Bluish Gray\" data-rgb=\"#AFB5C7\" style=\"&quot;background-color&quot;: #AFB5C7,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Bluish Gray</option><option data-tab=\"All\" value=\"9\" data-name=\"Light Gray\" data-rgb=\"#9C9C9C\" style=\"&quot;background-color&quot;: #9C9C9C,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Gray</option><option data-tab=\"All\" value=\"35\" data-name=\"Light Lime\" data-rgb=\"#EBEE8F\" style=\"&quot;background-color&quot;: #EBEE8F,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Lime</option><option data-tab=\"All\" value=\"90\" data-name=\"Light Nougat\" data-rgb=\"#FECCB0\" style=\"&quot;background-color&quot;: #FECCB0,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Nougat</option><option data-tab=\"All\" value=\"56\" data-name=\"Light Pink\" data-rgb=\"#FFE1FF\" style=\"&quot;background-color&quot;: #FFE1FF,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Pink</option><option data-tab=\"All\" value=\"93\" data-name=\"Light Purple\" data-rgb=\"#DA70D6\" style=\"&quot;background-color&quot;: #DA70D6,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Purple</option><option data-tab=\"All\" value=\"33\" data-name=\"Light Yellow\" data-rgb=\"#FFE383\" style=\"&quot;background-color&quot;: #FFE383,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Light Yellow</option><option data-tab=\"All\" value=\"34\" data-name=\"Lime\" data-rgb=\"#A6CA55\" style=\"&quot;background-color&quot;: #A6CA55,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Lime</option><option data-tab=\"All\" value=\"72\" data-name=\"Maersk Blue\" data-rgb=\"#6BADD6\" style=\"&quot;background-color&quot;: #6BADD6,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Maersk Blue</option><option data-tab=\"All\" value=\"71\" data-name=\"Magenta\" data-rgb=\"#B52952\" style=\"&quot;background-color&quot;: #B52952,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Magenta</option><option data-tab=\"All\" value=\"156\" data-name=\"Medium Azure\" data-rgb=\"#42C0FB\" style=\"&quot;background-color&quot;: #42C0FB,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Medium Azure</option><option data-tab=\"All\" value=\"42\" data-name=\"Medium Blue\" data-rgb=\"#61AFFF\" style=\"&quot;background-color&quot;: #61AFFF,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Medium Blue</option><option data-tab=\"All\" value=\"157\" data-name=\"Medium Lavender\" data-rgb=\"#885E9E\" style=\"&quot;background-color&quot;: #885E9E,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Medium Lavender</option><option data-tab=\"All\" value=\"76\" data-name=\"Medium Lime\" data-rgb=\"#BDC618\" style=\"&quot;background-color&quot;: #BDC618,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Medium Lime</option><option data-tab=\"All\" value=\"150\" data-name=\"Medium Nougat\" data-rgb=\"#E3A05B\" style=\"&quot;background-color&quot;: #E3A05B,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Medium Nougat</option><option data-tab=\"All\" value=\"31\" data-name=\"Medium Orange\" data-rgb=\"#FFA531\" style=\"&quot;background-color&quot;: #FFA531,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Medium Orange</option><option data-tab=\"All\" value=\"73\" data-name=\"Medium Violet\" data-rgb=\"#9391E4\" style=\"&quot;background-color&quot;: #9391E4,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Medium Violet</option><option data-tab=\"All\" value=\"28\" data-name=\"Nougat\" data-rgb=\"#FFAF7D\" style=\"&quot;background-color&quot;: #FFAF7D,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Nougat</option><option data-tab=\"All\" value=\"155\" data-name=\"Olive Green\" data-rgb=\"#7C9051\" style=\"&quot;background-color&quot;: #7C9051,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Olive Green</option><option data-tab=\"All\" value=\"4\" data-name=\"Orange\" data-rgb=\"#FF7E14\" style=\"&quot;background-color&quot;: #FF7E14,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Orange</option><option data-tab=\"All\" value=\"23\" data-name=\"Pink\" data-rgb=\"#FFC0CB\" style=\"&quot;background-color&quot;: #FFC0CB,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Pink</option><option data-tab=\"All\" value=\"24\" data-name=\"Purple\" data-rgb=\"#A5499C\" style=\"&quot;background-color&quot;: #A5499C,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Purple</option><option data-tab=\"All\" value=\"5\" data-name=\"Red\" data-rgb=\"#B30006\" style=\"&quot;background-color&quot;: #B30006,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Red</option><option data-tab=\"All\" value=\"88\" data-name=\"Reddish Brown\" data-rgb=\"#89351D\" style=\"&quot;background-color&quot;: #89351D,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Reddish Brown</option><option data-tab=\"All\" value=\"55\" data-name=\"Sand Blue\" data-rgb=\"#5A7184\" style=\"&quot;background-color&quot;: #5A7184,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Sand Blue</option><option data-tab=\"All\" value=\"48\" data-name=\"Sand Green\" data-rgb=\"#76A290\" style=\"&quot;background-color&quot;: #76A290,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Sand Green</option><option data-tab=\"All\" value=\"58\" data-name=\"Sand Red\" data-rgb=\"#8C6B6B\" style=\"&quot;background-color&quot;: #8C6B6B,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Sand Red</option><option data-tab=\"All\" value=\"2\" data-name=\"Tan\" data-rgb=\"#DEC69C\" style=\"&quot;background-color&quot;: #DEC69C,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Tan</option><option data-tab=\"All\" value=\"96\" data-name=\"Very Light Orange\" data-rgb=\"#E6C05D\" style=\"&quot;background-color&quot;: #E6C05D,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Very Light Orange</option><option data-tab=\"All\" value=\"1\" data-name=\"White\" data-rgb=\"#FFFFFF\" style=\"&quot;background-color&quot;: #FFFFFF,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;White</option><option data-tab=\"All\" value=\"3\" data-name=\"Yellow\" data-rgb=\"#F7D117\" style=\"&quot;background-color&quot;: #F7D117,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Yellow</option><option data-tab=\"All\" value=\"158\" data-name=\"Yellowish Green\" data-rgb=\"#DFEEA5\" style=\"&quot;background-color&quot;: #DFEEA5,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Yellowish Green</option><option data-tab=\"All\" value=\"12\" data-name=\"Trans-Clear\" data-rgb=\"#EEEEEE\" style=\"&quot;background-color&quot;: #EEEEEE,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Trans-Clear</option><option data-tab=\"All\" value=\"14\" data-name=\"Trans-Dark Blue\" data-rgb=\"#00296B\" style=\"&quot;background-color&quot;: #00296B,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Trans-Dark Blue</option><option data-tab=\"All\" value=\"15\" data-name=\"Trans-Light Blue\" data-rgb=\"#68BCC5\" style=\"&quot;background-color&quot;: #68BCC5,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Trans-Light Blue</option><option data-tab=\"All\" value=\"164\" data-name=\"Trans-Light Orange\" data-rgb=\"#E99A3A\" style=\"&quot;background-color&quot;: #E99A3A,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Trans-Light Orange</option><option data-tab=\"All\" value=\"16\" data-name=\"Trans-Neon Green\" data-rgb=\"#C0F500\" style=\"&quot;background-color&quot;: #C0F500,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Trans-Neon Green</option><option data-tab=\"All\" value=\"18\" data-name=\"Trans-Neon Orange\" data-rgb=\"#FF4231\" style=\"&quot;background-color&quot;: #FF4231,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Trans-Neon Orange</option><option data-tab=\"All\" value=\"98\" data-name=\"Trans-Orange\" data-rgb=\"#D04010\" style=\"&quot;background-color&quot;: #D04010,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Trans-Orange</option><option data-tab=\"All\" value=\"17\" data-name=\"Trans-Red\" data-rgb=\"#9C0010\" style=\"&quot;background-color&quot;: #9C0010,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Trans-Red</option><option data-tab=\"All\" value=\"19\" data-name=\"Trans-Yellow\" data-rgb=\"#EBF72D\" style=\"&quot;background-color&quot;: #EBF72D,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Trans-Yellow</option><option data-tab=\"All\" value=\"21\" data-name=\"Chrome Gold\" data-rgb=\"#F1F2E1\" style=\"&quot;background-color&quot;: #F1F2E1,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Chrome Gold</option><option data-tab=\"All\" value=\"22\" data-name=\"Chrome Silver\" data-rgb=\"#DCDCDC\" style=\"&quot;background-color&quot;: #DCDCDC,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Chrome Silver</option><option data-tab=\"All\" value=\"66\" data-name=\"Pearl Light Gray\" data-rgb=\"#ACB7C0\" style=\"&quot;background-color&quot;: #ACB7C0,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Pearl Light Gray</option><option data-tab=\"All\" value=\"65\" data-name=\"Metallic Gold\" data-rgb=\"#B8860B\" style=\"&quot;background-color&quot;: #B8860B,&quot;color&quot;:&quot;#FFF !important&quot;\">&nbsp;&nbsp;Metallic Gold</option><option data-tab=\"All\" value=\"60\" data-name=\"Milky White\" data-rgb=\"#D4D3DD\" style=\"&quot;background-color&quot;: #D4D3DD,&quot;color&quot;:&quot;#000 !important&quot;\">&nbsp;&nbsp;Milky White</option></select>";
         let stateofChangeRemarkButton = false;
         let searchValue = "";
         let showUpdateButton = false;
         let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" + "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" + "  Loading...\n" + "</button>";
         let amountChecked = 0;
+        let lastRemarksChange = 0;3
+        let lastColourChange = 0;
+        let lastQuantityChange = 0;
+        let lastUsedChange = 0;
+        let delay = 20;
         function listenersWhenSearchIsComplete (){
             console.log("called listenersWhenSearchIsComplete()");
-            document.querySelectorAll(".singleInputButton").forEach(function (item) {
-                item.addEventListener('click', singleInputButton);
+            document.querySelectorAll(".inputRemarks").forEach(function (item) {
+                item.addEventListener('keyup', function (e) {
+                    if (e.code === 'Enter') {
+                        changeRemarks(e);
+                        document.getElementById('search').focus();
+                        document.getElementById('search').select();
+                    }
+                });
+                item.addEventListener('click', function (e) {
+                    e.target.focus();
+                    e.target.select();
+                });
             });
+            document.querySelectorAll(".inputQuantity").forEach(function (item) {
+                item.addEventListener('keyup', function (e) {
+                    if (e.code === 'Enter') {
+                        changeQuantity(e);
+                        document.getElementById('search').focus();
+                        document.getElementById('search').select();
+                    }
+                });
+                item.addEventListener('click', function (e) {
+                    e.target.focus();
+                    e.target.select();
+                });
+            });
+            document.querySelectorAll(".inputColour").forEach(function (item) {
+                item.addEventListener('change', function (e) {
+                    changeColour(e);
+                    document.getElementById('search').focus();
+                    document.getElementById('search').select();
+                });
+                item.addEventListener('click', function (e) {
+                    e.target.focus();
+                    e.target.select();
+                });
+            });
+            document.querySelectorAll(".inputUsed").forEach(function (item) {
+                item.addEventListener('keyup', function (e) {
+                    if (e.code === 'Enter') {
+                        changeUsed(e);
+                        document.getElementById('search').focus();
+                        document.getElementById('search').select();
+                    }
+                });
+                item.addEventListener('click', function (e) {
+                    e.target.focus();
+                    e.target.select();
+                });
+            });
+
             document.querySelectorAll("img").forEach(function (item) {
                 item.addEventListener('click', imgThumbnail);
             });
@@ -274,35 +348,121 @@ block scripts
             console.log("called showModalChangeRemark()");
             $("#changeRemarkModal").modal('show');
         }
-        function singleInputButton(e) {
+
+        function changeColour(e){
             e.preventDefault();
-            console.log("called singleInputButton()");
-            //if ($(e.target).is('.singleInputButton')) {
-                let id = $(this).prop('id').substr(1).trim();
-                let newRemarkName = $("#R" + id).val();
-                console.log("id: \"" + id + "\"");
-                console.log("remarks: " + newRemarkName);
-                let thisButton = $(this);
+            if (lastColourChange >= (Date.now() - delay))
+                return;
+            lastColourChange = Date.now();
+            let id = e.target.id.substr(1).trim();
+            let thisButton = "#" + e.target.id;
+            let newColour = $(thisButton).val();
+            $.ajax({
+                method: "POST",
+                url: '/api/change_colour',
+                data: {
+                    id: id,
+                    newColour: newColour
+                },
+                beforeSend: function () {
+                    $(thisButton).removeClass("is-valid");
+                    $(thisButton).removeClass("is-invalid");
+                }
+            }).done(function (data) {
+                if(data.meta.code!==200){
+                    console.log(data)
+                    $(thisButton).addClass("is-invalid");
+                }else {
+                    $(thisButton).addClass("is-valid");
+                }
+            });
+        }
+
+        function changeUsed(e){
+            e.preventDefault();
+            if (lastUsedChange >= (Date.now() - delay))
+                return;
+            lastUsedChange = Date.now();
+            let id = e.target.id.substr(1).trim();
+            let thisButton = "#" + e.target.id;
+            let newUsed = $(thisButton).val();
+            $.ajax({
+                method: "POST",
+                url: '/api/change_used',
+                data: {
+                    id: id,
+                    newUsed: newUsed
+                },
+                beforeSend: function () {
+                    $(thisButton).removeClass("is-valid");
+                    $(thisButton).removeClass("is-invalid");
+                }
+            }).done(function (data) {
+                if (data.meta.code !== 200) {
+                    console.log(data)
+                    $(thisButton).addClass("is-invalid");
+                } else {
+                    $(thisButton).addClass("is-valid");
+                }
+            });
+        }
+
+        function changeQuantity(e){
+            e.preventDefault();
+            if (lastQuantityChange >= (Date.now() - delay))
+                return;
+            lastQuantityChange = Date.now();
+            let id = e.target.id.substr(1).trim();
+            let thisButton = "#" + e.target.id;
+            let newQuantity = $(thisButton).val();
+            $.ajax({
+                method: "POST",
+                url: '/api/change_quantity',
+                data: {
+                    id: id,
+                    newQuantity: newQuantity
+                },
+                beforeSend: function () {
+                    $(thisButton).removeClass("is-valid");
+                    $(thisButton).removeClass("is-invalid");
+                }
+            }).done(function (data) {
+                if (data.meta.code !== 200) {
+                    console.log(data)
+                    $(thisButton).addClass("is-invalid");
+                } else {
+                    $(thisButton).addClass("is-valid");
+                }
+            });
+        }
+
+        function changeRemarks(e) {
+            e.preventDefault();
+            if (lastRemarksChange >= (Date.now() - delay))
+                return;
+            lastRemarksChange = Date.now();
+                let id = e.target.id.substr(1).trim();
+                let thisButton = "#"+e.target.id;
+                let newRemarkName = $(thisButton).val();
                 $.ajax({
                     method: "POST",
-                    url: '/api/change_one_remark',
+                    url: '/api/change_single_remarks',
                     data: {
-                        ids: "['" + id + "']",
+                        id: id,
                         newRemarkName: newRemarkName
                     },
-                    beforeSend: function (data) {
-                        let spin = "<div class=\"spinner-border text-light\" id=\"S" + id + "\" role=\"status\">\n" +
-                            "  <span class=\"sr-only\">Loading...</span>\n" +
-                            "</div>";
-                        $(thisButton).empty();
-                        $(thisButton).append(spin);
+                    beforeSend: function () {
+                        $(thisButton).removeClass("is-valid");
+                        $(thisButton).removeClass("is-invalid");
                     }
                 }).done(function (data) {
-                    let done = "<i class=\"far fa-check-circle fa-2x\"></i>";
-                    $(thisButton).empty();
-                    $(thisButton).append(done);
-                    $("#R" + id).addClass("is-valid");
-                })
+                    if (data.meta.code !== 200) {
+                        console.log(data)
+                        $(thisButton).addClass("is-invalid");
+                    } else {
+                        $(thisButton).addClass("is-valid");
+                    }
+                });
         }
         function checkers(e) {
             e.preventDefault();
@@ -328,9 +488,13 @@ block scripts
             $("#search").val($("#search").val().toUpperCase());
             $("#bodyOfTable tr").remove();
             revertOutOfChangeRemarkState();
+            let url_ = '/api/inventories?search=' + $("#search").val();
+            if($("#scanoption").is(':checked')){
+                url_= '/api/inventories?search=' + $("#search").val()+"&exact=Y";
+            }
             $.ajax({
                 method: "GET",
-                url: '/api/inventories?search=' + $("#search").val(),
+                url: url_,
                 beforeSend: function () {
                     $("#loadingSection").append(loadingSpinner);
                 }
@@ -338,25 +502,27 @@ block scripts
                 $("#spinner").remove();
                 data.data.forEach(function (item) {
                     let tr = "<tr id=" + item.inventory_id + ">"; //start row
+                    tr+="<td >";
+                    tr+="<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank' class=\"btn btn-primary btn-lg active\" role=\"button\" aria-pressed=\"true\"> " +
+                        "<i class=\"fas fa-external-link-alt fa-3x\"></i>" +
+                        "</a>"
+                    tr+="</td >";
                     tr += "<td >"; // start 1 column
                     if (item.remarks === undefined) {
                         tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
                     } else {
-                        tr += "<input type=\"text\" class=\"form-control inputRemarks\" id=\"R" + item.inventory_id + "\" placeholder=\"" + item.remarks + "\" value=\"" + item.remarks + "\">\n" +
-                            "<button type=\"button\" id='B" + item.inventory_id + "' class=\"singleInputButton btn btn-success\">" +
-                            "<i class=\"fas fa-cloud-upload-alt fa-2x\"></i>" +
-                            "</button>";
+                        tr += "<input type=\"text\" class=\"form-control inputRemarks\" id=\"R" + item.inventory_id + "\" placeholder=\"" + item.remarks + "\" value=\"" + item.remarks + "\">\n";
                     }
                     tr += "</td><td>";//start 2nd column
                     if (item.color_name === "(Not Applicable)") {
                         tr += "<i class=\"fas fa-tint-slash\"></i>";
                     } else {
-                        tr += item.color_name;
+                        tr += item.color_name
                     }
                     tr += "</td><td>";//start 3nd column
-                    tr += "<a href='#qtyModalShow' class='qty' data-name='" + item.item.name + "' data-id='" + item.inventory_id + "' data-qty='" + item.quantity + "' >" + item.quantity + "</div>";
+                    tr += "<input type=\"text\" class=\"form-control inputQuantity\" id=\"Q" + item.inventory_id + "\" placeholder=\"" + item.quantity + "\" value=\"" + item.quantity + "\">\n";
                     tr += "</td><td>";//start 4nd column
-                    tr += item.new_or_used
+                    tr += "<input type=\"text\" class=\"form-control inputUsed\" id=\"U" + item.inventory_id + "\" placeholder=\"" + item.new_or_used + "\" value=\"" + item.new_or_used + "\">\n";
                     tr += "</td><td>";//start 5nd column
                     tr += getPic(item);
                     tr += "</td></tr>";
@@ -519,6 +685,157 @@ block scripts
                 ///TODO: show message based on success
             });
             //end api call
+
+
+        }
+        //id will be #C[ID]
+        function getSpecificColorSelect(id,selectedColourName){
+            let color = "\n" +
+                        "            <select class=\"custom-select\" id=\"color\">\n"+
+                        "              <option data-tab=\"All\" value=\"0\" data-name=\"(Not Applicable)\" data-rgb=\"transparent\" style=\"&quot;background-color&quot;: transparent\">\n"+
+                        "                &nbsp; &nbsp;(Not Applicable)</option>\n"+
+                        "              <option data-tab=\"All\" value=\"11\" data-name=\"Black\" data-rgb=\"#212121\" style=\"&quot;background-color&quot;: #212121,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp; &nbsp;Black</option>\n"+
+                        "              <option data-tab=\"All\" value=\"7\" data-name=\"Blue\" data-rgb=\"#0057A6\" style=\"&quot;background-color&quot;: #0057A6,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"36\" data-name=\"Bright Green\" data-rgb=\"#10CB31\" style=\"&quot;background-color&quot;: #,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Bright Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"105\" data-name=\"Bright Light Blue\" data-rgb=\"#9FC3E9\" style=\"&quot;background-color&quot;: #9FC3E9,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Bright Light Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"110\" data-name=\"Bright Light Orange\" data-rgb=\"#F7BA30\" style=\"&quot;background-color&quot;: #F7BA30,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Bright Light Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"103\" data-name=\"Bright Light Yellow\" data-rgb=\"#F3E055\" style=\"&quot;background-color&quot;: #F3E055,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Bright Light Yellow</option>\n"+
+                        "              <option data-tab=\"All\" value=\"104\" data-name=\"Bright Pink\" data-rgb=\"#FFBBFF\" style=\"&quot;background-color&quot;: #FFBBFF,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Bright Pink</option>\n"+
+                        "              <option data-tab=\"All\" value=\"8\" data-name=\"Brown\" data-rgb=\"#532115\" style=\"&quot;background-color&quot;: #532115,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Brown</option>\n"+
+                        "              <option data-tab=\"All\" value=\"153\" data-name=\"Dark Azure\" data-rgb=\"#3399FF\" style=\"&quot;background-color&quot;: #3399FF,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Azure</option>\n"+
+                        "              <option data-tab=\"All\" value=\"63\" data-name=\"Dark Blue\" data-rgb=\"#143044\" style=\"&quot;background-color&quot;: #143044,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"85\" data-name=\"Dark Bluish Gray\" data-rgb=\"#595D60\" style=\"&quot;background-color&quot;: #595D60,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Bluish Gray</option>\n"+
+                        "              <option data-tab=\"All\" value=\"10\" data-name=\"Dark Gray\" data-rgb=\"#6B5A5A\" style=\"&quot;background-color&quot;: #6B5A5A,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Gray</option>\n"+
+                        "              <option data-tab=\"All\" value=\"80\" data-name=\"Dark Green\" data-rgb=\"#2E5543\" style=\"&quot;background-color&quot;: #2E5543,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"68\" data-name=\"Dark Orange\" data-rgb=\"#B35408\" style=\"&quot;background-color&quot;: #B35408,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"47\" data-name=\"Dark Pink\" data-rgb=\"#C87080\" style=\"&quot;background-color&quot;: #C87080,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Pink</option>\n"+
+                        "              <option data-tab=\"All\" value=\"89\" data-name=\"Dark Purple\" data-rgb=\"#5F2683\" style=\"&quot;background-color&quot;: #5F2683,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Purple</option>\n"+
+                        "              <option data-tab=\"All\" value=\"59\" data-name=\"Dark Red\" data-rgb=\"#6A0E15\" style=\"&quot;background-color&quot;: #6A0E15,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Red</option>\n"+
+                        "              <option data-tab=\"All\" value=\"69\" data-name=\"Dark Tan\" data-rgb=\"#907450\" style=\"&quot;background-color&quot;: #907450,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Tan</option>\n"+
+                        "              <option data-tab=\"All\" value=\"39\" data-name=\"Dark Turquoise\" data-rgb=\"#008A80\" style=\"&quot;background-color&quot;: #008A80,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Dark Turquoise</option>\n"+
+                        "              <option data-tab=\"All\" value=\"6\" data-name=\"Green\" data-rgb=\"#00642E\" style=\"&quot;background-color&quot;: #00642E,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"154\" data-name=\"Lavender\" data-rgb=\"#B18CBF\" style=\"&quot;background-color&quot;: #B18CBF,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Lavender</option>\n"+
+                        "              <option data-tab=\"All\" value=\"152\" data-name=\"Light Aqua\" data-rgb=\"#CCFFFF\" style=\"&quot;background-color&quot;: #CCFFFF,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Aqua</option>\n"+
+                        "              <option data-tab=\"All\" value=\"62\" data-name=\"Light Blue\" data-rgb=\"#B4D2E3\" style=\"&quot;background-color&quot;: #B4D2E3,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"86\" data-name=\"Light Bluish Gray\" data-rgb=\"#AFB5C7\" style=\"&quot;background-color&quot;: #AFB5C7,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Bluish Gray</option>\n"+
+                        "              <option data-tab=\"All\" value=\"9\" data-name=\"Light Gray\" data-rgb=\"#9C9C9C\" style=\"&quot;background-color&quot;: #9C9C9C,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Gray</option>\n"+
+                        "              <option data-tab=\"All\" value=\"35\" data-name=\"Light Lime\" data-rgb=\"#EBEE8F\" style=\"&quot;background-color&quot;: #EBEE8F,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Lime</option>\n"+
+                        "              <option data-tab=\"All\" value=\"90\" data-name=\"Light Nougat\" data-rgb=\"#FECCB0\" style=\"&quot;background-color&quot;: #FECCB0,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Nougat</option>\n"+
+                        "              <option data-tab=\"All\" value=\"56\" data-name=\"Light Pink\" data-rgb=\"#FFE1FF\" style=\"&quot;background-color&quot;: #FFE1FF,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Pink</option>\n"+
+                        "              <option data-tab=\"All\" value=\"93\" data-name=\"Light Purple\" data-rgb=\"#DA70D6\" style=\"&quot;background-color&quot;: #DA70D6,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Purple</option>\n"+
+                        "              <option data-tab=\"All\" value=\"33\" data-name=\"Light Yellow\" data-rgb=\"#FFE383\" style=\"&quot;background-color&quot;: #FFE383,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Light Yellow</option>\n"+
+                        "              <option data-tab=\"All\" value=\"34\" data-name=\"Lime\" data-rgb=\"#A6CA55\" style=\"&quot;background-color&quot;: #A6CA55,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Lime</option>\n"+
+                        "              <option data-tab=\"All\" value=\"72\" data-name=\"Maersk Blue\" data-rgb=\"#6BADD6\" style=\"&quot;background-color&quot;: #6BADD6,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Maersk Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"71\" data-name=\"Magenta\" data-rgb=\"#B52952\" style=\"&quot;background-color&quot;: #B52952,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Magenta</option>\n"+
+                        "              <option data-tab=\"All\" value=\"156\" data-name=\"Medium Azure\" data-rgb=\"#42C0FB\" style=\"&quot;background-color&quot;: #42C0FB,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Azure</option>\n"+
+                        "              <option data-tab=\"All\" value=\"42\" data-name=\"Medium Blue\" data-rgb=\"#61AFFF\" style=\"&quot;background-color&quot;: #61AFFF,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"157\" data-name=\"Medium Lavender\" data-rgb=\"#885E9E\" style=\"&quot;background-color&quot;: #885E9E,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Lavender</option>\n"+
+                        "              <option data-tab=\"All\" value=\"76\" data-name=\"Medium Lime\" data-rgb=\"#BDC618\" style=\"&quot;background-color&quot;: #BDC618,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Lime</option>\n"+
+                        "              <option data-tab=\"All\" value=\"150\" data-name=\"Medium Nougat\" data-rgb=\"#E3A05B\" style=\"&quot;background-color&quot;: #E3A05B,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Nougat</option>\n"+
+                        "              <option data-tab=\"All\" value=\"31\" data-name=\"Medium Orange\" data-rgb=\"#FFA531\" style=\"&quot;background-color&quot;: #FFA531,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"73\" data-name=\"Medium Violet\" data-rgb=\"#9391E4\" style=\"&quot;background-color&quot;: #9391E4,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Medium Violet</option>\n"+
+                        "              <option data-tab=\"All\" value=\"28\" data-name=\"Nougat\" data-rgb=\"#FFAF7D\" style=\"&quot;background-color&quot;: #FFAF7D,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Nougat</option>\n"+
+                        "              <option data-tab=\"All\" value=\"155\" data-name=\"Olive Green\" data-rgb=\"#7C9051\" style=\"&quot;background-color&quot;: #7C9051,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Olive Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"4\" data-name=\"Orange\" data-rgb=\"#FF7E14\" style=\"&quot;background-color&quot;: #FF7E14,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"23\" data-name=\"Pink\" data-rgb=\"#FFC0CB\" style=\"&quot;background-color&quot;: #FFC0CB,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Pink</option>\n"+
+                        "              <option data-tab=\"All\" value=\"24\" data-name=\"Purple\" data-rgb=\"#A5499C\" style=\"&quot;background-color&quot;: #A5499C,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Purple</option>\n"+
+                        "              <option data-tab=\"All\" value=\"5\" data-name=\"Red\" data-rgb=\"#B30006\" style=\"&quot;background-color&quot;: #B30006,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Red</option>\n"+
+                        "              <option data-tab=\"All\" value=\"88\" data-name=\"Reddish Brown\" data-rgb=\"#89351D\" style=\"&quot;background-color&quot;: #89351D,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Reddish Brown</option>\n"+
+                        "              <option data-tab=\"All\" value=\"55\" data-name=\"Sand Blue\" data-rgb=\"#5A7184\" style=\"&quot;background-color&quot;: #5A7184,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Sand Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"48\" data-name=\"Sand Green\" data-rgb=\"#76A290\" style=\"&quot;background-color&quot;: #76A290,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Sand Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"58\" data-name=\"Sand Red\" data-rgb=\"#8C6B6B\" style=\"&quot;background-color&quot;: #8C6B6B,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Sand Red</option>\n"+
+                        "              <option data-tab=\"All\" value=\"2\" data-name=\"Tan\" data-rgb=\"#DEC69C\" style=\"&quot;background-color&quot;: #DEC69C,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Tan</option>\n"+
+                        "              <option data-tab=\"All\" value=\"96\" data-name=\"Very Light Orange\" data-rgb=\"#E6C05D\" style=\"&quot;background-color&quot;: #E6C05D,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Very Light Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"1\" data-name=\"White\" data-rgb=\"#FFFFFF\" style=\"&quot;background-color&quot;: #FFFFFF,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;White</option>\n"+
+                        "              <option data-tab=\"All\" value=\"3\" data-name=\"Yellow\" data-rgb=\"#F7D117\" style=\"&quot;background-color&quot;: #F7D117,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Yellow</option>\n"+
+                        "              <option data-tab=\"All\" value=\"158\" data-name=\"Yellowish Green\" data-rgb=\"#DFEEA5\" style=\"&quot;background-color&quot;: #DFEEA5,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Yellowish Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"12\" data-name=\"Trans-Clear\" data-rgb=\"#EEEEEE\" style=\"&quot;background-color&quot;: #EEEEEE,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Clear</option>\n"+
+                        "              <option data-tab=\"All\" value=\"14\" data-name=\"Trans-Dark Blue\" data-rgb=\"#00296B\" style=\"&quot;background-color&quot;: #00296B,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Dark Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"15\" data-name=\"Trans-Light Blue\" data-rgb=\"#68BCC5\" style=\"&quot;background-color&quot;: #68BCC5,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Light Blue</option>\n"+
+                        "              <option data-tab=\"All\" value=\"164\" data-name=\"Trans-Light Orange\" data-rgb=\"#E99A3A\" style=\"&quot;background-color&quot;: #E99A3A,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Light Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"16\" data-name=\"Trans-Neon Green\" data-rgb=\"#C0F500\" style=\"&quot;background-color&quot;: #C0F500,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Neon Green</option>\n"+
+                        "              <option data-tab=\"All\" value=\"18\" data-name=\"Trans-Neon Orange\" data-rgb=\"#FF4231\" style=\"&quot;background-color&quot;: #FF4231,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Neon Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"98\" data-name=\"Trans-Orange\" data-rgb=\"#D04010\" style=\"&quot;background-color&quot;: #D04010,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Orange</option>\n"+
+                        "              <option data-tab=\"All\" value=\"17\" data-name=\"Trans-Red\" data-rgb=\"#9C0010\" style=\"&quot;background-color&quot;: #9C0010,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Red</option>\n"+
+                        "              <option data-tab=\"All\" value=\"19\" data-name=\"Trans-Yellow\" data-rgb=\"#EBF72D\" style=\"&quot;background-color&quot;: #EBF72D,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Trans-Yellow</option>\n"+
+                        "              <option data-tab=\"All\" value=\"21\" data-name=\"Chrome Gold\" data-rgb=\"#F1F2E1\" style=\"&quot;background-color&quot;: #F1F2E1,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Chrome Gold</option>\n"+
+                        "              <option data-tab=\"All\" value=\"22\" data-name=\"Chrome Silver\" data-rgb=\"#DCDCDC\" style=\"&quot;background-color&quot;: #DCDCDC,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Chrome Silver</option>\n"+
+                        "              <option data-tab=\"All\" value=\"66\" data-name=\"Pearl Light Gray\" data-rgb=\"#ACB7C0\" style=\"&quot;background-color&quot;: #ACB7C0,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Pearl Light Gray</option>\n"+
+                        "              <option data-tab=\"All\" value=\"65\" data-name=\"Metallic Gold\" data-rgb=\"#B8860B\" style=\"&quot;background-color&quot;: #B8860B,&quot;color&quot;:&quot;#FFF !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Metallic Gold</option>\n"+
+                        "              <option data-tab=\"All\" value=\"60\" data-name=\"Milky White\" data-rgb=\"#D4D3DD\" style=\"&quot;background-color&quot;: #D4D3DD,&quot;color&quot;:&quot;#000 !important&quot;\">\n"+
+                        "                &nbsp;&nbsp;Milky White</option>\n"+
+                        "            </select>";
+
+
+
 
 
         }
