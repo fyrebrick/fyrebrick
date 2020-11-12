@@ -77,7 +77,6 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                         return;
                     }
                     if (req.params.v3 === 'items') {
-                        console.log(obj.data.length + " is length of data");
                         if (obj.data.length > 1) {
                             let newData = obj.data[0];
                             obj.data[1].forEach((o) => {
@@ -100,27 +99,25 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                             return;
                         }
                     } else if (req.params.v1 === "inventories" && req.query.search) {
-                            let search = req.query.search;
+                            let search = req.query.search.toLowerCase();
                             let newData = [];
-                            obj.data.forEach((o) => {
-                                if (o.remarks) {
+                            for (let i = 0, len = obj.data.length; i < len; i++) {
+                                if (obj.data[i].remarks) {
                                     if(req.query.exact==="Y"){
-                                        if (o.remarks.toLowerCase()===search.toLowerCase()) {
-                                            newData.push(o);
+                                        if (obj.data[i].remarks.toLowerCase()===search) {
+                                            newData.push(obj.data[i]);
                                         }
                                     }else{
-                                        if (o.remarks.toLowerCase().includes(search.toLowerCase())) {
-                                            newData.push(o);
+                                        if (obj.data[i].remarks.toLowerCase().includes(search)) {
+                                            newData.push(obj.data[i]);
                                         }
                                     }
-
                                 }
-                            });
-                            let j = {
+                            }
+                            resolve({
                                 "meta": obj.meta,
                                 "data": newData
-                            };
-                            resolve(j);
+                            });
                     } else if (status && status !== "inventories") {
                         statusObj = {meta: obj.meta, data: []};
                         obj.data.forEach((order) => {
@@ -131,7 +128,6 @@ let getJson = async (req,res,user,onlyJson=false,linkOveride="",status="")=> {
                         resolve(statusObj);
                         return;
                     } else {
-                        console.log("getJSON!");
                         resolve(data);
                         return;
                     }

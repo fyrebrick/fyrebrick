@@ -16,7 +16,6 @@ exports.startUp = () => {
             redirect: process.env.PRODUCTION_GOOGLE_REDIRECT_URL
         };
     }
-    console.log(googleConfig);
     defaultScope = [
         "https://www.googleapis.com/auth/plus.me",
         "https://www.googleapis.com/auth/userinfo.email",
@@ -96,12 +95,11 @@ exports.checkSignIn = async function checkSignIn(req) {
     let email = req.session.email;
     const currentUser = await User.findOne({googleId: googleId,setUpComplete:true}, function (err, User) {
         if(err) {
-            console.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: "+err.message);
+            console.trace("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: "+err.message);
             throw new Error(err);
         }
     });
     if (!currentUser) {//new user, add user to database
-        console.log("[INFO]: New User found, welcome "+req.session.email+"!");
         //create user
         const newUser = new User({
             googleId: googleId,
@@ -109,13 +107,11 @@ exports.checkSignIn = async function checkSignIn(req) {
             tokens: tokens
         });
         await newUser.save((err)=>{
-            if(err) console.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newUser.save trace: "+err.message);});
-        console.log("[INFO]: Succesfully created settings, profile and user for new user "+req.session.email);
+            if(err) console.trace("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newUser.save trace: "+err.message);});
         req.session._id = newUser._id;
         req.session.logged_in = false;
         return newUser._id;
     } else {//user already added
-        console.log("[INFO]: User logged in, welcome back "+email);
         req.session._id = currentUser._id;
         req.session.logged_in = true;
         return currentUser._id;

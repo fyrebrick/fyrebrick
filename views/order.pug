@@ -200,7 +200,6 @@ block scripts
                    //filter out checks
                    $(".checkers").each(function(index){
                        if($(this).is(":checked")){
-                           console.log(this);
                             $(this).parent().parent().parent().remove();
                        }
                    });
@@ -443,7 +442,6 @@ block scripts
                 ],
                 initComplete:function(settings,json){
                     order_json=json;
-                    //console.log(json,'json');
                     //get order from database third
                     $.ajax({
                         method: "GET",
@@ -452,19 +450,16 @@ block scripts
                         $(".spinner-img").each(function(index){
                             let currentSpinnerImgId = this.id.substr("spinner-".length);
                             let fullId = this.id;
-                            console.log(currentSpinnerImgId);
                             $.ajax({
                                 method: "GET",
                                 url: "/api/inventories/"+currentSpinnerImgId
                             }).done(function (data) {
                                 let quantity;
-                                console.log(data);
                                 if(!data.data){
                                         quantity = 0;
                                 }else{
                                     quantity = data.data.quantity;
                                 }
-                                console.log(quantity)
                                 $("#spinner-"+currentSpinnerImgId).remove();
                                 $("#spinner-box-"+currentSpinnerImgId).text(quantity);
                             });
@@ -488,7 +483,6 @@ block scripts
                                     description: $("#edit_description").val()
                                 },
                                 fail:function(data){
-                                    console.log(data)
                                 }
                             }).done(function (data) {
                                 $("#description").toggle();
@@ -500,7 +494,6 @@ block scripts
                         $('table#table_id').on('mousedown', 'input', function (e) {
                             e.preventDefault();
                             if ($(e.target).is("input.checkers")) {
-                                //console.log($(this).is(":checked"));
                                 let state = $(this).is(":checked");
                                 $("#" + this.id).prop("checked", state);
                                 //update the database
@@ -521,7 +514,6 @@ block scripts
                                         }
                                     }
                                 }).done(function (data) {
-                                    //console.log("done", data);
                                     //progress bar updated
                                     if(state){
                                         if(order_db.orders_checked!=0){
@@ -537,7 +529,6 @@ block scripts
                             e.preventDefault();
                             if ($(e.target).is('img.img-thumbnail')) {
                                 let modalId = "#modal" + this.id.substr(3, this.id.length);
-                                //console.log(modalId);
                                 $(modalId).modal('show');
                             }
                         }).on('click', '.qty', function (e) {
@@ -552,7 +543,6 @@ block scripts
                         });
 
                         //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
-                        //console.log('initcomplete! starting checkboxes');
                         for (const i of order_db.items) {
                             $("#check" + i.id).prop("checked", i.status);
                         }
@@ -562,8 +552,7 @@ block scripts
             });
             function progress_bar (orders_checked,orders_total){
                 let fill_percent = Number(((orders_checked / orders_total) * 100));
-                let empty_percent = Number((100 - fill_percent))
-                console.log(fill_percent, empty_percent);
+                let empty_percent = Number((100 - fill_percent));
                 $("#progress-fill").width(fill_percent + "%");
                 $("#progress-fill").text(orders_checked+"/"+orders_total);
                 $("#progress-empty").width(empty_percent + "%");
@@ -800,7 +789,6 @@ block scripts
                         break;
                 }
                 css += ">"+color_name+"</span>";
-                console.log(css);
                 return css;
             }
         });

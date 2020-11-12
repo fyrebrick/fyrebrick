@@ -69,8 +69,6 @@ async function getStoreInfo(store){
                     }catch(err){
                         console.trace(err);
                     }
-                } else {
-                    console.log("no store found for ", store);
                 }
 
             });

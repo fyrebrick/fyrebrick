@@ -11,9 +11,7 @@ let changeValue = async(ids,newRemarkName,user) => {
                 null,
                 "HMAC-SHA1"
             );
-            console.log(ids);
             ids = JSON.parse(ids);
-            console.log(ids);
             ids.forEach((id)=>{
                 oauth.put(
                     'https://api.bricklink.com/api/store/v1/inventories/'+id,

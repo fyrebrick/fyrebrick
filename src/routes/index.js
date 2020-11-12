@@ -8,8 +8,6 @@ const api = require('./api');
 router.get('/',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
-            console.log(req.session);
-            console.log("test");
             res.render("index");
             return;
             /////////////////////////////////
@@ -26,7 +24,6 @@ router.get('/',(req,res,next)=>{
 
 router.get('/logout',(req,res,next)=>{
     req.session.destroy();
-    console.log("test");
     res.redirect('/');
 });
 
@@ -38,13 +35,10 @@ router.get('/change',checkSignIn,async(req,res,next)=>{
    }) ;
 });
 router.get('/invest',checkSignIn,async(req,res,next)=>{
-    console.log("test");
    res.render('invest');
 });
 
 router.post('/register', async (req,res,next)=>{
-    console.log(req.body);
-    console.log("test");
     let updateUser = {
         CONSUMER_KEY:req.body.consumerKey,
         CONSUMER_SECRET:req.body.consumerSecret,
@@ -53,8 +47,7 @@ router.post('/register', async (req,res,next)=>{
         setUpComplete:true,
     };
     await User.updateOne({_id:req.session._id},updateUser,(data,err)=>{
-        console.log(data,err);
-    });console.log("test");
+    });
     req.session.logged_in = true;
     res.redirect('/');
 });
@@ -65,8 +58,6 @@ router.get('/redirect',async (req,res,next)=>{
     req.session.googleId = googleCode.googleId;
     req.session.tokens = googleCode.tokens;
     await google.checkSignIn(req);
-    console.log("test");
-    console.log(req.session);
     res.redirect('/');
 });
 
@@ -77,7 +68,6 @@ router.get('/orders/:order_id/items',checkSignIn,async (req,res,next)=>{
 });
 
 router.get('/status/:status',checkSignIn,(req,res,next)=>{
-    console.log(req.params.status);
     res.render('status',{'status':req.params.status});
 });
 

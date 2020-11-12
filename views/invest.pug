@@ -111,7 +111,6 @@ block scripts
         function update(index, items,qty) {
             //items is array of all the inventory_id's
             //index is the to index out of items which will be left/used
-            console.log(index,items,qty);
             $.ajax({
                 method:'POST',
                 url: "/api/invests_update",
@@ -127,7 +126,6 @@ block scripts
         function combine(index, items, qty,remarks,newRemark) {
             //items is array of all the inventory_id's
             //index is the to index out of items which will be left/used
-            console.log(index, items, qty);
             $.ajax({
                 method: 'POST',
                 url: "/api/invests_combine",
@@ -274,7 +272,6 @@ block scripts
                 i = i-1;
                 list.data[i].forEach(
                     function (item,index,meta) {
-                        console.log(meta)
                         let inventories ="";
                         let qtyies = "";
                         let remarks = "";
@@ -586,7 +583,6 @@ block scripts
                         break;
 
                 }
-                console.log(css);
                 $("#color").css(css);
             }
         });

@@ -23,7 +23,6 @@ block styles
         }
 block scripts
     script.
-        console.log("#{status}")
         $(document).ready(function () {
             $('#table_id').DataTable({
                 ajax: {                    url: '/api/status/'+"#{status}", dataSrc: 'data'                },

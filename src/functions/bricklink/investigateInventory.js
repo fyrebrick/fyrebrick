@@ -11,7 +11,6 @@ let investigate = async (user)=> {
             null,
             "HMAC-SHA1"
         );
-        console.log(user);
         let investData;
         oauth.get(
             'https://api.bricklink.com/api/store/v1/inventories',
@@ -75,7 +74,6 @@ let investigate = async (user)=> {
                         }
                     }
                 );
-                console.log("1", investData);
                 resolve(investData);
             });
     });

@@ -31,11 +31,8 @@ block scripts
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-                    console.log(stringDate);
-                    console.log(i);
                     array[data.length-i] = stringDate;
                 }
-                console.log(array);
                 return array;
             }
             var chart = new Chart(ctx, {
