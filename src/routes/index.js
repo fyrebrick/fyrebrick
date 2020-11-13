@@ -74,5 +74,10 @@ router.get('/status/:status',checkSignIn,(req,res,next)=>{
 router.get('/inventories',checkSignIn,(req,res,next)=>{
     res.render('inventory');
 });
+router.get('/add',checkSignIn,(req,res,next)=>{
+    res.render('add');
+});
+
+
 
 module.exports = router;

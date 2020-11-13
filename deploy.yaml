@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bricklink-webservice-deployment
+spec:
+  type: LoadBalancer
+  replicas: 10
+  containers:
+  - name: bricklink-webservice
+    image: snakehead007/bricklink-webservice:latest
+    ports:
+    - port: 3000

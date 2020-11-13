@@ -8,6 +8,7 @@ const addToInventoryIds = require("../functions/bricklink/addToInventoryIds");
 const combineInventoryIds = require('../functions/bricklink/combineInventoryIds');
 const changeRemark = require('../functions/bricklink/changeRemark');
 const getJSON = require('../functions/bricklink/getJson');
+
 const getUrl = require('../functions/scrape/getUrls');
 const https = require('https');
 const jsdom = require("jsdom");

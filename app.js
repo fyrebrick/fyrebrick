@@ -10,6 +10,7 @@ const settingsRoutes = require('./src/routes/settings');
 const dbRoutes = require('./src/routes/db');
 const statsRoutes = require('./src/routes/stats');
 const {checkSignIn} = require('./src/middlewares/index');
+const addRoute = require('./src/routes/add');
 const app = express();
 const statsUpdater = require('./src/schedules/statsUpdater');
 const bricklinkPlus = require("bricklink-plus");
@@ -22,6 +23,7 @@ const start = async () => {
   app.use('/settings',checkSignIn,settingsRoutes);
   app.use('/db',checkSignIn,dbRoutes);
   app.use('/api',checkSignIn,apiRoutes);
+  app.use('/add',checkSignIn,addRoute)
   app.use('/stats',checkSignIn,statsRoutes);
   statsUpdater.default();
 };
