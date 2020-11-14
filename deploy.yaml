@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bricklink-webservice-deployment
-  namespace: BL
+  namespace: bl
 spec:
   replicas: 10
   selector:
