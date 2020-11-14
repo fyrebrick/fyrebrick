@@ -105,6 +105,6 @@ dist
 .tern-port
 
 #manual
+.env-file
 .env.develop
-.env
 /node_modules
