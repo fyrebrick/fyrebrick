@@ -18,7 +18,7 @@ You can either run using node.js or docker.
     
     This means you need create a project on [apis.google.com](https://console.developers.google.com/apis/)
     
-    e.g.: `CONSUMER_KEY="99B44795D4C168E795D4C168E795D700"`
+    e.g.: `CONSUMER_KEY="99B44795D4C168E795D4C168E795D700"` 
     
     And start the server by running `nmp install;npm start`
     

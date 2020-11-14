@@ -18,7 +18,7 @@ const bricklinkPlus = require("bricklink-plus");
 const start = async () => {
   if (!process.env.PORT) throw new Error(".env file not found, or wrong path");
   await load(app);
-  console .log("[INFO]: Server started");
+  console .log("[INFO]: Server started"); 
   app.use('/',mainRoutes);
   app.use('/settings',checkSignIn,settingsRoutes);
   app.use('/db',checkSignIn,dbRoutes);
