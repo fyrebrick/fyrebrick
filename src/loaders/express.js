@@ -29,6 +29,11 @@ module.exports.default = function (app) {
     app.use(hpp());
     app.use(function (req, res, next) {
         res.locals.session = req.session;
+        res.locals.version = process.env.VERSION;
+        res.locals.mode = (process.env.DEVELOP==="true")?"develop":"live";
+        res.locals.type = process.env.TYPE;
+        //pug variables
+        res.locals.order_id="";
         next();
     });
     app.listen(process.env.PORT);

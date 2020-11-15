@@ -1,0 +1,78 @@
+body{
+    width: 100%;
+}
+img{
+    min-height:200px !important;
+    min-width: 200px !important;
+}
+tbody tr td:nth-child(2) a {
+    font-size-adjust: initial;
+    font-size: 26px;
+    text-align: center;
+}
+td {
+    font-size: 41px;
+    font-weight: bold;
+}
+[type="search"] {
+    font-size: 41px;
+}
+.progress {
+    top: -21px;
+    position: relative;
+}
+tbody tr td:nth-child(1) {
+    margin-top: 27px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.spinner-box {
+    background-color: #fff;
+    z-index: 20;
+    border-radius: 55px;
+    opacity: 0.7;
+    position: relative;
+}
+.buttonBig {
+    width: 200px;
+    height: 80px;
+    font-size: 20px;
+}
+.buttonModal {
+    margin-left: 25px;
+    margin-right: 25px;
+    font-size: 31px !important;
+    flex: auto;
+    postition: relative;
+}
+
+#inputIndicator, #qtyInput {
+    height: 60px;
+    font-size: 30px;
+}
+#inputIndicator {
+    width: 58px;
+    padding-left: 21px;
+}
+.qtyNumber {
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+#filterSwitchDiv{
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+#filterSwitchLbl{
+    top: -9px;
+    font-size: 150%;
+    display: inline;
+    margin-left: 80px;
+    margin-top: -19px;
+    position: relative;
+}
+#filterSwitch{
+    left: 71px;
+    position: absolute;
+}

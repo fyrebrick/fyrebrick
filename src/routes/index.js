@@ -4,11 +4,12 @@ const google =require('../middlewares/google');
 const User = require('../models/user');
 const {checkSignIn} = require('../middlewares/index');
 const api = require('./api');
+const ordersRoute = require('./orders');
 
 router.get('/',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
-            res.render("index");
+            res.render("dashboard",{active:"dashboard"});
             return;
         }else{
             res.render("welcome",{
@@ -20,6 +21,7 @@ router.get('/',(req,res,next)=>{
     }
     res.redirect(google.urlGoogle());
 });
+router.use('/orders',checkSignIn,ordersRoute);
 
 router.get('/logout',(req,res,next)=>{
     req.session.destroy();
@@ -34,7 +36,7 @@ router.get('/change',checkSignIn,async(req,res,next)=>{
    }) ;
 });
 router.get('/invest',checkSignIn,async(req,res,next)=>{
-   res.render('invest');
+   res.render('invest',{active:"inventory"});
 });
 
 router.post('/register', async (req,res,next)=>{
@@ -62,19 +64,20 @@ router.get('/redirect',async (req,res,next)=>{
 
 router.get('/orders/:order_id/items',checkSignIn,async (req,res,next)=>{
    res.render('order',{
-      'order_id':req.params.order_id
+      'order_id':req.params.order_id,
+      active:"orders"
    })
 });
 
 router.get('/status/:status',checkSignIn,(req,res,next)=>{
-    res.render('status',{'status':req.params.status});
+    res.render('status',{'status':req.params.status,active:"orders"});
 });
 
 router.get('/inventories',checkSignIn,(req,res,next)=>{
-    res.render('inventory');
+    res.render('inventory',{active:"inventory"});
 });
 router.get('/add',checkSignIn,(req,res,next)=>{
-    res.render('add');
+    res.render('add',{active:"inventory"});
 });
 
 

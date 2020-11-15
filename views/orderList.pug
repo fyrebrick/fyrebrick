@@ -1,0 +1,24 @@
+extends layout
+block content
+    .container-fluid
+        .row
+            .col-lg-12
+                .card
+                    .card-body
+                        .active-member
+                            .table-responsive
+                                table#mainTable.table.table-xs.mb-0
+                                    thead
+                                        tr
+                                            th.data-class-name Order Id
+                                            th Date Ordered
+                                            th Status
+                                            th progress
+                                    tbody#dynamicTable
+                            
+
+block styles
+    link(rel="stylesheet", href="/css/orderListTable.css")
+    //link(rel="stylesheet", href="/css/orderList.css")
+block scripts
+    script(src="/js/orderList.js")

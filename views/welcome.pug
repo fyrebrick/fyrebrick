@@ -1,20 +1,6 @@
 html
   include _head
-  style.
-    .box {
-      float: left;
-      overflow: hidden;
-    }
-    .box-inner {
-      width: 400px;
-      padding: 10px;
-    }
-    .jumbotron {
-      height:100%;
-    }
-    #create{
-      margin-left:50px;
-    }
+  link(rel="stylesheet", href="/css/welcome.css")
   body
     .container-fluid
       .jumbotron
@@ -48,31 +34,4 @@ html
                 small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
               a#back.btn.btn-success.btn-lg.text-white( role='button') back
               input#create.btn.btn-primary.btn-lg(type='submit' role='button', value=buttonTitle)
-    script.
-      $(document).ready(function(){
-        $("#next").click(function(){
-          $("#consumerSection").
-          animate({
-            width: "toggle"
-          });
-          $("#tokenSection").
-          animate({
-            width: "toggle"
-          });
-        });
-        $("#back").click(function () {
-          $("#consumerSection").
-          animate({
-            width: "toggle"
-          });
-          $("#tokenSection").
-          animate({
-            width: "toggle"
-          });
-        });
-      });
-      function animationToggleForward(id){
-        $(id).animate({
-          width: "toggle"
-        });
-        }
+    script(src="/js/welcome.js")

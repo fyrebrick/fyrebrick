@@ -1,0 +1,28 @@
+
+.nav-link.not-active{
+    background: linear-gradient(to right, #e8e8e8, #e8e8e8 50%, #aaa7a7 50%);
+    background-clip: text;
+    background-size: 200% 100%;
+    background-position: 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 275ms ease;
+    color: #e8e8e8 ;
+}
+.nav-link:hover{
+    background-position: 0 100%;
+}
+.nav-link.active{
+    color: #ffffff;
+    font-weight: 700;
+    /* .nav-item{
+    padding-right:80%
+}
+.nav-item:last-child{
+    padding-right: 0px !;
+}
+.navbar{
+    width:100%;
+} */
+}
+

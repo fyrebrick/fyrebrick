@@ -1,0 +1,19 @@
+[type="search"] {
+    font-size: 34px;
+}
+#searchButton{
+    height: 65px;
+}
+input[type="checkbox"]{
+    -ms-transform: scale(3) !important;
+    -moz-transform: scale(3) !important;
+    -webkit-transform: scale(3) !important;
+    -o-transform: scale(3) !important;
+    margin-top:10px;
+    position: relative;
+}
+.list-group{
+    border-left: #000 solid 2px !important;
+    overflow: scroll !important;
+    height: 60% !important;
+}
