@@ -16,15 +16,13 @@ html
       margin-left:50px;
     }
   body
-    //test
     .container-fluid
       .jumbotron
         h1.display-4=titleJumbo
-        ////////////////////////////////////////////
         p.lead
           | The information we need from you below, you can find to login
-          a(href="https://www.bricklink.com/v2/api/register_consumer.page", target="_blank", rel="noopener noreferrer")  here
-          | for Ip 81.164.134.131
+          a(href="https://www.bricklink.com/v2/api/register_consumer.page", target="_blank", rel="noopener noreferrer")
+          | here for Ip 0.0.0.0 and mask 0.0.0.0
         hr.my-4
         form.row(action="/register"  , method='post')
           #consumerSection.box

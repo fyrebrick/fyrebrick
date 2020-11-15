@@ -9,11 +9,13 @@
   "dependencies": {
     "after-load": "1.0.4",
     "body-parser": "latest",
+    "bricklink-plus": "^1.0.6-rc.1",
     "cookie-parser": "1.4.5",
     "debug": "4.2.0",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-flash": "0.0.2",
+    "express-session": "1.17.1",
     "googleapis": "64.0.0",
     "hpp": "0.2.3",
     "http": "0.0.1-security",
@@ -28,9 +30,5 @@
     "oauth": "0.9.15",
     "path": "0.12.7",
     "pug": "3.0.0"
-  },
-  "devDependencies": {
-    "bricklink-plus": "1.0.5-e",
-    "express-session": "1.17.1"
   }
 }

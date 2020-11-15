@@ -25,7 +25,7 @@ img{
 width: 100px !important;
     height: 60px !important;
 }
-input[type='checkbox'] {
+input[type='checkbox']{
     /* Double-sized Checkboxes */
     -ms-transform: scale(5); /* IE */
     -moz-transform: scale(5); /* FF */

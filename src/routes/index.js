@@ -5,7 +5,7 @@ const User = require('../models/user');
 const {checkSignIn} = require('../middlewares/index');
 const api = require('./api');
 
-router.get('/',async (req,res,next)=>{
+router.get('/',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
             res.render("index");
@@ -18,44 +18,7 @@ router.get('/',async (req,res,next)=>{
             return;
         }
     }
-    if(process.env.DEVELOP=="false"){
-        res.redirect(google.urlGoogle());
-    }else{
-        const currentUser = await User.findOne({googleId: "1"}, function (err, User) {
-            if(err) {
-                console.trace("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: "+err.message);
-                throw new Error(err);
-            }
-        });
-        console.log(currentUser);
-        req.session.email = "developing"
-        req.session.googleId = "1";
-        req.session.tokens = {};
-        if (!currentUser) {//new user, add user to database
-            //create user
-            const newUser = new User({
-                googleId: "1",
-                email: "developing",
-                tokens: {}
-            });
-            await newUser.save((err)=>{
-                if(err) console.trace("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newUser.save trace: "+err.message);});
-            req.session._id = newUser._id;
-            req.session.logged_in = false;
-            res.redirect('/welcome');
-        } else {//user already added
-            req.session._id = currentUser._id;
-            if(currentUser.setUpComplete){
-                req.session.logged_in = true;
-                res.render('index');
-            }else{
-                req.session.logged_in = false;
-                res.render('welcome');
-            }
-        }
-
-    }
-    
+    res.redirect(google.urlGoogle());
 });
 
 router.get('/logout',(req,res,next)=>{

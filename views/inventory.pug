@@ -527,7 +527,7 @@ block scripts
                     tr += "<input type=\"text\" class=\"form-control inputUsed\" id=\"U" + item.inventory_id + "\" placeholder=\"" + item.new_or_used + "\" value=\"" + item.new_or_used + "\">\n";
                     tr += "</td><td>";//start 5nd column
                     tr += getPic(item);
-                    tr += "<a href='https://www.bricklink.com/v2/inventory_detail.page?invID="+item.inventory_id+"' class='item-no'>Item "+item.item.no+"</a>";
+                    tr += "<a target='_blank' href='https://www.bricklink.com/v2/inventory_detail.page?invID="+item.inventory_id+"' class='item-no'>Item "+item.item.no+"</a>";
                     tr += "</td></tr>";
                     $('#bodyOfTable').append(tr);
                     searchValue = $("#search").val();

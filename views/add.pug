@@ -9,7 +9,7 @@ block content
             .btn-group(role='group' aria-label='Group of action buttons')#mainButtonRows
                 button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
     hr
-    #main
+    #main.container
 block styles
     style.
         [type="search"] {
@@ -17,6 +17,19 @@ block styles
         }
         #searchButton{
             height: 65px;
+        }
+        input[type="checkbox"]{
+            -ms-transform: scale(3) !important;
+            -moz-transform: scale(3) !important;
+            -webkit-transform: scale(3) !important;
+            -o-transform: scale(3) !important;
+            margin-top:10px;
+            position: relative;
+        }
+        .list-group{
+            border-left: #000 solid 2px !important;
+            overflow: scroll !important;
+            height: 60% !important;
         }
 
 block scripts
@@ -81,24 +94,46 @@ block scripts
                     beforeSend: startLoading
                 }).done(function(data){
                     //receives [{color_id,quantity}]
-                    console.log("done");
-                    let knowColorsHTML = "<ul class=\"list-group\">\n";
-                    data.data.forEach(function(o){
-                        knowColorsHTML += "<li class=\"list-group-item\" id='"+o.color_id+"'>"+getInfoFromColorId(o.color_id).name+" qty("+o.qty+")";
-                        knowColorsHTML += "<label for='"+o.color_id+"'>"+getInfoFromColorId(o.color_id).name+" qty("+o.qty+")+</label>"
-                        knowColorsHTML += "<input id='"+o.color_id+"' type='checkbox'></input>"
-                        knowColorsHTML+= "</li>\n";
-                    });
-                    knowColorsHTML += "</ul>";
-                    console.log(knowColorsHTML);
+                    console.log(data);
+                let k = "<div class='row justify-content-md-center'>";
+                        k += "<div class='col'>";
+                            k = "<ul class=\"list-group list-group-flush\"'>\n";
+                            data.data.forEach(function(o){
+                                k += "<li class=\"list-group-item\" id='"+o.color_id+"' style='border-left: "+o.rgb+" solid 57px;'>";
+                                    k += "<div class='row'>";
+                                        k += "<div class='col'>";
+                                        k += "<input class='colorBox' id='"+o.color_id+"' type='checkbox'></input>";
+                                        k += "</div>";
+                                        k += "<div class='col'>";
+                                        k += "<label for='"+o.color_id+"'>"+o.name+"</label>";
+                                        k += "</div>";
+                                        //- k += "<div class='col'>";
+                                        //- k += "<p>amount in stock: "+o.quantity+"</p>";
+                                        //- k += "</div>";
+                                    k += "</div>";
+                                k+= "</li>\n";
+                            });
+                            k += "</ul>";
+                        k += "</div>";
+                    k +="</div>";
+                    k += "<div class='row justify-content-md-center'>";
+                    k += "<button id='colourUseButton' class=\"btn btn-primary use-item\">Use these colours</a>";
+                    k += "</div>"
                     $("#main").empty();
-                    $("#main").append(knowColorsHTML);
+                    $("#main").append(k);
+                    addItemsListening();
                     stopLoading();
                 });
             }
-            function getInfoFromColorId(color_id){
-                //TODO lots of work! 0 - 157
-                return {rgb:"#000000",name:"not implemented yet"};
+            function addItems(e){
+                startLoading();
+                $("#main").empty();
+
+                stopLoading();
+
+            }
+            function addItemsListening(){
+                document.getElementById('colourUseButton').addEventListener('click',addItems);
             }
             function searchListening(){
                 document.querySelectorAll(".use-item").forEach(function (item) {

@@ -290,16 +290,16 @@ block scripts
                         render: function (data, type, row, meta) {
                             if(row.remarks!==undefined){
                                 let l = row.remarks.substr(0, 1).toLowerCase();
-                                const de = /[a-d,A-D]\d{1,}/gm;
+                                const de = /[a-z,A-Z]\d{1,}/gm;
                                 const ute = row.remarks;
                                 if (de.exec(ute)) {
                                     //pappieBedrag+=(row.unit_price*row.quantity);
-                                    return "<div class='pappieCheckbox'><span class='box papa'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
+                                    return "<div class=''><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
                                 } else {
-                                    return "<div class='merijnCheckbox'><span class='box merijn'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
+                                    return "<div class=''><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
                                 }
                             }else{
-                                return "<div class='merijnCheckbox'><span class='box merijn'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
+                                return "<div class=''><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
                             }
                         }
                     },
@@ -329,7 +329,7 @@ block scripts
                                     }
                                     break;
                                 case 3:
-                                    if (heeftLetterInRemarks) { //A12
+                                    if (heeftLetterInRemarks) { //A123
                                         remarkNew= eersteLettervanRemark + "0" + remarks.substr(1,remarks.length);
                                     } else {
                                         remarkNew= "0" + row.remarks;

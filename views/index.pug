@@ -46,7 +46,7 @@ block scripts
                         render:function(data,type,row,meta){
                             let d = new Date(data);
                             const options = { year: 'numeric', month: 'long', day: 'numeric'};
-                            return d.toLocaleDateString('en-UK', options)+" @ "+d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })}
+                            return d.toLocaleDateString('en-UK', options);}
                     },
                     {data:'status',
                         render:function(data,type,row,meta){
