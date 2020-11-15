@@ -30,7 +30,7 @@
     "pug": "3.0.0"
   },
   "devDependencies": {
-    "bricklink-plus": "1.0.5-e",
+    "bricklink-plus": "1.0.6",
     "express-session": "1.17.1"
   }
 }
