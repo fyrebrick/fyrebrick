@@ -29,3 +29,31 @@
 .progress {
     margin-top: 6px
 }
+.status-name{
+    /*names*/
+    font-size: 14px;
+    padding: 0 3px 0 10px;
+}
+.data-status{
+    font-size: 14px;
+    padding-left: 3px;
+    /*icons*/
+}
+.status-badge{
+    padding: 7px;
+    min-width: 100px;
+}
+tr{
+    border-radius: 10px;
+    cursor: pointer;
+    background: rgb(235,235,235);
+    background: linear-gradient(to left, #ffffff00 0%, rgb(178, 215, 255) 100%) right;
+    background-size: 2000%;
+    transition: .1s ease-out;
+    transition: .3s ease-in;
+
+}
+tbody tr:hover{
+    background-position: left;
+
+}
