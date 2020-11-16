@@ -34,6 +34,7 @@ module.exports.default = function (app) {
         res.locals.type = process.env.TYPE;
         //pug variables
         res.locals.order_id="";
+        res.locals.data={};
         next();
     });
     app.listen(process.env.PORT);

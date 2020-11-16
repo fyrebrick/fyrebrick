@@ -3,41 +3,14 @@ block styles
     link(rel="stylesheet", href="/css/order.css")
 
 block content
-    .d-flex.flex-row-reverse.bd-highlight#update_row(style="display:none;")
-        .p-2.bd-highlight
-            button#edit_description_update.btn.btn-primary(style="display:none;" type="button" value="update") update
-                #spinner_edit_description_update
-    .row
-        .col-4
-            h1
-                a#details(data-toggle="modal" data-target="#modal_order", href="#details")="Order: "+order_id
-        .col-2
-            button#edit_description_button.btn.btn-outline-primary(type='button')
-                i.fas.fa-edit
-        .col-6
-            p#description.lead
-                #spinner_description.spinner-border(role='status')
-                    span.sr-only Loading..
-            .form-group
-                textarea#edit_description.form-control(rows="3", style="display:none;")
-
-    hr
-    .progress
-        .progress-bar#progress-fill.progress-bar-striped.progress-bar-animated( role='progressbar' style="width: 0%;" )
-        .progress-bar#progress-empty.bg-light(role='progressbar' style='width: 100%')
-    #filterSwitchDiv
-        span#filterSwitchLbl(for='filterSwitch') Filter out checked items
-        input#filterSwitch(type='checkbox')
-    table#table_id.display(data-display-length='-1')
-        thead
-            tr
-                th Check
-                th Remark
-                th Desc.
-                th Color
-                th.data-class-name Qt
-                th N/U
-                th pic
+        .row
+            .col-lg-12
+                .card
+                    .card-body
+                        .active-member
+                            .table-responsive
+                                table#mainTable.table.table-xs.mb-0
+                                    tbody#dynamicTable
 block scripts
     script(src="/js/order.js")
         

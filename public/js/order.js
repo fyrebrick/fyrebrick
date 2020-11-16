@@ -1,373 +1,130 @@
 $(document).ready(function () {
-    let spinner = "<div id=\"spinner_edit\" class=\"spinner-border\" role=\"status\">\n" +
-        "  <span class=\"sr-only\">Loading...</span>\n" +
-        "</div>";
-    let check = "<i id=\"check_edit\" class=\"fas fa-check\"></i>";
-    let order_db = null;
-    let order_json = null;
-    $("#filterSwitch").click(function(){
-       if($("#filterSwitch").is(":checked")){
-           //filter out checks
-           $(".checkers").each(function(index){
-               if($(this).is(":checked")){
-                    $(this).parent().parent().parent().remove();
-               }
-           });
-       }else{
-           //reload page bruh
-           location.reload();
-       }
-    });
-    //get order details from api first
-    $("#qtyButtonSubmit").click(function () {
+    getItems();
+    function request_checkbox(e){
+        const id = e.target.id.substr(1);
         $.ajax({
-            method: "POST",
-            url: '/api/change_quantity',
-            data: {
-                sign: $("#inputIndicator").text(),
-                value: $("#qtyInput").val(),
-                id: $("#qtyId").text()
+            method: "PUT",
+            url: "/db/order/"+PUG_order_id,
+            data: {item: id},
+            error:function(){
+                if (window.alert("Checkbox gave an error. please reload.")) {
+                    location.reload();
+                }
             },
-        }).done(function (data) {
-            $("#qtyModal").modal('hide');
-        });
-    })
-    $("#qtyButtonAdd").click(function () {
-        $(this).removeClass("btn-success");
-        $(this).addClass("btn-outline-success");
-        $("#qtyButtonRemove").removeClass("btn-outline-danger");
-        $("#qtyButtonRemove").addClass("btn-danger");
-        $("#inputIndicator").text("+");
-        $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
-    })
-    $("#qtyButtonRemove").click(function () {
-        $(this).removeClass("btn-danger");
-        $(this).addClass("btn-outline-danger");
-        $("#qtyButtonAdd").removeClass("btn-outline-success");
-        $("#qtyButtonAdd").addClass("btn-success");
-        $("#inputIndicator").text("-");
-        let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
-        if (next <= 0) {
-            $("#qtyNumberNext").text("0");
-        } else {
-            $("#qtyNumberNext").text(next);
-        }
-    })
-    $("#qtyInput").keyup(function () {
-        let sign = $("#inputIndicator").text();
-        if (sign === "+") {
-            $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
-        } else if (sign === "-") {
-            let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
-            if (next <= 0) {
-                $("#qtyNumberNext").text("0");
-            } else {
-                $("#qtyNumberNext").text(next);
+            fail:function(){
+                if(window.alert("Checkbox failed. please reload.")){
+                    location.reload();
+                }
             }
+        }).done(change_img_shadow_colour(id));
+    }
+    function change_img_shadow_colour(id){
+        if($("#C"+id).is(":checked")){
+            $("#img"+id).removeClass("normal_img_shadow")
+            .addClass("checked_img_shadow");
+        }else{
+            $("#img"+id).addClass("normal_img_shadow")
+            .removeClass("checked_img_shadow");
         }
-
-    })
-    $.ajax({
-        method: "GET",
-        url: "/api/orders/"+PUG_order_id
-    })
-        .done(function (data) {
-            const json = JSON.parse(data);
-            $("#spinner_payment").remove();
-            $("#payment").text(json.data.payment.method);
-            $("#spinner_status").remove();
-            $("#status").text(json.data.status);
-            $("#spinner_shipping_method").remove();
-            $("#shipping_method").text(json.data.shipping.method);
-            $("#spinner_shipping_cost").remove();
-            $("#shipping_cost").text(json.data.cost.shipping+" "+json.data.cost.currency_code);
-            $("#spinner_address").remove();
-            $("#address").text(json.data.shipping.address.full+" "+json.data.shipping.address.country_code );
-        });
-
-    let pappieBedrag = 0.00;
-    //get order items for table second
-    $('#table_id').DataTable({
-        ajax: {
-            paging: false,
+    }
+    function getItems(){
+        $.ajax({
+            method:"GET",
             url: '/api/orders/'+PUG_order_id+'/items',
-            dataSrc: 'data'
-        },
-        columns:[
-            {
-                data: null,
-                bSearchable: false,
-                render: function (data, type, row, meta) {
-                    if(row.remarks!==undefined){
-                        let l = row.remarks.substr(0, 1).toLowerCase();
-                        const de = /[a-z,A-Z]\d{1,}/gm;
-                        const ute = row.remarks;
-                        if (de.exec(ute)) {
-                            //pappieBedrag+=(row.unit_price*row.quantity);
-                            return "<div class=''><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
-                        } else {
-                            return "<div class=''><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
-                        }
-                    }else{
-                        return "<div class=''><span class='box'></span><input type='checkbox' class='checkers' id='check" + row.inventory_id + "' ></div>";
-                    }
-                }
-            },
-            {data:null,
-            render:function(data,type,row,meta){
-                if(row.remarks===undefined){
-                    return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >geen remark </a>";
-                }else{
-                    const remarks = row.remarks;
-                    const eersteLettervanRemark = remarks.substr(0,1);
-                    const amountOfNumbersInRemarks = (remarks.match(/\d/g) || []).length;
-                    const heeftLetterInRemarks  = ((remarks.toLowerCase().match(/[a-z]/g) || []).length>=1 );
-                    let remarkNew;
-                    switch (amountOfNumbersInRemarks) {
-                        case 1:
-                            if(heeftLetterInRemarks){ //A1
-                                remarkNew= eersteLettervanRemark+"000"+remarks.substr(1,remarks.length);
-                            }else{//1
-                                remarkNew=  "000"+remarks;
-                            }
-                            break;
-                        case 2:
-                            if(heeftLetterInRemarks){ //A12
-                                remarkNew=  eersteLettervanRemark+"00"+remarks.substr(1,remarks.length);
-                            }else{
-                                remarkNew= "00"+row.remarks;
-                            }
-                            break;
-                        case 3:
-                            if (heeftLetterInRemarks) { //A123
-                                remarkNew= eersteLettervanRemark + "0" + remarks.substr(1,remarks.length);
-                            } else {
-                                remarkNew= "0" + row.remarks;
-                            }
-                            break;
-                        default:
-                            remarkNew=row.remarks;
-                    }
-                    return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + row.inventory_id + "' target='_blank'  >"+remarkNew+"</a>";
-                }
-            }
-            },
-            {data: null,
-                render: function(data,type,row,meta){
-                    if(row.description){
-                        return row.description;
-                    }else{
-                        return "";
-                    }
-                }
-            },
-            {
-                data:'color_name',
-                render: function(data,type,row,meta){
-                    if(data==="(Not Applicable)"){
-                        return "<i class=\"fas fa-tint-slash\"></i>";
-                    }else{
-                        return setColor(data);
-                    }
-                }
-            },
-            {
-                data:'quantity',
-                render: function (data,type,row,meta){
-                    return "<a href='#qtyModalShow' class='qty' data-name='"+row.item.name+"' data-id='"+row.inventory_id+"' data-qty='"+row.quantity+"' >"+row.quantity+"</div>"
-                }
-            },
-            {data:'new_or_used'},
-            {
-                data:'color_id',
-                bSortable: false,
-                bSearchable: false,
-                render: function (data, type, row, meta) {
-                    let id = row.color_id+row.item.no;
-                    let modal = "<div class=\"modal fade\" id=\"modal"+id+"\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle"+id+"\" aria-hidden=\"true\">\n" +
-                        "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
-                        "    <div class=\"modal-content\">\n" +
-                        "      <div class=\"modal-header\">\n" +
-                        "        <h5 class=\"modal-title\" id=\"modalTitel"+id+"\">Item no "+row.item.no+"</h5>\n" +
-                        "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
-                        "          <span aria-hidden=\"true\">&times;</span>\n" +
-                        "        </button>\n" +
-                        "      </div>\n" +
-                        "      <div class=\"modal-body\">\n" +
-                        "        "+row.item.name+
-                        "      </div>\n" +
-                        "      <div class=\"modal-footer\">\n" +
-                        "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
-                        "      </div>\n" +
-                        "    </div>\n" +
-                        "  </div>\n" +
-                        "</div>";
-                    let _type=row.item.type.substr(0,1);
-                        let returnValue;
-                    switch (row.item.type) {
-                        case "SET":
-                            returnValue = modal + "\n" +
-                                "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/S/" + row.item.no + ".jpg\"" + " alt=\"\"> ";
-                            break;
-                        case "MINIFIG":
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/MN/"+row.color_id+"/"+row.item.no+".png\"" + " alt=\"\"> ";
-                            break;
-                        case "PART":
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img"+id+"\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/PN/"+data+"/"+row.item.no+".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'INSTRUCTION':
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/IN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'BOOK':
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/BN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'SET':
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/SN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'GEAR':
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/GN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-                        case 'CATALOG':
-                            returnValue =  modal + "\n" +
-                                "<img id=\"img" + id + "\" class=\"img-thumbnail \" src=\"https://img.bricklink.com/ItemImage/CN/" + data + "/" + row.item.no + ".png\"" + " alt=\"\"> ";
-                            break;
-
-                        default:
-                            returnValue =  "<i class=\"fas fa-image\"></i>";
-                    }
-                    return returnValue + "<div class=\"spinner-box\" id=\"spinner-box-"+row.inventory_id+"\">" +
-                                            "<div id=\"spinner-"+row.inventory_id+"\" class=\"spinner-border spinner-img\" role=\"status\">\n" +
-                                                "  <span class=\"sr-only\">Loading...</span>\n" +
-                                           "</div>" +
-                                        "</div>" ;
-                    return returnValue;
-                }
-            }
-        ],
-        initComplete:function(settings,json){
-            order_json=json;
-            //get order from database third
-            $.ajax({
-                method: "GET",
-                url:"/db/order/"+PUG_order_id+"?orders_total="+order_json.data.length
-            }).done(function (data) {
-                $(".spinner-img").each(function(index){
-                    let currentSpinnerImgId = this.id.substr("spinner-".length);
-                    let fullId = this.id;
-                    $.ajax({
-                        method: "GET",
-                        url: "/api/inventories/"+currentSpinnerImgId
-                    }).done(function (data) {
-                        let quantity;
-                        if(!data.data){
-                                quantity = 0;
-                        }else{
-                            quantity = data.data.quantity;
-                        }
-                        $("#spinner-"+currentSpinnerImgId).remove();
-                        $("#spinner-box-"+currentSpinnerImgId).text(quantity);
-                    });
-                });
-                order_db = data;
-                $("#spinner_description").remove();
-                $("#description").text(data.description);
-                $("#edit_description").val(data.description);
-                $("#edit_description_button").click(function () {
-                    $("#description").toggle();
-                    $("#edit_description").toggle();
-                    $("#edit_description_update").toggle();
-                });
-                //update progress bar
-                progress_bar(order_db.orders_checked,order_db.orders_total);
-                $("#edit_description_update").click(function () {
-                    $.ajax({
-                        method: "PUT",
-                        url: "/db/order/"+PUG_order_id,
-                        data: {
-                            description: $("#edit_description").val()
-                        },
-                        fail:function(data){
-                        }
-                    }).done(function (data) {
-                        $("#description").toggle();
-                        $("#edit_description").toggle();
-                        $("#edit_description_update").toggle();
-                        $("#description").text($("#edit_description").val());
-                    });
-                });
-                $('table#table_id').on('mousedown', 'input', function (e) {
-                    e.preventDefault();
-                    if ($(e.target).is("input.checkers")) {
-                        let state = $(this).is(":checked");
-                        $("#" + this.id).prop("checked", state);
-                        //update the database
-                        //id of checkboxes are like this => "check[id]"
-                        let id = this.id.substr(5, this.id.length);
-                        $.ajax({
-                            method: "PUT",
-                            url: "/db/order/"+PUG_order_id,
-                            data: {item: id},
-                            error:function(){
-                                if (window.alert("Checkbox gave an error. please reload.")) {
-                                    location.reload();
-                                }
-                            },
-                            fail:function(){
-                                if(window.alert("Checkbox failed. please reload.")){
-                                    location.reload();
-                                }
-                            }
-                        }).done(function (data) {
-                            //progress bar updated
-                            if(state){
-                                if(order_db.orders_checked!=0){
-                                    order_db.orders_checked--;
-                                }
-                            }else{
-                                order_db.orders_checked++;
-                            }
-                            progress_bar(order_db.orders_checked,order_db.orders_total);
-                        });
-                    }
-                }).on('click', 'img', function (e) {
-                    e.preventDefault();
-                    if ($(e.target).is('img.img-thumbnail')) {
-                        let modalId = "#modal" + this.id.substr(3, this.id.length);
-                        $(modalId).modal('show');
-                    }
-                }).on('click', '.qty', function (e) {
-                    e.preventDefault();
-                    if ($(e.target).is(".qty")) {
-                        let data = $(this).data(); //name, id, qty
-                        $("#qtyTitle").text("Add or remove quantity to item \"" + data.name + "\"");
-                        $("#qtyNumberCurrent").text(data.qty);
-                        $("#qtyId").text(data.id);
-                        $("#qtyModal").modal('show');
-                    }
-                });
-
-                //$("#pappieBedrag").text("Pappie: "+pappieBedrag.toFixed(2)+"€");
-                for (const i of order_db.items) {
-                    $("#check" + i.id).prop("checked", i.status);
-                }
+            beforeSend:startLoading()
+        }).done(function(data){
+            data.data.forEach(function(item){
+                console.log(item);
+                let t = "<tr>"; 
+                    t += "<td>";//images
+                        t+=render_image(item);
+                        t+=render_checkbox(item.inventory_id);
+                    t += "</td>";
+                    t += "<td>";//info
+                        t+= "<div class='itemName'>"+render_description(item)+"</div>"
+                        t+= "<div class='smaller-info'>";
+                            t+="<div class='new_or_used'>"+(item.new_or_used==="N")?"New":"Used"+"</div>"
+                            t+="<div class='color_name'>"+render_color(item.color_name)+"</div>";
+                            t+="<div class='type'>";
+                                t+=item.item.type.substr(0,1)+item.item.type.substr(1).toLowerCase()
+                            t+="</div>";
+                        t+="</div>";
+                    t += "</td>";//remarks
+                    t += "<td>"
+                        t +="<div class='remarks'>"+render_remarks(item)+"</div>";
+                    t += "</td>";
+                    t += "<td>";//quantity
+                        t += "<div class='quantity'>"+item.quantity+"</div>";
+                    t += "</td>";
+                t+="</tr>";
+                $("#dynamicTable").append(t);
             });
+            order_event_listeners();
+            check_already_checked_items();
+            stopLoading();
+        })
+    }
+    function check_already_checked_items(){
+        const items = PUG_data.orderDB.items;
+        console.log(items);
+        items.forEach(function(item){
+            $("#C"+item.id).prop("checked",item.status);
+            if(item.status){
+                change_img_shadow_colour(item.id);
+            }
+        })
+    }
+    function order_event_listeners(){
+        document.querySelectorAll(".checkbox_order").forEach(function (item){
+            item.addEventListener("change",request_checkbox);
+        });
+    }
+    function render_checkbox(inventory_id) {
+        //here check value of checkbo
+        return "<div class='form-check checkbox_box'> <input class='checkbox_order form-check-input' type='checkbox' value='' id='C"+inventory_id+"'> </div>"
+    }
+    function render_remarks(data){
+        return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + data.inventory_id + "' target='_blank'  >"+data.remarks+"</a>";
+    }
+    function render_description(data){
+        return (data.description)?data.description:"";
+    }
+    function render_color(color_name){
+        return (color_name&&color_name!=="(Not Applicable)")?setColor(color_name):"<i class=\"fas fa-tint-slash\"></i>";
+    }
+    function render_image(data) {
+        let src;
+        switch (data.item.type) {
+            case "SET":
+                src = "https://img.bricklink.com/S/" + data.item.no + ".jpg";
+                break;
+            case "MINIFIG":
+                src = "https://img.bricklink.com/ItemImage/MN/"+data.color_id+"/"+data.item.no+".png";
+                break;
+            case "PART":
+                src = "https://img.bricklink.com/ItemImage/PN/"+data.color_id+"/"+data.item.no+".png";
+                break;
+            case 'INSTRUCTION':
+                src= "https://img.bricklink.com/ItemImage/IN/" + data.color_id + "/" + data.item.no + ".png";
+                break;
+            case 'BOOK':
+                src= "https://img.bricklink.com/ItemImage/BN/" + data.color_id + "/" + data.item.no + ".png";
+                break;
+            case 'SET':
+                src="https://img.bricklink.com/ItemImage/SN/" + data.color_id + "/" + data.item.no + ".png";
+                break;
+            case 'GEAR':
+                src="https://img.bricklink.com/ItemImage/GN/" + data.color_id + "/" + data.item.no + ".png";
+                break;
+            case 'CATALOG':
+                src = "https://img.bricklink.com/ItemImage/CN/" + data.color_id + "/" + data.item.no + ".png";
+                break;
 
+            default:
+                return "<i class=\"fas fa-image\"></i>";
         }
-    });
-    function progress_bar (orders_checked,orders_total){
-        let fill_percent = Number(((orders_checked / orders_total) * 100));
-        let empty_percent = Number((100 - fill_percent));
-        $("#progress-fill").width(fill_percent + "%");
-        $("#progress-fill").text(orders_checked+"/"+orders_total);
-        $("#progress-empty").width(empty_percent + "%");
-    };
-
+        return "<img id=\"img"+data.inventory_id+"\" class=\"img-thumbnail normal_img_shadow bl_img\" src=\""+src+"\" alt=\"\"> ";;
+    }
     function setColor(color_name) {
         let css = "<span class=\"badge\" ";
         switch (color_name) {

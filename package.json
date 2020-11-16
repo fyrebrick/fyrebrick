@@ -1,10 +1,11 @@
 {
-  "name": "bricklinkapi",
+  "name": "fyrebrick",
   "version": "0.8.0",
   "private": true,
   "scripts": {
     "start": "node ./app.js",
-    "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest"
+    "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest",
+    "fyrebrick": "docker build -t snakehead007/fyrebrick . && docker push snakehead007/fyrebrick"
   },
   "dependencies": {
     "after-load": "1.0.4",
