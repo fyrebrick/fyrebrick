@@ -6,7 +6,7 @@ $(document).ready(function () {
     function clickTableRow (e){
         //when pressed table row: close all rows first, open this row
         //info in rows are
-        $("#"+e.target.id).append("<tr><td>test</td></tr>")
+        window.location.href ="/orders/"+e.target.parentNode.id+"/items";
 
     }
     function getData (){
@@ -20,7 +20,7 @@ $(document).ready(function () {
                     if(data.data.length !== 0){
                         data.data.forEach(function(order){
                         let t = "<tr id='"+order.order_id+"'>";
-                                t += "<td>";
+                                t += "<td class='order_number d-flex justify-content-center'>";
                                     t+=render_order_id(order.order_id);
                                 t += "</td>";
                                 t += "<td>";
@@ -29,7 +29,6 @@ $(document).ready(function () {
                                 t += "<td>";
                                     t+=render_status(order.status);
                                 t += "</td>";
-                                t += "<td id="+order.order_id+">";
                                 t += "</td>";
                             t+="</tr>";
                             $("#dynamicTable").append(t);

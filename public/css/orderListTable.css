@@ -57,3 +57,7 @@ tbody tr:hover{
     background-position: left;
 
 }
+.order_number{
+    font-size: 29px;
+    position: relative;
+}

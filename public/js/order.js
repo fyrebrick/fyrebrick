@@ -38,10 +38,11 @@ $(document).ready(function () {
                 let t = "<tr>"; 
                     t += "<td>";//images
                         t+=render_image(item);
-                        t+=render_checkbox(item.inventory_id);
                     t += "</td>";
                     t += "<td>";//info
-                        t+= "<div class='itemName'>"+render_description(item)+"</div>"
+                        if(render_description(item)!==""){
+                            t+= "<div class='itemName'>"+render_description(item)+"</div>"
+                        }
                         t+= "<div class='smaller-info'>";
                             t+="<div class='new_or_used'>"+(item.new_or_used==="N")?"New":"Used"+"</div>"
                             t+="<div class='color_name'>"+render_color(item.color_name)+"</div>";
@@ -55,6 +56,9 @@ $(document).ready(function () {
                     t += "</td>";
                     t += "<td>";//quantity
                         t += "<div class='quantity'>"+item.quantity+"</div>";
+                    t += "</td>";
+                    t += "<td>";
+                        t+=render_checkbox(item.inventory_id);
                     t += "</td>";
                 t+="</tr>";
                 $("#dynamicTable").append(t);
@@ -94,9 +98,10 @@ $(document).ready(function () {
     }
     function render_image(data) {
         let src;
+        //https://img.bricklink.com/ItemImage/SN/0/621-1.png
         switch (data.item.type) {
-            case "SET":
-                src = "https://img.bricklink.com/S/" + data.item.no + ".jpg";
+            case 'SET':
+                src="https://img.bricklink.com/ItemImage/SN/" + data.color_id + "/" + data.item.no + ".png";
                 break;
             case "MINIFIG":
                 src = "https://img.bricklink.com/ItemImage/MN/"+data.color_id+"/"+data.item.no+".png";
@@ -110,20 +115,22 @@ $(document).ready(function () {
             case 'BOOK':
                 src= "https://img.bricklink.com/ItemImage/BN/" + data.color_id + "/" + data.item.no + ".png";
                 break;
-            case 'SET':
-                src="https://img.bricklink.com/ItemImage/SN/" + data.color_id + "/" + data.item.no + ".png";
-                break;
             case 'GEAR':
                 src="https://img.bricklink.com/ItemImage/GN/" + data.color_id + "/" + data.item.no + ".png";
                 break;
             case 'CATALOG':
                 src = "https://img.bricklink.com/ItemImage/CN/" + data.color_id + "/" + data.item.no + ".png";
                 break;
-
             default:
                 return "<i class=\"fas fa-image\"></i>";
         }
         return "<img id=\"img"+data.inventory_id+"\" class=\"img-thumbnail normal_img_shadow bl_img\" src=\""+src+"\" alt=\"\"> ";;
+    }
+    function ImageExist(url) 
+    {
+        let img = new Image();
+        img.src = url;
+        return img.height != 0;
     }
     function setColor(color_name) {
         let css = "<span class=\"badge\" ";

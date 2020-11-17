@@ -1,5 +1,6 @@
 .bl_img{
-    width:25%;
+    width:25s%;
+    min-width:200px;
     border-radius: 15px;
 }
 .normal_img_shadow{
@@ -15,9 +16,7 @@
     -khtml-box-shadow: 5px 5px 5px #94c48f;
 }
 .checkbox_box{
-    position: relative;
-    left: 22%;
-    bottom: 29px;
+
 }
 .checkbox_order{
     -ms-transform: scale(2); 
