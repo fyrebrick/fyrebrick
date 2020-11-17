@@ -1,0 +1,27 @@
+.bl_img{
+    width:25s%;
+    min-width:200px;
+    border-radius: 15px;
+}
+.normal_img_shadow{
+    box-shadow: 5px 5px 5px #afb5c7;
+    -moz-box-shadow: 5px 5px 5px #afb5c7;
+    -webkit-box-shadow: 5px 5px 5px #afb5c7;
+    -khtml-box-shadow: 5px 5px 5px #afb5c7;
+}
+.checked_img_shadow{
+    box-shadow: 5px 5px 5px #94c48f;
+    -moz-box-shadow: 5px 5px 5px #94c48f;
+    -webkit-box-shadow: 5px 5px 5px #94c48f;
+    -khtml-box-shadow: 5px 5px 5px #94c48f;
+}
+.checkbox_box{
+
+}
+.checkbox_order{
+    -ms-transform: scale(2); 
+    -moz-transform: scale(2); 
+    -webkit-transform: scale(2); 
+    -o-transform: scale(2); 
+    padding: 25px;
+}

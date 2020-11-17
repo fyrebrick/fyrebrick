@@ -1,0 +1,90 @@
+a.item-no{
+    background-color: #fff;
+    z-index: 20;
+    border-radius: 55px;
+    opacity: 0.7;
+    position: relative;
+    display:block;
+}
+.badge{
+    margin-top: 15px;
+}
+#checkAllInput  {
+    width: 8% !important;
+    position: relative;
+    bottom: 2px;
+    left: 35%;
+}
+td {
+    font-size: 41px;
+    font-weight: bold;
+}
+[type="search"] {
+    font-size: 34px;
+}
+#searchButton{
+    height: 65px;
+}
+.dataTables_filter, .dataTables_info { display: none; }
+.buttonBig{
+    width:200px;
+    height:80px;
+    font-size:20px;
+}
+.buttonModal {
+    margin-left: 25px;
+    margin-right: 25px;
+    font-size: 31px !important;
+    flex:auto;
+    postition:relative;
+}
+#inputIndicator, #qtyInput {
+    height: 60px;
+    font-size:30px;
+}
+#inputIndicator {
+    width: 58px;
+    padding-left: 21px;
+}
+.qtyNumber{
+    margin-left:10px;
+    font-size:20px;
+    font-weight: 600;
+ }
+.redRow{
+    border: 3px solid darkred;
+    outline: none;
+    box-shadow: 0 0 10px darkred;
+}
+.redRow td{
+    background-color: hsla(0, 100%, 27%, 0.25);
+}
+.checkboxChangeRemarks{
+    top: 30px;
+    position: relative;
+}
+.greenRow{
+    border: 3px solid darkgreen;
+    outline: none;
+    box-shadow: 0 0 10px darkgreen;
+}
+
+.greenRow td {
+    background-color: hsla(120, 100%, 20%, 0.25);
+}
+.singleInputButton{
+    top: 19px;
+    position: relative;
+}
+#scanOptionButton{
+    padding-right: 40px;
+}
+#scanOption{
+    -ms-transform: scale(3) !important;
+    -moz-transform: scale(3) !important;
+    -webkit-transform: scale(3) !important;
+    -o-transform: scale(3) !important;
+    padding: 25px;
+    position: relative;
+    left: 21px;
+}

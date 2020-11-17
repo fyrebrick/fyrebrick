@@ -1,60 +1,43 @@
 nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
-
-    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation')
+    a#fyrebrick.navbar-brand(href='/')
+        img(src="/images/logo-grey.svg" width="30" height="30" alt="FyreBrick")
+    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
-    #navbarNavAltMarkup.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-            li.nav-item
-                a.nav-link.display-4(href='/') Home
-            li.nav-item.dropdown
-                a#stockNavbarDropdownMenuLink.nav-link.dropdown-toggle.display-4(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' ) Stock
-                .dropdown-menu(aria-labelledby='stockNavbarDropdownMenuLink')
-                    a.dropdown-item(href='/inventories')
-                        i.fas.fa-boxes
-                        span Inventory
-                    .dropdown-divider
-                    a.dropdown-item(href='/invest')
-                        i.fas.fa-search
-                        span Investigate
-                    a.dropdown-item(href='/add')
-                        i.far.fa-plus-square
-                        span Add items
-
-            li.nav-item.dropdown
-                a#navbarDropdownMenuLink.display-4.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Status
-                .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
-                    a.dropdown-item(href='/status/COMPLETED')
-                        i.fas.fa-check-double
-                        span Completed
-                    .dropdown-divider
-                    a.dropdown-item(href='/status/READY')
-                        i.fas.fa-check
-                        span Ready
-                    .dropdown-divider
-                    a.dropdown-item(href='/status/PAID')
-                        i.fas.fa-dollar-sign
-                        span Paid
-                    .dropdown-divider
-                    a.dropdown-item(href='/status/PACKED')
-                        i.fas.fa-box
-                        span Packed
-                    .dropdown-divider
-                    a.dropdown-item(href='/status/RECEIVED')
-                        i.fas.fa-box-open
-                        span Received
-                    .dropdown-divider
-                    a.dropdown-item(href='/status/UPDATED')
-                        i.fas.fa-clipboard-list
-                        span Updated
-            li.nav-item.dropdown
-                a#dropdownaccount.display-4.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')=session.email
-                .dropdown-menu(aria-labelledby='dropdownaccount')
-                    a.dropdown-item(href="/stats")
-                        i.fas.fa-chart-line
-                        span Statistics
-                    a.dropdown-item(href="/change")
-                        i.fas.fa-wrench
-                        span change your settings
-                    a.dropdown-item(href="/logout")
-                        i.fas.fa-sign-out-alt
-                        span logout
+    #navbar.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto.mt-lg-0.mt-2
+            li
+                .dropdown
+                    a#inventory.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' )
+                        | Inventory
+                        .dropdown-menu(aria-labelledby='inventory')
+                            a.dropdown-item(href='/inventories')
+                                i.fas.fa-boxes
+                                span search
+                            a.dropdown-item(href='/invest')
+                                i.fas.fa-search
+                                span Investigate
+                            a.dropdown-item.disabled(href='/add')
+                                i.far.fa-plus-square
+                                span Add items
+            li
+                .dropdown
+                    a#orders.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                        |    Orders
+                        .dropdown-menu(aria-labelledby='orders')
+                            a.dropdown-item(href='/orders/new')
+                                span new orders
+            li
+                .dropdown
+                    a#account.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                        |   Account
+                        .dropdown-menu(aria-labelledby='account')
+                            a.dropdown-item.disabled(href="/stats")
+                                i.fas.fa-chart-line
+                                span Statistics
+                            a.dropdown-item(href="/change")
+                                i.fas.fa-wrench
+                                span change your settings
+                            a.dropdown-item(href="/logout")
+                                i.fas.fa-sign-out-alt
+                                span logout
+        span.navbar-text="v"+version+" "+mode+" "+type

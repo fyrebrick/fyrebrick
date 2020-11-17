@@ -4,11 +4,31 @@ const google =require('../middlewares/google');
 const User = require('../models/user');
 const {checkSignIn} = require('../middlewares/index');
 const api = require('./api');
+const ordersRoute = require('./orders');
 
-router.get('/',async (req,res,next)=>{
+router.use('/orders',checkSignIn,ordersRoute);
+
+router.get('/',(req,res)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
-            res.render("index");
+            res.render("dashboard",{active:"dashboard"});
+            return;
+        }else{
+            res.render("welcome",{
+                titleJumbo:"Welcome",
+                buttonTitle:"Create your profile"
+            });
+            return;
+        }
+    }else{
+        res.render('logon');
+    }
+});
+
+router.get('/logon',(req,res,next)=>{
+    if(req.session.logged_in !== undefined){
+        if(req.session.logged_in){
+            res.render("dashboard",{active:"dashboard"});
             return;
         }else{
             res.render("welcome",{
@@ -18,44 +38,7 @@ router.get('/',async (req,res,next)=>{
             return;
         }
     }
-    if(process.env.DEVELOP=="false"){
-        res.redirect(google.urlGoogle());
-    }else{
-        const currentUser = await User.findOne({googleId: "1"}, function (err, User) {
-            if(err) {
-                console.trace("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: "+err.message);
-                throw new Error(err);
-            }
-        });
-        console.log(currentUser);
-        req.session.email = "developing"
-        req.session.googleId = "1";
-        req.session.tokens = {};
-        if (!currentUser) {//new user, add user to database
-            //create user
-            const newUser = new User({
-                googleId: "1",
-                email: "developing",
-                tokens: {}
-            });
-            await newUser.save((err)=>{
-                if(err) console.trace("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newUser.save trace: "+err.message);});
-            req.session._id = newUser._id;
-            req.session.logged_in = false;
-            res.redirect('/welcome');
-        } else {//user already added
-            req.session._id = currentUser._id;
-            if(currentUser.setUpComplete){
-                req.session.logged_in = true;
-                res.render('index');
-            }else{
-                req.session.logged_in = false;
-                res.render('welcome');
-            }
-        }
-
-    }
-    
+    res.redirect(google.urlGoogle());
 });
 
 router.get('/logout',(req,res,next)=>{
@@ -71,7 +54,7 @@ router.get('/change',checkSignIn,async(req,res,next)=>{
    }) ;
 });
 router.get('/invest',checkSignIn,async(req,res,next)=>{
-   res.render('invest');
+   res.render('invest',{active:"inventory"});
 });
 
 router.post('/register', async (req,res,next)=>{
@@ -97,21 +80,11 @@ router.get('/redirect',async (req,res,next)=>{
     res.redirect('/');
 });
 
-router.get('/orders/:order_id/items',checkSignIn,async (req,res,next)=>{
-   res.render('order',{
-      'order_id':req.params.order_id
-   })
-});
-
-router.get('/status/:status',checkSignIn,(req,res,next)=>{
-    res.render('status',{'status':req.params.status});
-});
-
 router.get('/inventories',checkSignIn,(req,res,next)=>{
-    res.render('inventory');
+    res.render('inventory',{active:"inventory"});
 });
 router.get('/add',checkSignIn,(req,res,next)=>{
-    res.render('add');
+    res.render('add',{active:"inventory"});
 });
 
 

@@ -1,0 +1,14 @@
+.box {
+    float: left;
+    overflow: hidden;
+  }
+  .box-inner {
+    width: 400px;
+    padding: 10px;
+  }
+  .jumbotron {
+    height:100%;
+  }
+  #create{
+    margin-left:50px;
+  }

@@ -1,0 +1,41 @@
+td {
+    font-size: 41px;
+    font-weight: bold;
+}
+#loadingSection{
+    margin-bottom: 15px;
+}
+.page-link{
+    padding: 10px 30px 10px 30px;
+    font-size: 30px;
+}
+
+.buttonBig {
+    width: 200px;
+    height: 80px;
+    font-size: 20px;
+}
+
+.buttonModal {
+    margin-left: 25px;
+    margin-right: 25px;
+    font-size: 31px !important;
+    flex: auto;
+    position: relative;
+}
+
+#inputIndicator, #qtyInput {
+    height: 60px;
+    font-size: 30px;
+}
+
+#inputIndicator {
+    width: 58px;
+    padding-left: 21px;
+}
+
+.qtyNumber {
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}

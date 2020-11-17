@@ -1,30 +1,14 @@
 html
   include _head
-  style.
-    .box {
-      float: left;
-      overflow: hidden;
-    }
-    .box-inner {
-      width: 400px;
-      padding: 10px;
-    }
-    .jumbotron {
-      height:100%;
-    }
-    #create{
-      margin-left:50px;
-    }
+  link(rel="stylesheet", href="/css/welcome.css")
   body
-    //test
     .container-fluid
       .jumbotron
         h1.display-4=titleJumbo
-        ////////////////////////////////////////////
         p.lead
           | The information we need from you below, you can find to login
-          a(href="https://www.bricklink.com/v2/api/register_consumer.page", target="_blank", rel="noopener noreferrer")  here
-          | for Ip 81.164.134.131
+          a(href="https://www.bricklink.com/v2/api/register_consumer.page", target="_blank", rel="noopener noreferrer")
+          | here for Ip 0.0.0.0 and mask 0.0.0.0
         hr.my-4
         form.row(action="/register"  , method='post')
           #consumerSection.box
@@ -50,31 +34,4 @@ html
                 small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
               a#back.btn.btn-success.btn-lg.text-white( role='button') back
               input#create.btn.btn-primary.btn-lg(type='submit' role='button', value=buttonTitle)
-    script.
-      $(document).ready(function(){
-        $("#next").click(function(){
-          $("#consumerSection").
-          animate({
-            width: "toggle"
-          });
-          $("#tokenSection").
-          animate({
-            width: "toggle"
-          });
-        });
-        $("#back").click(function () {
-          $("#consumerSection").
-          animate({
-            width: "toggle"
-          });
-          $("#tokenSection").
-          animate({
-            width: "toggle"
-          });
-        });
-      });
-      function animationToggleForward(id){
-        $(id).animate({
-          width: "toggle"
-        });
-        }
+    script(src="/js/welcome.js")

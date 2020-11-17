@@ -1,0 +1,28 @@
+#fyrebrickLogo{
+    width: 500px;
+}
+#googleButton{
+    font-family: unset;
+    font-size: 17px;
+    font-weight: 400;
+}
+#fyrebrick_box{
+    height: 65px;
+    width: 271px;
+    transform: translate(-93%, -492%);
+    padding: 11px;
+    z-index: 1;
+
+}
+.middle{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+}
+.wrap-login100{
+    background: #fff;
+    border-radius: 9px;
+    overflow: hidden;
+}

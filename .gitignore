@@ -106,5 +106,6 @@ dist
 
 #manual
 .env-file
+.env
 .env.develop
 /node_modules

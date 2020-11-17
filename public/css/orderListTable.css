@@ -1,0 +1,63 @@
+.mt-100 {
+    margin-top: 70px
+}
+
+.card {
+    margin-bottom: 30px;
+    border: 0px;
+    border-radius: 0.25rem;
+    box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08)
+}
+
+.card .card-body {
+    padding: 1.88rem 1.81rem
+}
+
+.table thead th {
+    border-bottom: none;
+    border-top: none;
+    vertical-align: middle
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6
+}
+
+.progress {
+    margin-top: 6px
+}
+.status-name{
+    /*names*/
+    font-size: 14px;
+    padding: 0 3px 0 10px;
+}
+.data-status{
+    font-size: 14px;
+    padding-left: 3px;
+    /*icons*/
+}
+.status-badge{
+    padding: 7px;
+    min-width: 100px;
+}
+tr{
+    border-radius: 10px;
+    cursor: pointer;
+    background: rgb(235,235,235);
+    background: linear-gradient(to left, #ffffff00 0%, rgb(178, 215, 255) 100%) right;
+    background-size: 2000%;
+    transition: .1s ease-out;
+    transition: .3s ease-in;
+
+}
+tbody tr:hover{
+    background-position: left;
+
+}
+.order_number{
+    font-size: 29px;
+    position: relative;
+}

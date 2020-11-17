@@ -1,0 +1,12 @@
+td {
+    font-size: 41px;
+    font-weight: bold;
+}
+
+.badge-primary {
+    padding: 20px;
+}
+
+[type="search"] {
+    font-size: 41px;
+}
