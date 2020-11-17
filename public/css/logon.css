@@ -7,9 +7,7 @@
     font-weight: 400;
 }
 #fyrebrick_box{
-    height: 65px;
-    width: 271px;
-    transform: translate(-93%, -492%);
+    transform: translate(-97%, -500%);
     padding: 11px;
     z-index: 1;
 
@@ -24,5 +22,54 @@
 .wrap-login100{
     background: #fff;
     border-radius: 9px;
-    overflow: hidden;
+    overflow: hidden;    
+    box-shadow: 5px 5px 40px;
+}
+
+@media (min-width: 595px){
+    #fyrebrick_box{
+        height: 65px;
+        width: 271px;
+    }
+}
+@media (max-width: 595px) { 
+    .wrap-login100{
+        width:100%;
+    }
+ }
+@media (min-width: 449px) and (max-width: 595px) { 
+    #fyrebrickLogo{
+        width: 400px;
+    }
+    #fyrebrick_box {
+        height: 65px;
+        width: 216px;
+    }
+}
+@media (max-height:645px) and (min-width:449px){
+    #fyrebrickLogo{
+        width: 350px;
+    }
+    #fyrebrick_box {
+        height: 43px;
+        width: 192px;
+    }
+}
+@media (max-height:426px) and (min-width:449px){
+    #fyrebrickLogo{
+        width: 250px;
+    }
+    #fyrebrick_box {
+        height: 32px;
+        width: 141px;
+    }
+}
+@media (min-width: 298px) and (max-width: 448px) { 
+    #fyrebrickLogo{
+        width: 200px;
+    }
+    #fyrebrick_box {
+        height: 43px;
+        width: 114px;
+    }
 }

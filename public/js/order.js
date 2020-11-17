@@ -38,25 +38,15 @@ $(document).ready(function () {
                 let t = "<tr>"; 
                     t += "<td>";//images
                         t+=render_image(item);
+                        t+="<div class='new_or_used'>"+((item.new_or_used==="N")?"New":"Used")+"</div>"
                     t += "</td>";
                     t += "<td>";//info
-                        if(render_description(item)!==""){
-                            t+= "<div class='itemName'>"+render_description(item)+"</div>"
-                        }
-                        t+= "<div class='smaller-info'>";
-                            t+="<div class='new_or_used'>"+(item.new_or_used==="N")?"New":"Used"+"</div>"
-                            t+="<div class='color_name'>"+render_color(item.color_name)+"</div>";
-                            t+="<div class='type'>";
-                                t+=item.item.type.substr(0,1)+item.item.type.substr(1).toLowerCase()
-                            t+="</div>";
+                        t+= "<div class='main-info'>";
+                            t +="<div class='remarks'>"+render_remarks(item)+"</div>";
+                            t+="<div class='info color_name'>"+render_color(item.color_name)+"</div>";
+                            t += "<div class='quantity'>"+item.quantity+"</div>";
                         t+="</div>";
                     t += "</td>";//remarks
-                    t += "<td>"
-                        t +="<div class='remarks'>"+render_remarks(item)+"</div>";
-                    t += "</td>";
-                    t += "<td>";//quantity
-                        t += "<div class='quantity'>"+item.quantity+"</div>";
-                    t += "</td>";
                     t += "<td>";
                         t+=render_checkbox(item.inventory_id);
                     t += "</td>";
@@ -67,6 +57,9 @@ $(document).ready(function () {
             check_already_checked_items();
             stopLoading();
         })
+    }
+    function getTypeName(item){
+        return item.item.type.substr(0,1)+item.item.type.substr(1).toLowerCase()
     }
     function check_already_checked_items(){
         const items = PUG_data.orderDB.items;

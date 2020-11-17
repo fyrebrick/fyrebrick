@@ -23,13 +23,15 @@ $(document).ready(function () {
                                 t += "<td class='order_number d-flex justify-content-center'>";
                                     t+=render_order_id(order.order_id);
                                 t += "</td>";
-                                t += "<td>";
-                                    t+=render_date_ordered(order.date_ordered);
+                                t += "<td class='order_date'>";
+                                    t+="<div class='long_date'>"+render_date_ordered(order.date_ordered,'long')+"</div>";
+                                    t+="<div class='short_date'>"+render_date_ordered(order.date_ordered,'short')+"</div>";
                                 t += "</td>";
                                 t += "<td>";
-                                    t+=render_status(order.status);
+                                    t+=render_status(order.status).span;
                                 t += "</td>";
-                                t += "</td>";
+                                t += "<td id='P"+order.order_id+"'>";
+                                t += "</td>";   
                             t+="</tr>";
                             $("#dynamicTable").append(t);
                             render_progress(order);
@@ -80,65 +82,73 @@ $(document).ready(function () {
         } else {
             status = on_error;
         }
-        $("#"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div></div>");
+        $("#P"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div></div>"   
+            +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div>"
+        );
     }
 
     function render_status(status){
         let icon ='error';
         let color = "";
+        let bg_color = "#000000";
         switch(status){
             case 'COMPLETED':
-                color="#b71cff";
-                icon= "<i class=\"fas fa-check-double data-status\"></i>";
+                color="#39ff1c";
+                icon= "fas fa-check-double data-status";
                 break;
             case 'READY':
                 color = "#a4ff1c";
-                icon= "<i class=\"fas fa-check data-status\"></i>";
+                icon= "fas fa-check data-status";
                 break;
             case 'PAID':
                 color = "#1cff6b";
-                icon= "<i class=\"fas fa-dollar-sign data-status\"></i>";
+                icon= "fas fa-dollar-sign data-status";
                 break;
             case 'PACKED':
                 color = "#d5ff1c";
-                icon= "<i class=\"fas fa-box data-status\"></i>";
+                icon= "fas fa-box data-status";
                 break;
             case 'SHIPPED':
-                color = "#1cff33";
-                icon= "<i class=\"fas fa-shipping-fast data-status\"></i>";
+                color = "#ffe91c";
+                icon= "fas fa-shipping-fast data-status";
                 break;
             case 'RECEIVED':
-                icon= "<i class=\"fas fa-box-open data-status\"></i>";
+                color = "#ff00d9";
+                bg_color = "#FFFFFF";
+                icon= "fas fa-box-open data-status";
                 break;
             case 'UPDATED':
                 color = "#1cbbff";
-                icon= "<i class=\"fas fa-clipboard-list data-status\"></i>";
+                icon= "fas fa-clipboard-list data-status";
                 break;
             case 'PENDING':
                 color = "#ffa81c";
-                icon= "<i class=\"fas fa-hourglass data-status\"></i>";
+                icon= "fas fa-hourglass data-status";
                 break;
             case 'CANCELLED':
                 color = "#6c757d";
-                icon= "<i class=\"fas fa-ban data-status\"></i>";
+                bg_color = "#FFFFFF"
+                icon= "fas fa-ban data-status";
                 break;
             case 'PURGED':
                 color = "#ff1c1c";
-                icon= "<i class=\"fas fa-window-close data-status\"></i>";
+                bg_color = "#FFFFFF";
+                icon= "fas fa-window-close data-status";
                 break;
             default:
                 icon= "error"
                 break;
         }
-        let s = "<span class=\"status-badge     badge badge-pill\" style=\"background-color:"+color+";\">"+icon+"<span class=\"status-name\">"+status.toLowerCase()+"</span>"+"</button>";
-        return s;
+        let icon_i = "<i style='color:"+bg_color+";' class=\""+icon+"\"></i>";
+        let s = "<span class=\"status-badge badge badge-pill\" style=\"color:"+bg_color+";background-color:"+color+";\">"+icon_i+"<span class=\"status-name\">"+status.toLowerCase()+"</span>"+"</button>";
+        return {span:s,bg_color:bg_color};
     }
-    function render_date_ordered(date){
+    function render_date_ordered(date,month_lenght){
         let d = new Date(date);
-        const options = { year: 'numeric', month: 'long', day: 'numeric'};
+        const options = { year: 'numeric', month: month_lenght, day: 'numeric'};
         return d.toLocaleDateString('en-UK', options);
     }
     function render_order_id (order_id) {
-        return "<a href=\"\/orders\/"+order_id+"\/items\" id=\"o"+order_id+"\" class=\"badge badge-primary\" >" +order_id + "</a>";
+        return "<a href=\"\/orders\/"+order_id+"\/items\" id=\"o"+order_id+"\" class=\"order_id badge badge-primary\" >" +order_id + "</a>";
     }
 });
