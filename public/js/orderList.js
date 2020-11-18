@@ -19,7 +19,7 @@ $(document).ready(function () {
                 if(data.data){
                     if(data.data.length !== 0){
                         data.data.forEach(function(order){
-                        let t = "<tr id='"+order.order_id+"'>";
+                        let t = "<tr class='row' id='"+order.order_id+"'>";
                                 t += "<td class='order_number d-flex justify-content-center'>";
                                     t+=render_order_id(order.order_id);
                                 t += "</td>";
@@ -59,7 +59,7 @@ $(document).ready(function () {
     }
 
     function addListenersTable(){
-        document.querySelectorAll("tbody tr").forEach(function (item){
+        document.querySelectorAll(".row").forEach(function (item){
             item.addEventListener("click",clickTableRow)
         })
     }
@@ -82,8 +82,8 @@ $(document).ready(function () {
         } else {
             status = on_error;
         }
-        $("#P"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div></div>"   
-            +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div>"
+        $("#P"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"   
+            +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div></div>"
         );
     }
 

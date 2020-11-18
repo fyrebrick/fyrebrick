@@ -1,30 +1,42 @@
 .bl_img{
-    width:50%;
-    min-width:200px;
+    width:200px;
     border-radius: 15px;
 }
-.normal_img_shadow{
-    box-shadow: 5px 5px 5px #afb5c7;
-    -moz-box-shadow: 5px 5px 5px #afb5c7;
-    -webkit-box-shadow: 5px 5px 5px #afb5c7;
-    -khtml-box-shadow: 5px 5px 5px #afb5c7;
-}
-.checked_img_shadow{
-    box-shadow: 5px 5px 5px #94c48f;
-    -moz-box-shadow: 5px 5px 5px #94c48f;
-    -webkit-box-shadow: 5px 5px 5px #94c48f;
-    -khtml-box-shadow: 5px 5px 5px #94c48f;
-}
 .checkbox_box{
-
+    margin-top:45px;
 }
-.checkbox_order{
-    -ms-transform: scale(2); 
-    -moz-transform: scale(2); 
-    -webkit-transform: scale(2); 
-    -o-transform: scale(2); 
-    padding: 25px;
+.checkbox-scale{
+    -ms-transform: scale(3); 
+    -moz-transform: scale(3); 
+    -webkit-transform: scale(3); 
+    -o-transform: scale(3);
+    transform: scale(3);
 }
 .info{
-    padding-bottom: 100%;
+    padding-top: 5%;
+}
+.info:last-child{
+    padding-bottom: 25px;
+}
+.quantity{
+
+}
+.color_name{
+
+}
+.remarks{
+
+}
+.main-info{
+    text-align: center;
+    font-size: 24px;
+}
+.info-text{
+    font-weight: 700;
+}
+.checkbox-row{
+    text-align: center;
+}
+.new_or_used{
+    
 }

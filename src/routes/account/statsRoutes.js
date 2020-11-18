@@ -1,9 +1,10 @@
-const User = require('../models/user');
-const getStats = require('../functions/stats/getStats');
+const User = require('../../models/user');
+const getStats = require('../../functions/stats/getStats');
 var express = require('express');
 var router = express.Router();
-let crunch = require('../functions/stats/crunch');
-const Stores = require('../models/stores');
+let crunch = require('../../functions/stats/crunch');
+const Stores = require('../../models/stores');
+
 router.get('/',async (req,res,next)=>{
     res.render('stats/index');
 });

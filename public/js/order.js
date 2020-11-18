@@ -38,16 +38,16 @@ $(document).ready(function () {
                 let t = "<tr>"; 
                     t += "<td>";//images
                         t+=render_image(item);
-                        t+="<div class='new_or_used'>"+((item.new_or_used==="N")?"New":"Used")+"</div>"
+                        t+="<div class='new_or_used'>"+item.new_or_used+"</div>"
                     t += "</td>";
                     t += "<td>";//info
                         t+= "<div class='main-info'>";
-                            t +="<div class='remarks'>"+render_remarks(item)+"</div>";
-                            t+="<div class='info color_name'>"+render_color(item.color_name)+"</div>";
-                            t += "<div class='quantity'>"+item.quantity+"</div>";
+                            t +="<div class='info info-text remarks'>"+item.remarks+"</div>";
+                            t +="<div class='info info-text color_name'>"+render_color(item.color_name)+"</div>";
+                            t += "<div class='info info-text quantity'>"+item.quantity+"</div>";
                         t+="</div>";
                     t += "</td>";//remarks
-                    t += "<td>";
+                    t += "<td class='checkbox-row'>";
                         t+=render_checkbox(item.inventory_id);
                     t += "</td>";
                 t+="</tr>";
@@ -78,7 +78,7 @@ $(document).ready(function () {
     }
     function render_checkbox(inventory_id) {
         //here check value of checkbo
-        return "<div class='form-check checkbox_box'> <input class='checkbox_order form-check-input' type='checkbox' value='' id='C"+inventory_id+"'> </div>"
+        return "<div class='inner_checkbox form-check checkbox_box'> <input class='checkbox-scale form-check-input' type='checkbox' value='' id='C"+inventory_id+"'> </div>"
     }
     function render_remarks(data){
         return "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + data.inventory_id + "' target='_blank'  >"+data.remarks+"</a>";
