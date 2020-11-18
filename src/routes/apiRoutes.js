@@ -1,13 +1,9 @@
 const router = require("express").Router();
 const OAuth = require('oauth');
 
-router.all("/fyrebrick",(req,res)=>{
-    
-});
-
-router.all('/bricklink/*',(req,res)=>{
+router.all('/*',(req,res)=>{
     let uri = "https://api.bricklink.com/api/store/v1"+req.url;
-    const oauth = new OAuth(
+    const oauth = new OAuth.OAuth(
         req.session.user.TOKEN_VALUE,
         req.session.user.TOKEN_SECRET,
         req.session.user.CONSUMER_KEY,

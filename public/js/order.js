@@ -4,7 +4,7 @@ $(document).ready(function () {
         const id = e.target.id.substr(1);
         $.ajax({
             method: "PUT",
-            url: "/db/order/"+PUG_order_id,
+            url: "/account/order/"+PUG_order_id,
             data: {item: id},
             error:function(){
                 if (window.alert("Checkbox gave an error. please reload.")) {

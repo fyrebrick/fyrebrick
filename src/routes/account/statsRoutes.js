@@ -92,10 +92,4 @@ router.post('/update/common_brick_colours',async (req,res,next)=>{
     res.send(chartData);
 });
 
-router.get('/new_used_info',async (req,res)=>{
-
-});
-
-
-
 module.exports = router;

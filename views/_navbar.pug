@@ -10,13 +10,13 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                     a#inventory.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' )
                         | Inventory
                         .dropdown-menu(aria-labelledby='inventory')
-                            a.dropdown-item(href='/inventories')
+                            a.dropdown-item(href='/account/inventories')
                                 i.fas.fa-boxes
                                 span search
-                            a.dropdown-item(href='/invest')
+                            a.dropdown-item(href='/account/investigate')
                                 i.fas.fa-search
                                 span Investigate
-                            a.dropdown-item.disabled(href='/add')
+                            a.dropdown-item.disabled(href='/inventories/items/add')
                                 i.far.fa-plus-square
                                 span Add items
             li
@@ -24,17 +24,17 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                     a#orders.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                         |    Orders
                         .dropdown-menu(aria-labelledby='orders')
-                            a.dropdown-item(href='/orders/new')
+                            a.dropdown-item(href='/account/orders/new')
                                 span new orders
             li
                 .dropdown
                     a#account.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                         |   Account
                         .dropdown-menu(aria-labelledby='account')
-                            a.dropdown-item.disabled(href="/stats")
+                            a.dropdown-item.disabled(href="/account/stats")
                                 i.fas.fa-chart-line
                                 span Statistics
-                            a.dropdown-item(href="/change")
+                            a.dropdown-item(href="/account/update")
                                 i.fas.fa-wrench
                                 span change your settings
                             a.dropdown-item(href="/logout")

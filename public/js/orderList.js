@@ -6,31 +6,31 @@ $(document).ready(function () {
     function clickTableRow (e){
         //when pressed table row: close all rows first, open this row
         //info in rows are
-        window.location.href ="/orders/"+e.target.parentNode.id+"/items";
+        window.location.href ="/account/orders/"+e.target.parentNode.id+"/items";
 
     }
     function getData (){
         $.ajax({
             method:'GET',
-            url: '/api/orders_limit?direction=in',
+            url: '/api/orders?direction=in&status=pending,updated,processing,ready,paid,packed',
             beforeSend: startLoading()
         }).done(function(data){
             if(data){
                 if(data.data){
                     if(data.data.length !== 0){
                         data.data.forEach(function(order){
-                        let t = "<tr class='row' id='"+order.order_id+"'>";
-                                t += "<td class='order_number d-flex justify-content-center'>";
+                        let t = "<tr id='"+order.order_id+"'>";
+                                t += "<td data-order='"+order.order_id+"'class='order_number d-flex justify-content-center'>";
                                     t+=render_order_id(order.order_id);
                                 t += "</td>";
-                                t += "<td class='order_date'>";
+                                t += "<td data-order='"+new Date(order.date_ordered).getTime()+"' class='order_date'>";
                                     t+="<div class='long_date'>"+render_date_ordered(order.date_ordered,'long')+"</div>";
                                     t+="<div class='short_date'>"+render_date_ordered(order.date_ordered,'short')+"</div>";
                                 t += "</td>";
                                 t += "<td>";
                                     t+=render_status(order.status).span;
                                 t += "</td>";
-                                t += "<td id='P"+order.order_id+"'>";
+                                t += "<td class='progress-col' id='P"+order.order_id+"'>";
                                 t += "</td>";   
                             t+="</tr>";
                             $("#dynamicTable").append(t);
@@ -52,7 +52,7 @@ $(document).ready(function () {
     function render_progress (order) {
         $.ajax({
             method: "GET",
-            url:"/db/order/" +order.order_id + "?orders_total=" + order.unique_count
+            url:"/account/order/" +order.order_id + "?orders_total=" + order.unique_count
         }).done(function(data){
             add_orders_checked(data);
         });
@@ -82,8 +82,9 @@ $(document).ready(function () {
         } else {
             status = on_error;
         }
-        $("#P"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"   
-            +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div></div>"
+        $("#P"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div></div>"   
+            +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div>"+
+            "<span style=\""+status+((status===done||status===not_started)?'color:#FFF':'color:#000')+"\"class=\"progress-small badge\">"+data.orders_checked+"/"+data.orders_total+"</span>"
         );
     }
 

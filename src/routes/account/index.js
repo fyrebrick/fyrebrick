@@ -4,6 +4,9 @@ const investigateRoutes = require("./investigateRoutes")
 const inventoriesRoutes = require("./inventories");
 const settingsRoutes = require("./settingsRoutes");
 const statsRoutes = require("./statsRoutes");
+const ordersRoutes = require("./ordersRoutes")
+const orderRoutes = require("./orderRoutes");
+const {checkSignIn} = require("../../middlewares/index");
 const User = require('../../models/user');
 
 router.get('/update',checkSignIn,async(req,res,next)=>{
@@ -15,7 +18,7 @@ router.get('/update',checkSignIn,async(req,res,next)=>{
  });
  
  router.get("/dashboard",(req,res)=>{
-    res.render("dashboard");
+    res.render("dashboard",{active:"dashboard"});
 });
 
  router.post('/register', async (req,res,next)=>{
@@ -36,5 +39,7 @@ router.use("/inventories",inventoriesRoutes);
 router.use("/investigate",investigateRoutes);
 router.use("/settings",settingsRoutes);
 router.use("/stats",statsRoutes);
+router.use("/orders",ordersRoutes);
+router.use("/order",orderRoutes);
 
 module.exports = router;

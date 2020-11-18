@@ -5,7 +5,9 @@ router.get('/',(req,res,next)=>{
     res.render("settings");
 
 });
+
 router.post('/update',(req,res,next)=>{
+    
 });
 
 

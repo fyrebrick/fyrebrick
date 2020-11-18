@@ -1,4 +1,4 @@
-let other = require('./other');
+const bricklinkPlus = require("bricklink-plus");
 
 exports.common_brick_colours = (_data,top,hours,skips=0) => {
     let olddata = _data;
@@ -29,7 +29,7 @@ exports.common_brick_colours = (_data,top,hours,skips=0) => {
                 allData.push({
                     label: _d.color_name,
                     fill: false,
-                    borderColor: other.getColorCode(_d.color_name),
+                    borderColor: bricklinkPlus.plus.color.getInfoFromColorId(_d.color_id).rgb,
                     data: [_d.quantity]
                 })
             }

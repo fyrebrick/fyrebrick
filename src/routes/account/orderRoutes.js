@@ -3,12 +3,6 @@ var router = express.Router();
 var Order = require('../../models/order');
 const User = require('../../models/user');
 
-router.get('/orders',async(req,res,next)=>{
-    let orders = await Order.findOne({consumer_key:user.CONSUMER_KEY});
-    res.setHeader('Content-Type', 'application/json');
-    res.send(orders);
-});
-
 const db_getSpecificOrder = require('../../functions/db/getSpecificOrder');
 router.get('/:order_id',async (req,res,next)=>{
     res.setHeader('Content-Type', 'application/json');

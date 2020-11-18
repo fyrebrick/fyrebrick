@@ -26,20 +26,11 @@
     border-top: 1px solid #dee2e6
 }
 
-.progress {
-
-}
 .progress-numbers{
     position: relative;
     font-weight: 400;
-/*     
-    top: -20px;
-    left: 50%;
-    margin-left: -13px;
-    */
-}
-.order_id{
-    font-size: 60%;
+    margin-left: 50%;
+    transform: translate(-7px, -22px);
 }
 .status-name{
     /*names*/
@@ -106,8 +97,32 @@ tbody tr:hover{
         display: none;
     }
 }
-@media (max-width:393px){
-    .progess{
-        width:30px;
+@media (min-width:409px){
+    .progress-small{
+        display: none;
+    }
+    .order_id{
+        font-size: 60%;
+    }
+}
+@media (max-width:408px){
+    .order_id{
+        font-size: 40%;
+    }
+    .progress{
+        display: none;
+    }
+    .progress-numbers{
+        display: none;
+    }
+    .progress-small{
+        display: inline;
+        font-weight: 400;
+        padding: 2px 10px 2px 10px;
+        border-radius: 7px;
+        font-size: 14px;
+    }
+    .progress-col{
+        text-align: center;
     }
 }

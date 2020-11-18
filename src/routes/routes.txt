@@ -1,0 +1,34 @@
+/  logon
+/  logout
+/  redirect
+/  api      /   *   
+/  account  /   update  
+            /   dashboard
+            /   register (POST) 
+            /   investigate     /
+                                /   data
+                                /   data    /   add
+                                /   data    /   combine
+            /   settings
+                                /
+                                /   update(POST)
+            /   orders          /   new     
+                                /   :order_id  /   items
+                                /   :status
+                                /   all
+            /   order           /   :order_id 
+                                /   :order_id (PUT)
+            /   stats           /
+                                /   total_unique
+                                /   common_brick_colours
+                                /   stores
+                                                         /  items
+                                                         /  lots
+                                                         /  views
+                                /   update  /common_brick_colours
+            /   inventories     /   
+                                /   item    /   getknowncolours(POST)
+                                            /   search(POST)
+                                /   items   /   add
+                                            /   remarks   /   update(POST)
+

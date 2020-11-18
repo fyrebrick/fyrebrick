@@ -12,7 +12,7 @@ router.use('/api',checkSignIn,apiRoutes)
 router.get('/',(req,res)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
-            res.render("dashboard",{active:"dashboard"});
+            res.redirect("/account/dashboard");
             return;
         }else{
             res.render("welcome",{
@@ -53,13 +53,15 @@ router.get('/redirect',async (req,res,next)=>{
     req.session.email = googleCode.email;
     req.session.googleId = googleCode.googleId;
     req.session.tokens = googleCode.tokens;
-    let user = await User.findOne({_id:req.session._id});
-    req.session.user = {
-        TOKEN_VALUE: user.TOKEN_VALUE,
-        TOKEN_SECRET: user.TOKEN_SECRET,
-        CONSUMER_KEY: user.CONSUMER_KEY,
-        CONSUMER_SECRET: user.CONSUMER_SECRET
-    };
+    let user = await User.findOne({googleId:googleCode.googleId});
+    if(user){
+        req.session.user = {
+            TOKEN_VALUE: user.TOKEN_VALUE,
+            TOKEN_SECRET: user.TOKEN_SECRET,
+            CONSUMER_KEY: user.CONSUMER_KEY,
+            CONSUMER_SECRET: user.CONSUMER_SECRET
+        };
+    }
     await google.checkSignIn(req);
     res.redirect('/');
 });
