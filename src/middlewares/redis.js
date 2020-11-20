@@ -1,24 +1,15 @@
 const redis = require('redis');
 const client = redis.createClient(3001,'127.0.0.1');
-const OAuth = require('oauth');
+//const OAuth = require('oauth');
 const TTL = 4 * 60;
 
-const bricklink_make_cache = (user, url) => {
-    let uri = "https://api.bricklink.com/api/store/v1"+url;
-    const oauth = new OAuth.OAuth(
-        user.TOKEN_VALUE,
-        user.TOKEN_SECRET,
-        user.CONSUMER_KEY,
-        user.CONSUMER_SECRET,
-        "1.0",
-        null,
-        "HMAC-SHA1"
-    )
-    oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {     
-        client.set(user._id+":"+url,JSON.stringify(data));
-        client.expire(user._id+":"+url,TTL)
-    });
-    return;
+const getCache = (_id,url) => {
+    return JSON.parse(client.get(_id+":"+url));
+}
+
+const setCache = (_id,url,data) => {
+    client.set(_id+":"+url,JSON.stringify(data));
+    client.expire(_id+":"+url,TTL);
 }
 
 const bricklink_GET_cache = (req,res,next) =>{
@@ -49,7 +40,8 @@ const bricklink_GET_cache = (req,res,next) =>{
 }
 
 module.exports = {
-    bricklink_GET_cache:bricklink_GET_cache,
+    get:getCache,
     client:client,
-    bricklink_make_cache:bricklink_make_cache
+    set:setCache,
+    BL_get:bricklink_GET_cache
 };

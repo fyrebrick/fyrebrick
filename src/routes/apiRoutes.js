@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const OAuth = require('oauth');
-const {bricklink_GET_cache} = require('../middlewares/redis');
+const {BL_get} = require('../middlewares/redis');
 
-router.all('/*',bricklink_GET_cache,(req,res)=>{
+router.all('/*',BL_get,(req,res)=>{
     res.setHeader('Content-Type', 'application/json');
     let uri = "https://api.bricklink.com/api/store/v1"+req.url;
     const oauth = new OAuth.OAuth(

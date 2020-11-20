@@ -4,6 +4,7 @@ const User = require('../../../models/user');
 const bricklinkPlus = require("bricklink-plus");
 const item_types = ["MINIFIG","PART","SET","BOOK","GEAR","CATALOG","INSTRUCTION","UNSORTED_LOT","ORIGINAL_BOX"];
 
+
 router.post('/getknowncolours',async(req,res)=>{
     let user = await User.findOne({_id:req.session._id});
     await bricklinkPlus.auth.setup({

@@ -201,8 +201,8 @@ function changeColour(e){
         url: '/plus/inventories/item/update/colour',
         data: {
             id: id,
-            Colour: newColour,
-            Colour_name: $(thisButton+" option:selected").data("name")
+            color_id: newColour,
+            color_name: $(thisButton+" option:selected").data("name")
         },
         beforeSend: function () {
             $(thisButton).removeClass("is-valid");
@@ -230,10 +230,10 @@ function changeUsed(e){
     let newUsed = $(thisButton).val();
     $.ajax({
         method: "POST",
-        url: '/plus/change_used',
+        url: '/plus/inventories/item/update/new_or_used',
         data: {
             id: id,
-            newUsed: newUsed
+            new_or_used: newUsed
         },
         beforeSend: function () {
             $(thisButton).removeClass("is-valid");
@@ -325,9 +325,9 @@ function search(e) {
     $("#search").val($("#search").val().toUpperCase());
     $("#bodyOfTable tr").remove();
     revertOutOfChangeRemarkState();
-    let url_ = '/api/inventories?search=' + $("#search").val();
+    let url_ = '/plus/inventories/items/search?search=' + $("#search").val();
     if($("#scanoption").is(':checked')){
-        url_= '/api/inventories?search=' + $("#search").val()+"&exact=Y";
+        url_= '/plus/inventories/items/search?search=' + $("#search").val()+"&exact=Y";
     }
     $.ajax({
         method: "GET",
@@ -480,19 +480,6 @@ function checkboxChangeRemarks(e) {
         $("#showAmountChecked").text(correctChecked + " selected");
     }
 }
-function qtyButtonSumbit() {
-    $.ajax({
-        method: "POST",
-        url: '/api/change_quantity',
-        data: {
-            sign: $("#inputIndicator").text(),
-            value: $("#qtyInput").val(),
-            id: $("#qtyId").text()
-        },
-    }).done(function (data) {
-        $("#qtyModal").modal('hide');
-    });
-}
 function changeRemarkFinish() { //button was pressed to change remarks
     //gather all selected inventoryId's
     let ids = [];
@@ -503,15 +490,14 @@ function changeRemarkFinish() { //button was pressed to change remarks
         ;
     });
     let newRemarkName = $("#inputUpdateRemark").val().toUpperCase();
-    let body = {
-        ids: JSON.stringify(ids),
-        newRemarkName: newRemarkName
-    };
     //api call here
     $.ajax({
         method: "PUT",
         url: '/api/change_remark',
-        data: body,
+        data: {
+            ids: JSON.stringify(ids),
+            newRemarkName: newRemarkName
+        },
     }).done(function (data) {
         $(".redRow").removeClass("redRow").addClass("greenRow");
         revertOutOfChangeRemarkState();
