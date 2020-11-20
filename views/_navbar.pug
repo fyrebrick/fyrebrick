@@ -7,37 +7,38 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
         ul.navbar-nav.mr-auto.mt-lg-0.mt-2
             li
                 .dropdown
-                    a#inventory.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' )
+                    a.narrow#inventory.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' )
                         | Inventory
                         .dropdown-menu(aria-labelledby='inventory')
                             a.dropdown-item(href='/account/inventories')
-                                i.fas.fa-boxes
-                                span search
+                                i.menu-icon.fas.fa-boxes
+                                span.sub-menu-title search
                             a.dropdown-item(href='/account/investigate')
-                                i.fas.fa-search
-                                span Investigate
+                                i.menu-icon.fas.fa-search
+                                span.sub-menu-title Investigate
                             a.dropdown-item.disabled(href='/inventories/items/add')
-                                i.far.fa-plus-square
-                                span Add items
+                                i.menu-icon.far.fa-plus-square
+                                span.sub-menu-title Add items
             li
                 .dropdown
-                    a#orders.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    a.narrow#orders.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                         |    Orders
                         .dropdown-menu(aria-labelledby='orders')
                             a.dropdown-item(href='/account/orders/new')
-                                span new orders
+                                i.menu-icon.fas.fa-file-invoice
+                                span.sub-menu-title new orders
             li
                 .dropdown
-                    a#account.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    a.narrow#account.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                         |   Account
                         .dropdown-menu(aria-labelledby='account')
-                            a.dropdown-item.disabled(href="/account/stats")
+                            a.menu-icon.dropdown-item.disabled(href="/account/stats")
                                 i.fas.fa-chart-line
-                                span Statistics
-                            a.dropdown-item(href="/account/update")
+                                span.sub-menu-title Statistics
+                            a.menu-icon.dropdown-item(href="/account/update")
                                 i.fas.fa-wrench
-                                span change your settings
-                            a.dropdown-item(href="/logout")
+                                span.sub-menu-title change your settings
+                            a.menu-icon.dropdown-item(href="/logout")
                                 i.fas.fa-sign-out-alt
-                                span logout
+                                span.sub-menu-title logout
         span.navbar-text="v"+version+" "+mode+" "+type

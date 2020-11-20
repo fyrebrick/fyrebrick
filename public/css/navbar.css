@@ -15,14 +15,13 @@
 .nav-link.active{
     color: #ffffff;
     font-weight: 700;
-    /* .nav-item{
-    padding-right:80%
 }
-.nav-item:last-child{
-    padding-right: 0px !;
-}
-.navbar{
-    width:100%;
+/* .narrow{
+    padding: 0;
 } */
+.menu-icon{
+    padding-right: 10px;
 }
-
+.sub-menu-title{
+    
+}

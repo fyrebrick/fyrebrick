@@ -2,11 +2,24 @@ $(document).ready(function () {
     if (performance.navigation.type == 2) {
         location.reload(true);
     }
+    add_order_to_headers("mainTable")
     getData();
     function clickTableRow (e){
         //when pressed table row: close all rows first, open this row
         //info in rows are
-        window.location.href ="/account/orders/"+e.target.parentNode.id+"/items";
+        let id = e.target.parentNode.id;
+        if($(e.target).hasClass("table-data")){
+            id = e.target.parentNode.id;
+        }else if($(e.target).hasClass("progress")
+            ||$(e.target).hasClass("progress-numbers")
+            ||$(e.target).hasClass("status-badge")
+            ||$(e.target).hasClass("long_date")
+            ||$(e.target).hasClass("short_date")){
+            id = e.target.parentNode.parentNode.id;
+        }else if($(e.target).hasClass("status-name")||$(e.target).hasClass("data-status")){
+            id = e.target.parentNode.parentNode.parentNode.id;
+        }
+        window.location.href ="/account/orders/"+id+"/items";
 
     }
     function getData (){
@@ -20,18 +33,18 @@ $(document).ready(function () {
                     if(data.data.length !== 0){
                         data.data.forEach(function(order){
                         let t = "<tr id='"+order.order_id+"'>";
-                                t += "<td data-order='"+order.order_id+"'class='order_number d-flex justify-content-center'>";
+                                t += "<td data-order='"+order.order_id+"'class='table-data order_number d-flex justify-content-center'>";
                                     t+=render_order_id(order.order_id);
                                 t += "</td>";
-                                t += "<td data-order='"+new Date(order.date_ordered).getTime()+"' class='order_date'>";
+                                t += "<td data-order='"+new Date(order.date_ordered).getTime()+"' class='table-data order_date'>";
                                     t+="<div class='long_date'>"+render_date_ordered(order.date_ordered,'long')+"</div>";
                                     t+="<div class='short_date'>"+render_date_ordered(order.date_ordered,'short')+"</div>";
                                 t += "</td>";
                                 t += "<td>";
                                     t+=render_status(order.status).span;
                                 t += "</td>";
-                                t += "<td class='progress-col' id='P"+order.order_id+"'>";
-                                t += "</td>";   
+                                t += "<td class='table-data progress-col' id='P"+order.order_id+"'>";
+                                  t += "</td>";   
                             t+="</tr>";
                             $("#dynamicTable").append(t);
                             render_progress(order);
@@ -49,21 +62,55 @@ $(document).ready(function () {
             stopLoading();
         });
     }
+    function add_order_to_headers(table_id){
+        const sort = "<i class=\"fas fa-sort sort-button sort-inactive\"></i>";
+        $("#"+table_id+" th.sortable .sort-box").each(function(i){
+            $(this).append(sort);
+        })
+        $("#"+table_id+" th.sortable").attr('data-type','desc');
+    }
+    function sort_table(e){
+        const table_id = "mainTable";
+        const row_number = e.target.id;
+        let rows = $("#"+table_id+" tbody tr");
+        let type = "asc";
+        if($(e.target).data('type')==='asc'){
+            type = 'desc'
+            $(e.target).data("type",type);
+            $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-up sort-active sort-button\"></i>");
+        }else if($(e.target).data('type')==='desc'){
+            type = 'asc';
+            $(e.target).data("type",type);
+            $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-down sort-button sort-active\"></i>");
+        }else{
+            console.log('found nothing');
+        }
+        rows.sort(function(a,b){
+            if(type==='desc'){
+                return $($(a).children()[row_number]).data('order') - $($(b).children()[row_number]).data('order');
+            }else if(type==='asc'){
+                return $($(b).children()[row_number]).data('order')- $($(a).children()[row_number]).data('order');
+            }
+        });
+        $("#"+table_id+" tbody")
+        .empty()
+        .append(rows);
+        
+    }
     function render_progress (order) {
         $.ajax({
             method: "GET",
             url:"/account/order/" +order.order_id + "?orders_total=" + order.unique_count
-        }).done(function(data){
-            add_orders_checked(data);
-        });
+        }).done(add_orders_checked);
     }
-
     function addListenersTable(){
-        document.querySelectorAll(".row").forEach(function (item){
+        document.querySelectorAll("#mainTable td").forEach(function (item){
             item.addEventListener("click",clickTableRow)
         })
+        document.querySelectorAll("#mainTable th.sortable").forEach(function (item){
+            item.addEventListener("click",sort_table)
+        })
     }
-
     function add_orders_checked (data) {
         //let text_progress = data.orders_checked + "/" + data.orders_total;
         let not_started = "background-color:#dc3545;"
@@ -86,8 +133,8 @@ $(document).ready(function () {
             +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div>"+
             "<span style=\""+status+((status===done||status===not_started)?'color:#FFF':'color:#000')+"\"class=\"progress-small badge\">"+data.orders_checked+"/"+data.orders_total+"</span>"
         );
+        $("#P"+data.order_id).attr("data-order",width);
     }
-
     function render_status(status){
         let icon ='error';
         let color = "";
@@ -150,6 +197,6 @@ $(document).ready(function () {
         return d.toLocaleDateString('en-UK', options);
     }
     function render_order_id (order_id) {
-        return "<a href=\"\/orders\/"+order_id+"\/items\" id=\"o"+order_id+"\" class=\"order_id badge badge-primary\" >" +order_id + "</a>";
+        return "<a href=\"\/account/orders\/"+order_id+"\/items\" id=\"o"+order_id+"\" class=\"order_id badge badge-primary\" >" +order_id + "</a>";
     }
 });

@@ -198,11 +198,11 @@ function changeColour(e){
     let newColour = $(thisButton).val();
     $.ajax({
         method: "POST",
-        url: '/api/change_colour',
+        url: '/plus/inventories/item/update/colour',
         data: {
             id: id,
-            newColour: newColour,
-            newName: $(thisButton+" option:selected").data("name")
+            Colour: newColour,
+            Colour_name: $(thisButton+" option:selected").data("name")
         },
         beforeSend: function () {
             $(thisButton).removeClass("is-valid");
@@ -230,7 +230,7 @@ function changeUsed(e){
     let newUsed = $(thisButton).val();
     $.ajax({
         method: "POST",
-        url: '/api/change_used',
+        url: '/plus/change_used',
         data: {
             id: id,
             newUsed: newUsed
@@ -258,10 +258,10 @@ function changeQuantity(e){
     let newQuantity = $(thisButton).val();
     $.ajax({
         method: "POST",
-        url: '/api/change_quantity',
+        url: '/plus/inventories/item/update/quantity',
         data: {
             id: id,
-            newQuantity: newQuantity
+            quantity: newQuantity
         },
         beforeSend: function () {
             $(thisButton).removeClass("is-valid");
@@ -288,10 +288,10 @@ function changeRemarks(e) {
         let newRemarkName = $(thisButton).val();
         $.ajax({
             method: "POST",
-            url: '/api/change_single_remarks',
+            url: '/plus/inventories/item/update/remarks',
             data: {
                 id: id,
-                newRemarkName: newRemarkName
+                remarks: newRemarkName
             },
             beforeSend: function () {
                 $(thisButton).removeClass("is-valid");

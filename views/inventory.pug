@@ -1,20 +1,17 @@
 extends layout
 block styles
-    link(rel="stylesheet", href="style.css")
+    link(rel="stylesheet", href="/css/inventory.css")
 block content
-    .row.justify-content-between
-        .col-2
-            #loadingSection
-        .col
-            input#search.form-control(type='search' placeholder='Search' aria-label='Search')
-        .col-auto.align-self-end.mr-auto
-            .btn-group(role='group' aria-label='Group of action buttons')#mainButtonRows
-                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
-                button#activateChangeRemarkButton.btn.btn-lg.btn-outline-secondary.my-2.my-sm-0(type='submit') Change remark
-                button#scanOptionButton.btn.btn-lg.btn-outline-secondary.my-2.my-sm-0 Exact Search
-                    input#scanoption(type="checkbox" value="true" )
+    .search-area.row.justify-content-between
+        input#search.search-bar(type='search' placeholder='Search' aria-label='Search')
+        .search-buttons(role='group' aria-label='Group of action buttons')#mainButtonRows
+            button#searchButton.button.my-2.my-sm-0(type='submit') 
+                i.menu-icon.fas.fa-search
+                span Search
+            button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') Change remark
+            button#scanOptionButton.button.my-2.my-sm-0 Exact Search
+                input#scanoption(type="checkbox" value="true" )
     hr
-
     #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
         .modal-dialog.modal-xl
             .modal-content

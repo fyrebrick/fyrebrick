@@ -10,10 +10,13 @@ block content
                                 table#mainTable.table.table-xs.mb-0
                                     thead
                                         tr
-                                            th.data-class-name Order Id
-                                            th.order_date Date Ordered
+                                            th#0.sortable.data-class-name Order Id
+                                                .sort-box
+                                            th#1.sortable.order_date Date Ordered
+                                                .sort-box
                                             th Status
-                                            th progress
+                                            th#3.sortable progress
+                                                .sort-box
                                     tbody#dynamicTable
 
 block styles

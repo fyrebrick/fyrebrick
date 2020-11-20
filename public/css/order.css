@@ -1,6 +1,7 @@
 .bl_img{
     width:200px;
     border-radius: 15px;
+    min-width: 80px;
 }
 .checkbox_box{
     margin-top:45px;
@@ -38,5 +39,33 @@
     text-align: center;
 }
 .new_or_used{
-    
+    position: absolute;
+    margin-top: 0;
+    margin-left: 0;
+    padding: 1px 4px 1px 4px;
+    transform: translate(11rem, -2rem);
+    font-size: 19px;
+    font-weight: 500;
+    border-radius: 9px;
+    background-color: #717273a1;
+    color: #FFFFFF;
+}
+.row_checked{
+    background: rgb(255,255,255);
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(119,255,132,0.8071603641456583) 100%);
+}
+@media (max-width:490px){
+    .info{
+        font-size: 20px;
+    }
+    .new_or_used{
+        transform: translate(0rem, -2rem)
+    }
+    .checkbox-scale {
+        -ms-transform: scale(2);
+        -moz-transform: scale(2);
+        -webkit-transform: scale(2);
+        -o-transform: scale(2);
+        transform: scale(2);
+    }
 }

@@ -2,6 +2,7 @@ $(document).ready(function () {
     getItems();
     function request_checkbox(e){
         const id = e.target.id.substr(1);
+        console.log(id);
         $.ajax({
             method: "PUT",
             url: "/account/order/"+PUG_order_id,
@@ -16,15 +17,17 @@ $(document).ready(function () {
                     location.reload();
                 }
             }
-        }).done(change_img_shadow_colour(id));
+        }).done(change_row_color(id));
     }
-    function change_img_shadow_colour(id){
+    function change_row_color(id){
         if($("#C"+id).is(":checked")){
-            $("#img"+id).removeClass("normal_img_shadow")
-            .addClass("checked_img_shadow");
+            $("#row"+id)
+            .removeClass("row_not_checked")
+            .addClass("row_checked");
         }else{
-            $("#img"+id).addClass("normal_img_shadow")
-            .removeClass("checked_img_shadow");
+            $("#row"+id)
+            .addClass("row_not_checked")
+            .removeClass("row_checked");
         }
     }
     function getItems(){
@@ -33,9 +36,8 @@ $(document).ready(function () {
             url: '/api/orders/'+PUG_order_id+'/items',
             beforeSend:startLoading()
         }).done(function(data){
-            data.data.forEach(function(item){
-                console.log(item);
-                let t = "<tr>"; 
+            data.data[0].forEach(function(item){
+                let t = "<tr id='row"+item.inventory_id+"'>"; 
                     t += "<td>";//images
                         t+=render_image(item);
                         t+="<div class='new_or_used'>"+item.new_or_used+"</div>"
@@ -63,16 +65,15 @@ $(document).ready(function () {
     }
     function check_already_checked_items(){
         const items = PUG_data.orderDB.items;
-        console.log(items);
         items.forEach(function(item){
             $("#C"+item.id).prop("checked",item.status);
             if(item.status){
-                change_img_shadow_colour(item.id);
+                change_row_color(item.id);
             }
         })
     }
     function order_event_listeners(){
-        document.querySelectorAll(".checkbox_order").forEach(function (item){
+        document.querySelectorAll(".checkbox-scale").forEach(function (item){
             item.addEventListener("change",request_checkbox);
         });
     }
