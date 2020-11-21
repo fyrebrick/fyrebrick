@@ -20,7 +20,6 @@ $(document).ready(function () {
         }).done(function (data) {
             let stringCardsHtml = "";
             if(data.data && data.data.length){
-                console.log(data);
                  data.data.forEach(function (o){
                      stringCardsHtml+="<div class=\"card\" style=\"width: 18rem;\">\n" +
                          "                                     <img src=\"" + o.image_url + "\" class=\"card-img-top\" alt=\"" + o.description + "\">\n" +
@@ -58,7 +57,6 @@ $(document).ready(function () {
             beforeSend: startLoading
         }).done(function(data){
             //receives [{color_id,quantity}]
-            console.log(data);
         let k = "<div class='row justify-content-md-center'>";
                 k += "<div class='col'>";
                     k = "<ul class=\"list-group list-group-flush\"'>\n";

@@ -2,7 +2,7 @@ $(document).ready(function () {
     getItems();
     function request_checkbox(e){
         const id = e.target.id.substr(1);
-        console.log(id);
+        //console.log(id);
         $.ajax({
             method: "PUT",
             url: "/account/order/"+PUG_order_id,

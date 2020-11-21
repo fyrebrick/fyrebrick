@@ -9,11 +9,11 @@ const accountRoutes = require("./account");
 
 router.use('/account',checkSignIn,accountRoutes);
 router.use('/api',checkSignIn,apiRoutes)
-router.use('/plus',(req,res,next)=>{
+router.use('/plus',checkSignIn,(req,res,next)=>{
+    console.log('adding header...')
     res.setHeader('Content-Type', 'application/json');
     next();
 },plusRoutes);
-
 router.get('/',(req,res)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){

@@ -14,7 +14,7 @@ router.post('/getknowncolours',async(req,res)=>{
         CONSUMER_SECRET: user.CONSUMER_SECRET
     });
     let data = await bricklinkPlus.api.item.getKnownColors(req.body.type,req.body.no);
-    console.log(data);
+    //console.log(data);
     let returnData = {meta:data.meta,data:[]};
     //[{color_id,quantity}]
     for (let i = 0, len = data.data.length; i < len; i++) {
@@ -46,15 +46,15 @@ router.post('/search',async (req, res) => {
     //first search item with search
     //find out what type it is.
     for (let i = 0, len = item_types.length; i < len; i++) {
-        console.log(item_types[i],search);
+        //console.log(item_types[i],search);
         const data = await bricklinkPlus.api.item.getItem(item_types[i],String(search));
-        console.log(data);
+        //console.log(data);
         if(data.data && data.data.no){
             console.log('found with type '+item_types[i]);
-            console.log(data);
+            //console.log(data);
             returnData.meta = data.meta;
             returnData.data.push(data.data);
-            console.log(returnData);
+            //console.log(returnData);
             res.setHeader('Content-Type', 'application/json');
             res.send(returnData);
             return;
@@ -71,7 +71,7 @@ router.post('/search',async (req, res) => {
         }
     }
     // found data returning
-    console.log(returnData);
+    //console.log(returnData);
     res.setHeader('Content-Type', 'application/json');
     res.send(returnData);
 

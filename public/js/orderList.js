@@ -119,7 +119,7 @@ $(document).ready(function () {
         let on_error = "background-color:#6c757d;"
         let status = "";
         let width = Math.round((Number(data.orders_checked)/Number(data.orders_total))*100.0);
-        console.log(width);
+        //console.log(width);
         if (data.orders_checked <= 0) {
             status = not_started
         } else if (data.orders_checked < data.orders_total) {

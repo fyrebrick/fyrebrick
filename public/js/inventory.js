@@ -27,7 +27,6 @@ let checkAll = '<div id="checkAllDiv" class=" custom-checkbox">\n'
 let stateofChangeRemarkButton = false;
 let searchValue = "";
 let showUpdateButton = false;
-let loadingSpinner = "<button id=\"spinner\" class=\"btn btn-primary btn-lg my-2 my-sm-0\" type=\"button\" disabled>\n" + "  <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" + "  Loading...\n" + "</button>";
 let amountChecked = 0;
 let lastRemarksChange = 0;3
 let lastColourChange = 0;
@@ -88,10 +87,6 @@ function listenersWhenSearchIsComplete (){
     document.querySelectorAll(".qty").forEach(function (item) {
         item.addEventListener('click', qty);
     });
-    document.getElementById("qtyButtonSubmit").addEventListener("click", qtyButtonSumbit);
-    document.getElementById("qtyButtonAdd").addEventListener("click", qtyButtonAdd);
-    document.getElementById("qtyButtonRemove").addEventListener("click", qtyButtonRemove);
-    document.getElementById("qtyInput").addEventListener('keyup', qtyInput);
 }
 function listenersWhenUpdating(){
     document.getElementById("checkAllInput").addEventListener('click', checkAllBox);
@@ -148,41 +143,6 @@ function activateChangeRemarkButton () {
         stateofChangeRemarkButton = true;
     }
     listenersWhenUpdating();
-}
-function qtyInput() {
-    let sign = $("#inputIndicator").text();
-    if (sign === "+") {
-        $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
-    } else if (sign === "-") {
-        let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
-        if (next <= 0) {
-            $("#qtyNumberNext").text("0");
-        } else {
-            $("#qtyNumberNext").text(next);
-        }
-    }
-
-}
-function qtyButtonRemove() {
-    $(this).removeClass("btn-danger");
-    $(this).addClass("btn-outline-danger");
-    $("#qtyButtonAdd").removeClass("btn-outline-success");
-    $("#qtyButtonAdd").addClass("btn-success");
-    $("#inputIndicator").text("-");
-    let next = Number($("#qtyNumberCurrent").text()) - Number($("#qtyInput").val());
-    if (next <= 0) {
-        $("#qtyNumberNext").text("0");
-    } else {
-        $("#qtyNumberNext").text(next);
-    }
-}
-function qtyButtonAdd() {
-    $(this).removeClass("btn-success");
-    $(this).addClass("btn-outline-success");
-    $("#qtyButtonRemove").removeClass("btn-outline-danger");
-    $("#qtyButtonRemove").addClass("btn-danger");
-    $("#inputIndicator").text("+");
-    $("#qtyNumberNext").text(Number($("#qtyNumberCurrent").text()) + Number($("#qtyInput").val()));
 }
 function showModalChangeRemark() {
     $("#changeRemarkModal").modal('show');
