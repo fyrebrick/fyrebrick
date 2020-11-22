@@ -1,31 +1,37 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../../../models/user');
-
+const bricklinkPlus = require("bricklink-plus");
 router.post('/update/colour',async (req,res)=>{
-    res.send(await updateInventory({
+    console.log(req.body);
+    res.send(await updateInventory(req,{
         color_id:req.body.Colour,
         color_name:req.body.Colour_name
     }));
 });
 
 router.post('/update/quantity',async (req,res)=>{
-    res.send(await updateInventory({
+    console.log(req.body);
+    res.send(await updateInventory(req,{
         quantity:req.body.quantity
     }));
 });
 
 
 router.post('/update/remarks',async (req,res)=>{
-    res.send(await updateInventory({remarks:req.body.remarks}));
+    console.log(req.body);
+    res.send(await updateInventory(req,{remarks:req.body.remarks}));
 });
 
 router.post('/update/new_or_used',async (req,res)=>{
-    res.send(await updateInventory({new_or_used:req.body.new_or_used}));
+    console.log(req.body);
+    res.send(await updateInventory(req,{new_or_used:req.body.new_or_used}));
 })
 
-const updateInventory = async (body) =>{
-    const user = User.findOne({_id:req.session._id});
+const updateInventory = async (req,body) =>{
+    const user = await User.findOne({_id:req.session._id});
+    console.log(user);
+    console.log(req.body.id);
      return await bricklinkPlus.api.inventory.updateInventory(req.body.id,body,{
         CONSUMER_KEY:user.CONSUMER_KEY,
         CONSUMER_SECRET:user.CONSUMER_SECRET,

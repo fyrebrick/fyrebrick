@@ -2,40 +2,6 @@ extends layout
 block styles
     link(rel="stylesheet", href="/css/inventory.css")
 block content
-    .search-area.row.justify-content-between
-        input#search.search-bar(type='search' placeholder='Search' aria-label='Search')
-        .search-buttons(role='group' aria-label='Group of action buttons')#mainButtonRows
-            button#searchButton.button.my-2.my-sm-0(type='submit') 
-                i.menu-icon.fas.fa-search
-                span Search
-            button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') Change remark
-            button#scanOptionButton.button.my-2.my-sm-0 Exact Search
-                input#scanoption(type="checkbox" value="true" )
-    hr
-    #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
-        .modal-dialog.modal-xl
-            .modal-content
-                .modal-header
-                    p#qtyId(style='display:none;')
-                    h5#qtyTitle.modal-title Add or remove quantity to this item
-                    button.close(type='button' data-dismiss='modal' aria-label='Close')
-                        span(aria-hidden='true') &times;
-                .modal-body
-                    .form
-                        .form-group
-                            p.lead#qtyLabelCurrent(for="qtyInput") Current :
-                                span#qtyNumberCurrent.qtyNumber 0
-                            p.lead#qtyLabelNext(for="qtyInput") Updated :
-                                span.qtyNumber#qtyNumberNext ?
-                            .input-group
-                                .input-group-prepend
-                                    span#inputIndicator.input-group-text ?
-                                input#qtyInput.form-control(type="number", step="1" min="0", placeholder="Quantity to add or remove")
-                        .row
-                            button#qtyButtonAdd.buttonBig.buttonModal.btn.btn-success(type="button") Add
-                            button#qtyButtonRemove.buttonBig.buttonModal.btn.btn-danger(type="button") Remove
-                .modal-footer
-                    button#qtyButtonSubmit.buttonBig.btn.btn-secondary(type="submit") update
     #changeRemarkModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
         .modal-dialog.modal-xl
             .modal-content
@@ -52,16 +18,36 @@ block content
                                 input#inputUpdateRemark.form-control(type="text", placeholder="...")
                 .modal-footer
                     button#changeRemarkFinish.buttonBig.btn.btn-secondary(type="submit") update
-    #drawTable
-        table#table_id.table.table-striped
-            thead#headOfTable.thead-dark
-                tr
-                    th(scope='col' id='scanOptionCol') Link
-                    th(scope="col") Remark
-                    th(scope="col") Colour
-                    th.data-class-name(scope="col") Qt
-                    th(scope="col") N/U
-                    th(scope="col") Fotootje
-            tbody#bodyOfTable
+    .container-fluid
+        .row
+            .col-lg-12
+                .search-area.row.justify-content-between
+                    input#search.search-bar(type='search' placeholder='Search' aria-label='Search')
+                    .search-buttons(role='group' aria-label='Group of action buttons')#mainButtonRows
+                        button#searchButton.button.my-2.my-sm-0(type='submit') 
+                            i.menu-icon.fas.fa-search
+                            span Search
+                        button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') Change remark
+                        button#scanOptionButton.button.my-2.my-sm-0 Exact Search
+                            input#scanoption(type="checkbox" value="true" )
+                hr
+                .card
+                    .card-body
+                        .active-member
+                            .table-responsive
+                                table#mainTable.table.table-xs.mb-0
+                                    thead
+                                        tr
+                                            th#scanOptionCol Link
+                                            th#1.sortable Remark
+                                                .sort-box
+                                            th#2.sortable Colour
+                                                .sort-box
+                                            th#3.sortable Qt
+                                                .sort-box
+                                            th#4.sortable N/U
+                                                .sort-box
+                                            th#imageCol Image
+                                    tbody#bodyOfTable
 block scripts
     script(src="/js/inventory.js")

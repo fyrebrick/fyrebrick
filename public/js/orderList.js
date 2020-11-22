@@ -94,8 +94,7 @@ $(document).ready(function () {
         });
         $("#"+table_id+" tbody")
         .empty()
-        .append(rows);
-        
+        .append(rows);  
     }
     function render_progress (order) {
         $.ajax({

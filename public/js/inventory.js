@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    add_order_to_headers("mainTable");
     document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
     document.getElementById("changeRemarkFinish").addEventListener("click",changeRemarkFinish);
     document.getElementById('search').addEventListener('onsearch', function (e) {
@@ -33,7 +34,44 @@ let lastColourChange = 0;
 let lastQuantityChange = 0;
 let lastUsedChange = 0;
 let delay = 20;
+function add_order_to_headers(table_id){
+    const sort = "<i class=\"fas fa-sort sort-button sort-inactive\"></i>";
+    $("#"+table_id+" th.sortable .sort-box").each(function(i){
+        $(this).append(sort);
+    })
+    $("#"+table_id+" th.sortable").attr('data-type','desc');
+}
+function sort_table(e){
+    const table_id = "mainTable";
+    const row_number = e.target.id;
+    let rows = $("#"+table_id+" tbody tr");
+    let type = "asc";
+    if($(e.target).data('type')==='asc'){
+        type = 'desc'
+        $(e.target).data("type",type);
+        $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-up sort-active sort-button\"></i>");
+    }else if($(e.target).data('type')==='desc'){
+        type = 'asc';
+        $(e.target).data("type",type);
+        $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-down sort-button sort-active\"></i>");
+    }else{
+        console.log('found nothing');
+    }
+    rows.sort(function(a,b){
+        if(type==='desc'){
+            return $($(a).children()[row_number]).data('order') - $($(b).children()[row_number]).data('order');
+        }else if(type==='asc'){
+            return $($(b).children()[row_number]).data('order')- $($(a).children()[row_number]).data('order');
+        }
+    });
+    $("#"+table_id+" tbody")
+    .empty()
+    .append(rows);  
+}
 function listenersWhenSearchIsComplete (){
+    document.querySelectorAll("#mainTable th.sortable").forEach(function (item){
+        item.addEventListener("click",sort_table)
+    })
     document.querySelectorAll(".inputRemarks").forEach(function (item) {
         item.addEventListener('keyup', function (e) {
             if (e.code === 'Enter') {
@@ -258,6 +296,7 @@ function changeRemarks(e) {
                 $(thisButton).removeClass("is-invalid");
             }
         }).done(function (data) {
+            console.log(data);
             if (data.meta.code !== 200||data.data.remarks!==newRemarkName) {
                 $(thisButton).addClass("is-invalid");
             } else {
@@ -303,13 +342,13 @@ function search(e) {
                 "<i class=\"fas fa-external-link-alt fa-3x\"></i>" +
                 "</a>"
             tr+="</td >";
-            tr += "<td >"; // start 1 column
+            tr += "<td data-order='"+item.remarks+"' >"; // start 1 column
             if (item.remarks === undefined) {
                 tr += "<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank'  >geen remark</a>";
             } else {
                 tr += "<input type=\"text\" class=\"form-control inputRemarks\" id=\"R" + item.inventory_id + "\" placeholder=\"" + item.remarks + "\" value=\"" + item.remarks + "\">\n";
             }
-            tr += "</td><td>";//start 2nd column
+            tr += "</td><td data-order='"+item.color_name+"' >";//start 2nd column
             if (item.color_name === "(Not Applicable)") {
                 tr += "<i class=\"fas fa-tint-slash\"></i>";
             } else {
@@ -320,9 +359,9 @@ function search(e) {
                     tr += "<p id='CM"+item.inventory_id+"'>"+ setColor(item.color_name) +"</p>"
                 }
             }
-            tr += "</td><td>";//start 3nd column
+            tr += "</td><td data-order='"+item.quantity+"' >";//start 3nd column
             tr += "<input type=\"text\" class=\"form-control inputQuantity\" id=\"Q" + item.inventory_id + "\" placeholder=\"" + item.quantity + "\" value=\"" + item.quantity + "\">\n";
-            tr += "</td><td>";//start 4nd column
+            tr += "</td><td data-order='"+item.new_or_used+"' >";//start 4nd column
             tr += "<input type=\"text\" class=\"form-control inputUsed\" id=\"U" + item.inventory_id + "\" placeholder=\"" + item.new_or_used + "\" value=\"" + item.new_or_used + "\">\n";
             tr += "</td><td>";//start 5nd column
             tr += getPic(item);
