@@ -4,7 +4,7 @@ const bricklinkPlus = require('bricklink-plus');
 const redis = require("../../../middlewares/redis");
 
 router.get('/search',async (req,res)=>{
-    let data = await redis.get(req);
+    let data = await redis.getPlus(req);
     if(!data){
         data = await bricklinkPlus.api.inventory.getInventories({},{
             CONSUMER_KEY:req.session.user.CONSUMER_KEY,
@@ -12,7 +12,7 @@ router.get('/search',async (req,res)=>{
             TOKEN_SECRET:req.session.user.TOKEN_SECRET,
             TOKEN_VALUE:req.session.user.TOKEN_VALUE
         });
-        redis.set(req,data);
+        redis.setPlus(req,data);
     }
     if(!data){
         console.trace("No data is found on request,");

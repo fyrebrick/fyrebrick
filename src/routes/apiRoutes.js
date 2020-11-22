@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const OAuth = require('oauth');
-const {BL_get} = require('../middlewares/redis');
+const redis = require('../middlewares/redis');
 
-router.all('/*',BL_get,(req,res)=>{
+router.all('/*',redis.BLApi_get,(req,res)=>{
     res.setHeader('Content-Type', 'application/json');
     let uri = "https://api.bricklink.com/api/store/v1"+req.url;
     const oauth = new OAuth.OAuth(
@@ -17,6 +17,7 @@ router.all('/*',BL_get,(req,res)=>{
     switch (req.method){
         case "GET":
             oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {                
+                redis.set(req,data);
                 res.send(JSON.parse(data));
             });
             break;

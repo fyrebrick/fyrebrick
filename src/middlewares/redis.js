@@ -1,20 +1,19 @@
 const redis = require('redis');
-const LZUTF8 = require('lzutf8');
 const client = redis.createClient(3001,'127.0.0.1');
 const OAuth = require('oauth');
+//const bricklinkPlus = require('bricklink-plus');
 const TTL = 4 * 60;
 
 const getCache = async (req) => {
     return new Promise(async (resolve,reject) =>{
         console.log("GET:"+getID(req));
-        await client.get(req.session._id+":"+req.baseUrl+req.route.path, (err,reply)=>{
+        await client.get(getId(req), (err,reply)=>{
             if(err){
                 console.trace(err.message);
                 reject(err);
             }
             if(reply===null){
                 console.log("no reply");
-
                 resolve(null);
             }else{
                 console.log("reply found");
@@ -23,47 +22,46 @@ const getCache = async (req) => {
         });
     });
 }
-
-const setCache = (req,data) => {
-    console.log("GET:"+getID(req));
-    client.set(getID(req),JSON.stringify(data),'EX',TTL);
+const getPlusCache = async (req) => {
+    return new Promise(async (resolve,reject) =>{
+        console.log("GET:"+getPlusID(req));
+        await client.get(getPlusID(req), (err,reply)=>{
+            if(err){
+                console.trace(err.message);
+                reject(err);
+            }
+            if(reply===null){
+                console.log("no reply");
+                resolve(null);
+            }else{
+                console.log("reply found");
+                console.log(reply);
+                resolve(JSON.parse(reply));
+            }
+        });
+    });
 }
 
-// const en = (data) => {
-//     const str = JSON.stringify(data)
-//     const unit8 = LZUTF8.compress(str);
-//     const buff = Buffer.from(unit8.buffer);
-//     return (buff)
-// };
-// const de = (data) => {
-//     if(!data){
-//         return null;
-//     }
-//     const buff = new Buffer.from(data, 'utf8');
-//     //string is corrupt after decoding
-//     console.log(JSON.parse(LZUTF8.decompress(buff)));
-//     return JSON.parse(LZUTF8.decompress(buff));
-// };
+const setCache = (req,data) => {
+    console.log("SET:"+getID(req));
+    client.set(getID(req),JSON.stringify(data));
+    client.expire(getID(req),TTL);
+}
 
-const bricklink_GET_cache = (req,res,next) =>{
+const setPlusCache = (req,data) => {
+    console.log("SET:"+getPlusID(req));
+    client.set(getPlusID(req),JSON.stringify(data));
+    client.expire(getPlusID(req),TTL);
+}
+
+const bricklinkApi_GET_cache = (req,res,next) =>{
     if(req.method==="GET"){
-        client.get(req.session._id+":"+req.baseUrl+req.route.path,(err,reply)=>{
+        console.log("getting "+getID(req));
+        client.get(getID(req),(err,reply)=>{
             if(reply){
                 res.send(JSON.parse(reply));
             }else{
-                let uri = "https://api.bricklink.com/api/store/v1"+req.url;
-                const oauth = new OAuth.OAuth(
-                    req.session.user.TOKEN_VALUE,
-                    req.session.user.TOKEN_SECRET,
-                    req.session.user.CONSUMER_KEY,
-                    req.session.user.CONSUMER_SECRET,
-                    "1.0",
-                    null,
-                    "HMAC-SHA1"
-                )
-                oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {                
-                    client.set(getID(req),JSON.stringify(data),'EX',TTL);
-                });                              
+                next();
             }
         })
     }else{
@@ -83,14 +81,20 @@ const bricklink_make_cache = (user,url,bl_url) => {
         "HMAC-SHA1"
     )
     oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {                
-        client.set(user._id+":/plus/inventories/items",JSON.stringify(data),'EX',TTL);
+        client.set(user.CONSUMER_KEY+":"+url,JSON.stringify(data));
+        client.expire(getID(user.CONSUMER_KEY+":"+url),TTL);
     });                              
 }
-const getID = (req) => req.session._id+":"+req.baseUrl+req.route.path;
+
+const getPlusID = (req) => req.session.user.CONSUMER_KEY+":"+req.baseUrl+req.route.path;
+const getID = (req) => req.session.user.CONSUMER_KEY+":"+req.url;
+
 module.exports = {
     get:getCache,
+    getPlus:getPlusCache,
+    setPlus:setPlusCache,
     client:client,
     set:setCache,
-    BL_get:bricklink_GET_cache,
+    BLApi_get:bricklinkApi_GET_cache,
     BL_make:bricklink_make_cache
 };
