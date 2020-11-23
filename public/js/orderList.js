@@ -29,6 +29,9 @@ $(document).ready(function () {
             beforeSend: startLoading()
         }).done(function(data){
             if(data){
+                try{
+                    data = JSON.parse(data);
+                }catch(e){}
                 if(data.data){
                     if(data.data.length !== 0){
                         data.data.forEach(function(order){

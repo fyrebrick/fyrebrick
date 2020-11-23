@@ -1,6 +1,14 @@
 const redis = require('redis');
-const client = redis.createClient(3001,'127.0.0.1');
+let client;
+if(process.env.DEVELOP==='true'){
+    console.log(process.env.DEVELOP_REDIS_HOST);
+    client = redis.createClient(process.env.REDIS_PORT,process.env.DEVELOP_REDIS_HOST);
+}else{
+    console.log(process.env.PRODUCTION_REDIS_HOST);
+    client = redis.createClient(process.env.REDIS_PORT,process.env.PRODUCTION_REDIS_HOST);
+}
 const OAuth = require('oauth');
+const { parse } = require('path');
 //const bricklinkPlus = require('bricklink-plus');
 const TTL = 4 * 60;
 
@@ -17,7 +25,14 @@ const getCache = async (req) => {
                 resolve(null);
             }else{
                 console.log("reply found");
-                resolve(JSON.parse(reply));
+                const parsed = JSON.parse(reply);
+                if(parsed && parsed.meta && parsed.meta.code==='200'){
+                    console.log('reply found');
+                    resolve(parsed);
+                }else{
+                    console.log(parsed);
+                    reject(parsed);
+                }
             }
         });
     });
@@ -34,9 +49,15 @@ const getPlusCache = async (req) => {
                 console.log("no reply");
                 resolve(null);
             }else{
-                console.log("reply found");
-                console.log(reply);
-                resolve(JSON.parse(reply));
+                const parsed = JSON.parse(reply);
+                if(parsed && parsed.meta && parsed.meta.code==200){
+                    console.log('reply found');
+                    resolve(parsed);
+                }else{
+                    console.log(parsed);
+                    reject(parsed);
+                }
+                
             }
         });
     });
@@ -82,7 +103,7 @@ const bricklink_make_cache = (user,url,bl_url) => {
     )
     oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {                
         client.set(user.CONSUMER_KEY+":"+url,JSON.stringify(data));
-        client.expire(getID(user.CONSUMER_KEY+":"+url),TTL);
+        client.expire(user.CONSUMER_KEY+":"+url,TTL);
     });                              
 }
 

@@ -11,6 +11,7 @@ exports.default = async ()=>{
     let every_hour_once = '0 * * * *';
 
     schedule.scheduleJob(every_hour_once,async()=>{
+        console.log('[INFO]: running stats job...');
         let all_stats = await Stats.find();
         for (const stats of all_stats) {
             let user = await User.findOne({CONSUMER_KEY: stats.consumer_key});
@@ -30,6 +31,7 @@ exports.default = async ()=>{
         }
     });
     schedule.scheduleJob(every_day_once,async()=> {
+        console.log('[INFO]: running getStores job');
         let data = await getStores.default().catch((err)=>{
             console.trace(err);
         }).then((data) => {

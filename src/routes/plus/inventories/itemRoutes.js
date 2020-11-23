@@ -30,8 +30,10 @@ router.post('/update/new_or_used',async (req,res)=>{
 
 const updateInventory = async (req,body) =>{
     const user = await User.findOne({_id:req.session._id});
-    console.log(user);
+    console.log(req.session._id);
     console.log(req.body.id);
+    console.log(user);
+    console.log(user._id);
      return await bricklinkPlus.api.inventory.updateInventory(req.body.id,body,{
         CONSUMER_KEY:user.CONSUMER_KEY,
         CONSUMER_SECRET:user.CONSUMER_SECRET,
