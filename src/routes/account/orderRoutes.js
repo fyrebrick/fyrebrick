@@ -6,9 +6,13 @@ const User = require('../../models/user');
 const db_getSpecificOrder = require('../../functions/db/getSpecificOrder');
 router.get('/:order_id',async (req,res,next)=>{
     res.setHeader('Content-Type', 'application/json');
-    let orders_total= Number(req.query.orders_total);
     let user = await User.findOne({_id:req.session._id});
-    res.send(await db_getSpecificOrder.default(orders_total,user,req.params.order_id));
+    if(req.query && req.query.orders_total){
+        let orders_total= Number(req.query.orders_total);
+        res.send(await db_getSpecificOrder.default(orders_total,user,req.params.order_id));
+    }else{
+        res.send(await db_getSpecificOrder.default(null,user,req.params.order_id));
+    }
 });
 
 //updates a specific order from the db

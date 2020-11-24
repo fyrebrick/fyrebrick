@@ -32,6 +32,7 @@ $(document).ready(function () {
                 try{
                     data = JSON.parse(data);
                 }catch(e){}
+                console.log(data);
                 if(data.data){
                     if(data.data.length !== 0){
                         data.data.forEach(function(order){

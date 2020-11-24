@@ -16,7 +16,9 @@ exports.default = async (orders_total,user,order_id) =>
         newOrder.save();
         return newOrder;
     }else{
-        order.orders_total = orders_total;
+        if(orders_total){
+            order.orders_total = orders_total;
+        }
         let orders_checked = 0;
         for(i of order.items ){
             if(i.status){

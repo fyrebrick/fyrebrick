@@ -22,7 +22,8 @@ module.exports.default = function (app) {
             name: "session",
             secret: process.env.SESSION_SECRET,
             saveUninitialized: false,
-            resave: false
+            resave: false,
+            cookie :{}
         })
     );
     app.use(flash());

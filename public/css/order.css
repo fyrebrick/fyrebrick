@@ -19,14 +19,22 @@
 .info:last-child{
     padding-bottom: 25px;
 }
+.qtbox{
+    border:1px solid black;
+    display:inline;
+    border-radius:10px;
+    box-shadow: 2px 2px 5px grey;
+    padding: 0 5px 0 5px;
+    background-color: #FFFFFF;
+}
 .quantity{
-
+    
 }
 .color_name{
 
 }
 .remarks{
-
+    font-size: 30px;
 }
 .main-info{
     text-align: center;
@@ -37,6 +45,9 @@
 }
 .checkbox-row{
     text-align: center;
+}
+.color_name .badge{
+    box-shadow:2px 2px 5px grey;
 }
 .new_or_used{
     position: absolute;
@@ -52,11 +63,19 @@
 }
 .row_checked{
     background: rgb(255,255,255);
-    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(119,255,132,0.8071603641456583) 100%);
+    background: #2ece5387;
+    border-left: 10px solid darkgreen;
+}
+#enlargedImg{
+    width: 100%;
+    border-radius: 10px;
 }
 @media (max-width:490px){
     .info{
         font-size: 20px;
+    }
+    .remarks{
+        font-size: 15px;
     }
     .new_or_used{
         transform: translate(0rem, -2rem)
