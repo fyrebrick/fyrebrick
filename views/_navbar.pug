@@ -1,4 +1,5 @@
-nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+if in_production
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark(style=(in_production==='true')?'background-color: #0c46da !important;':'')
     a#fyrebrick.navbar-brand(href='/')
         img(src="/images/logo-grey.svg" width="30" height="30" alt="FyreBrick")
     button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
@@ -9,6 +10,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 .dropdown
                     a.narrow#inventory.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' )
                         | Inventory
+                        span=in_production
                         .dropdown-menu(aria-labelledby='inventory')
                             a.dropdown-item(href='/account/inventories')
                                 i.menu-icon.fas.fa-boxes
@@ -41,4 +43,4 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                             a.menu-icon.dropdown-item(href="/logout")
                                 i.fas.fa-sign-out-alt
                                 span.sub-menu-title logout
-        span.navbar-text="v"+version+" "+mode+" "+type
+        span.navbar-text="v"+version+" "+mode+" "+type+((in_production)?"":" (DEVELOPMENT)")

@@ -32,6 +32,7 @@ module.exports.default = function (app) {
         res.locals.version = process.env.VERSION;
         res.locals.mode = (process.env.DEVELOP==="true")?"develop":"live";
         res.locals.type = process.env.TYPE;
+        res.locals.in_production = (process.env.IN_PRODUCTION==="true");
         //pug variables
         res.locals.order_id="";
         res.locals.data={};
