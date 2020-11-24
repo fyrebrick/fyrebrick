@@ -8,7 +8,10 @@ block content
             .col-lg-12
                 .card
                     .card-body
-                        .active-member
+                        h3="Order "+data.orderDB.order_id
+                        div(id="P"+data.orderDB.order_id)
+                .card
+                    .card-body
                             .table-responsive
                                 table#mainTable.table.table-xs.mb-0
                                     thead
@@ -20,5 +23,11 @@ block content
                                             th#2.sortable(data-type='asc') Picked
                                                 .sort-box
                                     tbody#dynamicTable
+
+block modals
+    #enlarge.modal(tabindex="-1")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                img#enlargedImg(src='')
 block scripts
     script(src="/js/order.js")

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     getItems();
     add_order_to_headers("mainTable")
+    request_progress(PUG_order_id);
     function request_checkbox(e){
         const id = e.target.id.substr(1);
         //console.log(id);
@@ -18,14 +19,19 @@ $(document).ready(function () {
                     location.reload();
                 }
             }
-        }).done(change_row_color(id));
+        }).done(function(data){
+            request_progress(PUG_order_id);
+            change_row_color(id)
+        });
     }
     function change_row_color(id){
         if($("#C"+id).is(":checked")){
+            $("#C"+id).parent().parent().attr('data-order',1)
             $("#row"+id)
             .removeClass("row_not_checked")
             .addClass("row_checked");
         }else{
+            $("#C"+id).parent().parent().attr('data-order',0)
             $("#row"+id)
             .addClass("row_not_checked")
             .removeClass("row_checked");
@@ -72,12 +78,10 @@ $(document).ready(function () {
         $("#"+table_id+" th.sortable").attr('data-type','desc');
     }
     function sort_table(e){
-        console.log('sorting....')
         const table_id = "mainTable";
         const row_number = e.target.id;
         let rows = $("#"+table_id+" tbody tr");
         let type = "asc";
-        console.log('sort direction:'+$(e.target).data('type'));
         if($(e.target).data('type')==='asc'){
             type = 'desc'
             $(e.target).data("type",type);
@@ -89,13 +93,10 @@ $(document).ready(function () {
         }else{
             console.log('found nothing');
         }
-        console.log('new sort direction:'+type);
         rows.sort(function(a,b){
             if(type==='desc'){
-                console.log($($(a).children()[row_number]).data('order'), $($(b).children()[row_number]).data('order'));
                 return $($(a).children()[row_number]).data('order') - $($(b).children()[row_number]).data('order');
             }else if(type==='asc'){
-                console.log($($(b).children()[row_number]).data('order'), $($(a).children()[row_number]).data('order'));
                 return $($(b).children()[row_number]).data('order') - $($(a).children()[row_number]).data('order');
             }
         });
@@ -104,7 +105,6 @@ $(document).ready(function () {
         .empty()
         .append(rows);
     }
-    //This function ensures the remarks are ordered correctly
     function orderifyRemarks(remarks){
         let f;
         const AMOUNT_OF_NUMBERS = 6;
@@ -126,10 +126,10 @@ $(document).ready(function () {
     }
     function check_already_checked_items(){
         const items = PUG_data.orderDB.items;
+        render_progress(items);
         items.forEach(function(item){
             $("#C"+item.id)
             .prop("checked",item.status);
-            $("#C"+item.id).parent().parent().attr('data-order',1)
             if(item.status){
                 change_row_color(item.id);
             }
@@ -142,6 +142,14 @@ $(document).ready(function () {
         document.querySelectorAll("#mainTable th.sortable").forEach(function (item){
             item.addEventListener("click",sort_table)
         })
+        document.querySelectorAll(".bl_img").forEach(function (item){
+            item.addEventListener("click",show_modal)
+        })
+    }
+    function show_modal(e){
+        const src = $("#"+e.target.id).attr('src');
+        $("#enlargedImg").attr('src',src);
+        $('#enlarge').modal('show')
     }
     function render_checkbox(inventory_id) {
         //here check value of checkbo
@@ -191,6 +199,37 @@ $(document).ready(function () {
         let img = new Image();
         img.src = url;
         return img.height != 0;
+    }
+    function request_progress (order_id) {
+        $.ajax({
+            method: "GET",
+            url:"/account/order/" +order_id
+        }).done(render_progress);
+    }
+    function render_progress (data) {
+        
+        //let text_progress = data.orders_checked + "/" + data.orders_total;
+        let not_started = "background-color:#dc3545;"
+        let done = "background-color:#28a745;";
+        let in_progress = "background-color:#ffc107;";
+        let on_error = "background-color:#6c757d;"
+        let status = "";
+        let width = Math.round((Number(data.orders_checked)/Number(data.orders_total))*100.0);
+        //console.log(width);
+        if (data.orders_checked <= 0) {
+            status = not_started
+        } else if (data.orders_checked < data.orders_total) {
+            status = in_progress;
+        } else if (data.orders_checked === data.orders_total) {
+            status = done;
+        } else {
+            status = on_error;
+        }
+        $("#P"+data.order_id).empty();
+        $("#P"+data.order_id).append("<div class=\"progress\" style=\"height: 20px;\"><div class=\"progress-bar\" role=\"progressbar\" style='"+status+"width:"+width+"%;' aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">"   
+            +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div></div></div>"
+        );
+        $("#P"+data.order_id).attr("data-order",width);
     }
     function setColor(color_name) {
         let css = "<span class=\"badge\" ";
