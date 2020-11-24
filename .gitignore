@@ -107,6 +107,7 @@ dist
 #manual
 .env-file
 .env
+.env.old
 .env.develop
 /node_modules
 /vscode

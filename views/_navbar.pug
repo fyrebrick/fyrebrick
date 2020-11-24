@@ -1,46 +1,6 @@
-if in_production
-nav.navbar.navbar-expand-lg.navbar-dark.bg-dark(style=(in_production==='true')?'background-color: #0c46da !important;':'')
-    a#fyrebrick.navbar-brand(href='/')
-        img(src="/images/logo-grey.svg" width="30" height="30" alt="FyreBrick")
-    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-    #navbar.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto.mt-lg-0.mt-2
-            li
-                .dropdown
-                    a.narrow#inventory.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' )
-                        | Inventory
-                        span=in_production
-                        .dropdown-menu(aria-labelledby='inventory')
-                            a.dropdown-item(href='/account/inventories')
-                                i.menu-icon.fas.fa-boxes
-                                span.sub-menu-title search
-                            a.dropdown-item(href='/account/investigate')
-                                i.menu-icon.fas.fa-search
-                                span.sub-menu-title Investigate
-                            a.dropdown-item.disabled(href='/inventories/items/add')
-                                i.menu-icon.far.fa-plus-square
-                                span.sub-menu-title Add items
-            li
-                .dropdown
-                    a.narrow#orders.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                        |    Orders
-                        .dropdown-menu(aria-labelledby='orders')
-                            a.dropdown-item(href='/account/orders/new')
-                                i.menu-icon.fas.fa-file-invoice
-                                span.sub-menu-title new orders
-            li
-                .dropdown
-                    a.narrow#account.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                        |   Account
-                        .dropdown-menu(aria-labelledby='account')
-                            a.menu-icon.dropdown-item.disabled(href="/account/stats")
-                                i.fas.fa-chart-line
-                                span.sub-menu-title Statistics
-                            a.menu-icon.dropdown-item(href="/account/update")
-                                i.fas.fa-wrench
-                                span.sub-menu-title change your settings
-                            a.menu-icon.dropdown-item(href="/logout")
-                                i.fas.fa-sign-out-alt
-                                span.sub-menu-title logout
-        span.navbar-text="v"+version+" "+mode+" "+type+((in_production)?"":" (DEVELOPMENT)")
+if !in_production
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark(style='background-color: #0c46da !important;')
+        include _parts/_mainNavbar
+else
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+        include _parts/_mainNavbar
