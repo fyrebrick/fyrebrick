@@ -3,6 +3,7 @@ block styles
     link(rel="stylesheet", href="/css/order.css")
 
 block content
+    .container-fluid
         .row
             .col-lg-12
                 .card
@@ -10,7 +11,14 @@ block content
                         .active-member
                             .table-responsive
                                 table#mainTable.table.table-xs.mb-0
+                                    thead
+                                        tr
+                                            th#0.sortable(data-type='asc') images
+                                                .sort-box
+                                            th#1.sortable(data-type='asc') Main info
+                                                .sort-box
+                                            th#2.sortable(data-type='asc') Picked
+                                                .sort-box
                                     tbody#dynamicTable
 block scripts
     script(src="/js/order.js")
-        

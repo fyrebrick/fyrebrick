@@ -1,5 +1,6 @@
 $(document).ready(function () {
     getItems();
+    add_order_to_headers("mainTable")
     function request_checkbox(e){
         const id = e.target.id.substr(1);
         //console.log(id);
@@ -36,20 +37,23 @@ $(document).ready(function () {
             url: '/api/orders/'+PUG_order_id+'/items',
             beforeSend:startLoading()
         }).done(function(data){
+            try{
+                data = JSON.parse(data);
+            }catch(e){}
             data.data[0].forEach(function(item){
                 let t = "<tr id='row"+item.inventory_id+"'>"; 
-                    t += "<td>";//images
+                    t += "<td data-order='"+item.new_or_used+"'>";//images
                         t+=render_image(item);
                         t+="<div class='new_or_used'>"+item.new_or_used+"</div>"
                     t += "</td>";
-                    t += "<td>";//info
+                    t += "<td data-order='"+orderifyRemarks(item.remarks)+"'>";//info
                         t+= "<div class='main-info'>";
                             t +="<div class='info info-text remarks'>"+item.remarks+"</div>";
                             t +="<div class='info info-text color_name'>"+render_color(item.color_name)+"</div>";
-                            t += "<div class='info info-text quantity'>"+item.quantity+"</div>";
+                            t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+" pcs</div></div>";
                         t+="</div>";
-                    t += "</td>";//remarks
-                    t += "<td class='checkbox-row'>";
+                    t += "</td>";
+                    t += "<td data-order:'checked' class='checkbox-row'>";
                         t+=render_checkbox(item.inventory_id);
                     t += "</td>";
                 t+="</tr>";
@@ -59,6 +63,63 @@ $(document).ready(function () {
             check_already_checked_items();
             stopLoading();
         })
+    }
+    function add_order_to_headers(table_id){
+        const sort = "<i class=\"fas fa-sort sort-button sort-inactive\"></i>";
+        $("#"+table_id+" th.sortable .sort-box").each(function(i){
+            $(this).append(sort);
+        })
+        $("#"+table_id+" th.sortable").attr('data-type','desc');
+    }
+    function sort_table(e){
+        console.log('sorting....')
+        const table_id = "mainTable";
+        const row_number = e.target.id;
+        let rows = $("#"+table_id+" tbody tr");
+        let type = "asc";
+        console.log('sort direction:'+$(e.target).data('type'));
+        if($(e.target).data('type')==='asc'){
+            type = 'desc'
+            $(e.target).data("type",type);
+            $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-up sort-active sort-button\"></i>");
+        }else if($(e.target).data('type')==='desc'){
+            type = 'asc';
+            $(e.target).data("type",type);
+            $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-down sort-button sort-active\"></i>");
+        }else{
+            console.log('found nothing');
+        }
+        console.log('new sort direction:'+type);
+        rows.sort(function(a,b){
+            if(type==='desc'){
+                console.log($($(a).children()[row_number]).data('order'), $($(b).children()[row_number]).data('order'));
+                return $($(a).children()[row_number]).data('order') - $($(b).children()[row_number]).data('order');
+            }else if(type==='asc'){
+                console.log($($(b).children()[row_number]).data('order'), $($(a).children()[row_number]).data('order'));
+                return $($(b).children()[row_number]).data('order') - $($(a).children()[row_number]).data('order');
+            }
+        });
+        
+        $("#"+table_id+" tbody")
+        .empty()
+        .append(rows);
+    }
+    //This function ensures the remarks are ordered correctly
+    function orderifyRemarks(remarks){
+        let f;
+        const AMOUNT_OF_NUMBERS = 6;
+        let hasNum = /\d/.test(remarks);
+        let hasChar = /[a-z,A-Z]/.test(remarks);
+        if(hasNum && hasChar){
+            const p = remarks.match(/([A-Za-z]+)([0-9]+)/);        
+            const a = p[1].split('').map(x=>x.charCodeAt(0)).reduce((a,b)=>a+b);
+            f = a+"0".repeat(AMOUNT_OF_NUMBERS-p[2].length)+p[2];
+        }else if(hasNum && !hasChar){
+            f = "0".repeat(AMOUNT_OF_NUMBERS-remarks.length)+remarks;
+        }else if(!hasNum && hasChar){
+            f = remarks;
+        }
+        return f;
     }
     function getTypeName(item){
         return item.item.type.substr(0,1)+item.item.type.substr(1).toLowerCase()
@@ -76,6 +137,9 @@ $(document).ready(function () {
         document.querySelectorAll(".checkbox-scale").forEach(function (item){
             item.addEventListener("change",request_checkbox);
         });
+        document.querySelectorAll("#mainTable th.sortable").forEach(function (item){
+            item.addEventListener("click",sort_table)
+        })
     }
     function render_checkbox(inventory_id) {
         //here check value of checkbo
