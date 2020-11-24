@@ -34,7 +34,7 @@
 
 }
 .remarks{
-    font-size: 30px;
+    font-size: 32px;
 }
 .main-info{
     text-align: center;
@@ -54,7 +54,7 @@
     margin-top: 0;
     margin-left: 0;
     padding: 1px 4px 1px 4px;
-    transform: translate(11rem, -2rem);
+    transform: translate(9rem, -2rem);
     font-size: 19px;
     font-weight: 500;
     border-radius: 9px;
@@ -70,12 +70,15 @@
     width: 100%;
     border-radius: 10px;
 }
-@media (max-width:490px){
+thead th:last-child{
+    min-width:6rem;
+}
+@media (max-width:552px){
     .info{
-        font-size: 20px;
+        font-size: 15px;
     }
     .remarks{
-        font-size: 15px;
+        font-size: 22px;
     }
     .new_or_used{
         transform: translate(0rem, -2rem)

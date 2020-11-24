@@ -50,7 +50,7 @@ $(document).ready(function () {
                 let t = "<tr id='row"+item.inventory_id+"'>"; 
                     t += "<td data-order='"+item.new_or_used.charCodeAt()+"'>";//images
                         t+=render_image(item);
-                        t+="<div class='new_or_used'>"+item.new_or_used+"</div>"
+                        t+="<div class='new_or_used'>"+(item.new_or_used==="N"?"New":"Used")+"</div>"
                     t += "</td>";
                     t += "<td data-order='"+orderifyRemarks(item.remarks)+"'>";//info
                         t+= "<div class='main-info'>";
@@ -121,8 +121,8 @@ $(document).ready(function () {
         }
         return f;
     }
-    function getTypeName(item){
-        return item.item.type.substr(0,1)+item.item.type.substr(1).toLowerCase()
+    function beautifyName(name){
+        return name.substr(0,1)+name.substr(1).toLowerCase()
     }
     function check_already_checked_items(){
         const items = PUG_data.orderDB.items;

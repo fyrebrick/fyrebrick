@@ -11,6 +11,7 @@
     position: fixed;
     background-color: #e8e8e8;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .sort-button{
     position: relative;
@@ -27,4 +28,7 @@
 }
 .button{
     
+}
+.table-responsive{
+    margin-bottom: 15%;
 }

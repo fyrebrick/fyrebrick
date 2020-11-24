@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./app.js",
     "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest",
-    "fyrebrick": "docker build -t snakehead007/fyrebrick:lastest . && docker push snakehead007/fyrebrick:latest",
+    "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
     "dev" : "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable"
   },
   "dependencies": {
