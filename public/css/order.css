@@ -25,6 +25,7 @@
     border-radius:10px;
     box-shadow: 2px 2px 5px grey;
     padding: 0 5px 0 5px;
+    background-color: #FFFFFF;
 }
 .quantity{
     
@@ -62,7 +63,8 @@
 }
 .row_checked{
     background: rgb(255,255,255);
-    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(119,255,132,0.8071603641456583) 100%);
+    background: #2ece5387;
+    border-left: 10px solid darkgreen;
 }
 @media (max-width:490px){
     .info{

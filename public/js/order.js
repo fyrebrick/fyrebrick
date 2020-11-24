@@ -42,7 +42,7 @@ $(document).ready(function () {
             }catch(e){}
             data.data[0].forEach(function(item){
                 let t = "<tr id='row"+item.inventory_id+"'>"; 
-                    t += "<td data-order='"+item.new_or_used+"'>";//images
+                    t += "<td data-order='"+item.new_or_used.charCodeAt()+"'>";//images
                         t+=render_image(item);
                         t+="<div class='new_or_used'>"+item.new_or_used+"</div>"
                     t += "</td>";
@@ -53,7 +53,7 @@ $(document).ready(function () {
                             t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+" pcs</div></div>";
                         t+="</div>";
                     t += "</td>";
-                    t += "<td data-order:'checked' class='checkbox-row'>";
+                    t += "<td data-order='0' class='checkbox-row'>";
                         t+=render_checkbox(item.inventory_id);
                     t += "</td>";
                 t+="</tr>";
@@ -127,7 +127,9 @@ $(document).ready(function () {
     function check_already_checked_items(){
         const items = PUG_data.orderDB.items;
         items.forEach(function(item){
-            $("#C"+item.id).prop("checked",item.status);
+            $("#C"+item.id)
+            .prop("checked",item.status);
+            $("#C"+item.id).parent().parent().attr('data-order',1)
             if(item.status){
                 change_row_color(item.id);
             }
