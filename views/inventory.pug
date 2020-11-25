@@ -2,35 +2,22 @@ extends layout
 block styles
     link(rel="stylesheet", href="/css/inventory.css")
 block content
-    #changeRemarkModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
-        .modal-dialog.modal-xl
-            .modal-content
-                .modal-header
-                    h5#changeRemarkTitle.modal-title Change selected Inventory lots' remark
-                    button.close(type='button' data-dismiss='modal' aria-label='Close')
-                        span(aria-hidden='true') &times;
-                .modal-body
-                    .form
-                        .form-group
-                            .input-group
-                                .input-group-prepend
-                                    span#labelUpdateRemark.input-group-text Input the remark to update
-                                input#inputUpdateRemark.form-control(type="text", placeholder="...")
-                .modal-footer
-                    button#changeRemarkFinish.buttonBig.btn.btn-secondary(type="submit") update
     .container-fluid
         .row
-            .col-lg-12
-                .search-area.row.justify-content-between
-                    input#search.search-bar(type='search' placeholder='Search' aria-label='Search')
-                    .search-buttons(role='group' aria-label='Group of action buttons')#mainButtonRows
-                        button#searchButton.button.my-2.my-sm-0(type='submit') 
-                            i.menu-icon.fas.fa-search
-                            span Search
-                        button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') Change remark
-                        button#scanOptionButton.button.my-2.my-sm-0 Exact Search
-                            input#scanoption(type="checkbox" value="true" )
-                hr
+            .col
+                .card
+                    .card-body
+                        .search-area.row.justify-content-between
+                            input#search.search-bar(type='search' placeholder='Search' aria-label='Search')
+                            .search-buttons(role='group' aria-label='Group of action buttons')#mainButtonRows
+                                button#searchButton.button.my-2.my-sm-0(type='submit') 
+                                    i.menu-icon.fas.fa-search
+                                    span Search
+                                button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') 
+                                    span Change remark
+                                button#scanOptionButton.button.my-2.my-sm-0 
+                                    span Exact Search
+                                    input#scanoption(type="checkbox" value="true" )
                 .card
                     .card-body
                         .active-member
@@ -49,5 +36,22 @@ block content
                                                 .sort-box
                                             th#imageCol Image
                                     tbody#bodyOfTable
+block modals
+    #changeRemarkModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
+            .modal-dialog.modal-xl
+                .modal-content
+                    .modal-header
+                        h5#changeRemarkTitle.modal-title Change selected Inventory lots' remark
+                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                            span(aria-hidden='true') &times;
+                    .modal-body
+                        .form
+                            .form-group
+                                .input-group
+                                    .input-group-prepend
+                                        span#labelUpdateRemark.input-group-text Input the remark to update
+                                    input#inputUpdateRemark.form-control(type="text", placeholder="...")
+                    .modal-footer
+                        button#changeRemarkFinish.buttonBig.btn.btn-secondary(type="submit") update
 block scripts
     script(src="/js/inventory.js")

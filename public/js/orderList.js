@@ -63,6 +63,7 @@ $(document).ready(function () {
                 $("#mainTable").empty().append("<div class='no-data-in-data'>Something went wrong (0002)</div>")
             }
             addListenersTable();
+            $("#0").click();
             stopLoading();
         });
     }

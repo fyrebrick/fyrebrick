@@ -1,31 +1,24 @@
 .bl_img{
-    width:200px;
+    width:150px;
     border-radius: 15px;
     min-width: 80px;
 }
 .checkbox_box{
-    margin-top:45px;
 }
 .checkbox-scale{
-    -ms-transform: scale(3); 
-    -moz-transform: scale(3); 
-    -webkit-transform: scale(3); 
-    -o-transform: scale(3);
-    transform: scale(3);
+    -ms-transform: scale(4.3); 
+    -moz-transform: scale(4.3); 
+    -webkit-transform: scale(4.3); 
+    -o-transform: scale(4.3);
+    transform: scale(4.3);
 }
 .info{
     padding-top: 5%;
 }
-.info:last-child{
-    padding-bottom: 25px;
+td:first-child{
+    vertical-align: inherit;
 }
 .qtbox{
-    border:1px solid black;
-    display:inline;
-    border-radius:10px;
-    box-shadow: 2px 2px 5px grey;
-    padding: 0 5px 0 5px;
-    background-color: #FFFFFF;
 }
 .quantity{
     
@@ -33,12 +26,23 @@
 .color_name{
 
 }
+td{
+    vertical-align: inherit !important;
+}
 .remarks{
     font-size: 32px;
+    border:1px solid black;
+    display:inline;
+    border-radius:10px;
+    padding: 0 5px 0 5px;
+    background-color: #FFFFFF;
 }
 .main-info{
     text-align: center;
-    font-size: 24px;
+    font-size: 32px;
+}
+.color_name{
+    font-size: 27px;
 }
 .info-text{
     font-weight: 700;
@@ -46,15 +50,12 @@
 .checkbox-row{
     text-align: center;
 }
-.color_name .badge{
-    box-shadow:2px 2px 5px grey;
-}
 .new_or_used{
     position: absolute;
     margin-top: 0;
     margin-left: 0;
     padding: 1px 4px 1px 4px;
-    transform: translate(9rem, -2rem);
+    transform:translate(6rem, -2rem);
     font-size: 19px;
     font-weight: 500;
     border-radius: 9px;
@@ -62,8 +63,11 @@
     color: #FFFFFF;
 }
 .row_checked{
-    background: rgb(255,255,255);
-    background: #2ece5387;
+    background: #c1fcce87 !important;
+    border-left: 10px solid #3ba93b;
+}
+.row_checked:nth-child(even){
+    background: #9decb087 !important;
     border-left: 10px solid darkgreen;
 }
 #enlargedImg{
@@ -73,21 +77,29 @@
 thead th:last-child{
     min-width:6rem;
 }
-@media (max-width:552px){
+tbody tr:nth-child(even){
+    background-color: #f1f1f1;
+}
+@media (max-width:486px){
     .info{
-        font-size: 15px;
+        font-size: 27px;
     }
-    .remarks{
-        font-size: 22px;
+    .color_name{
+        font-size: 23px;
     }
     .new_or_used{
-        transform: translate(0rem, -2rem)
+        transform: translate(0rem, -2rem);
+        font-size: 14px;
+        margin-top: 10px;
     }
-    .checkbox-scale {
-        -ms-transform: scale(2);
-        -moz-transform: scale(2);
-        -webkit-transform: scale(2);
-        -o-transform: scale(2);
-        transform: scale(2);
+    .bl_img{
+        width:100px;
+    }
+    .checkbox-scale{
+        -ms-transform: scale(3); 
+        -moz-transform: scale(3); 
+        -webkit-transform: scale(3); 
+        -o-transform: scale(3);
+        transform: scale(3);
     }
 }

@@ -1,3 +1,15 @@
+let checkAll = '<div id="checkAllDiv" class=" custom-checkbox">\n'
++'          <input id="checkAllInput" type="checkbox" class="checkAllbox">\n'
++'          </div>\n';
+let stateofChangeRemarkButton = false;
+let searchValue = "";
+let showUpdateButton = false;
+let amountChecked = 0;
+let lastRemarksChange = 0;3
+let lastColourChange = 0;
+let lastQuantityChange = 0;
+let lastUsedChange = 0;
+let delay = 20;
 document.addEventListener("DOMContentLoaded", function () {
     add_order_to_headers("mainTable");
     document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
@@ -22,18 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     document.getElementById("searchButton").addEventListener('click',search);
 });
-let checkAll = '<div id="checkAllDiv" class=" custom-checkbox">\n'
-    +'          <input id="checkAllInput" type="checkbox" class="checkAllbox">\n'
-    +'          </div>\n';
-let stateofChangeRemarkButton = false;
-let searchValue = "";
-let showUpdateButton = false;
-let amountChecked = 0;
-let lastRemarksChange = 0;3
-let lastColourChange = 0;
-let lastQuantityChange = 0;
-let lastUsedChange = 0;
-let delay = 20;
 function add_order_to_headers(table_id){
     const sort = "<i class=\"fas fa-sort sort-button sort-inactive\"></i>";
     $("#"+table_id+" th.sortable .sort-box").each(function(i){
@@ -185,7 +185,6 @@ function activateChangeRemarkButton () {
 function showModalChangeRemark() {
     $("#changeRemarkModal").modal('show');
 }
-
 function changeColour(e){
     e.preventDefault();
     if (lastColourChange >= (Date.now() - delay))
@@ -217,7 +216,6 @@ function changeColour(e){
         }
     });
 }
-
 function changeUsed(e){
     e.preventDefault();
     if (lastUsedChange >= (Date.now() - delay))
@@ -245,7 +243,6 @@ function changeUsed(e){
         }
     });
 }
-
 function changeQuantity(e){
     e.preventDefault();
     if (lastQuantityChange >= (Date.now() - delay))
@@ -275,7 +272,6 @@ function changeQuantity(e){
         }
     });
 }
-
 function changeRemarks(e) {
     e.preventDefault();
     if (lastRemarksChange >= (Date.now() - delay))
@@ -296,7 +292,6 @@ function changeRemarks(e) {
                 $(thisButton).removeClass("is-invalid");
             }
         }).done(function (data) {
-            console.log(data);
             if (data.meta.code !== 200||data.data.remarks!==newRemarkName) {
                 $(thisButton).addClass("is-invalid");
             } else {
@@ -506,7 +501,6 @@ function changeRemarkFinish() { //button was pressed to change remarks
     });
     //end api call
 }
-
 function setColor(color_name) {
     let css = "<span class=\"badge\" ";
     switch (color_name) {
@@ -740,7 +734,6 @@ function setColor(color_name) {
     css += ">" + color_name + "</span>";
     return css;
 }
-
 function getColorSelect(id){
     return colorOption = "\n" +
         "                        <select class=\"custom-select inputColour\" id=\"C"+id+"\">\n" +

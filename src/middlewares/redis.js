@@ -30,7 +30,6 @@ const getCache = async (req) => {
                     console.log('reply found');
                     resolve(parsed);
                 }else{
-                    console.log(parsed);
                     reject(parsed);
                 }
             }
@@ -54,7 +53,6 @@ const getPlusCache = async (req) => {
                     console.log('reply found');
                     resolve(parsed);
                 }else{
-                    console.log(parsed);
                     reject(parsed);
                 }
                 

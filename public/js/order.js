@@ -26,7 +26,7 @@ $(document).ready(function () {
     }
     function change_row_color(id){
         if($("#C"+id).is(":checked")){
-            $("#C"+id).parent().parent().attr('data-order',1)
+            $("#C"+id).parent().parent().attr('data-order',-1)
             $("#row"+id)
             .removeClass("row_not_checked")
             .addClass("row_checked");
@@ -56,7 +56,7 @@ $(document).ready(function () {
                         t+= "<div class='main-info'>";
                             t +="<div class='info info-text remarks'>"+item.remarks+"</div>";
                             t +="<div class='info info-text color_name'>"+render_color(item.color_name)+"</div>";
-                            t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+" pcs</div></div>";
+                            t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+"</div></div>";
                         t+="</div>";
                     t += "</td>";
                     t += "<td data-order='0' class='checkbox-row'>";
