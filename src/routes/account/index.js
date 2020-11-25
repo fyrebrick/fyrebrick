@@ -8,7 +8,7 @@ const ordersRoutes = require("./ordersRoutes")
 const orderRoutes = require("./orderRoutes");
 const {checkSignIn} = require("../../middlewares/index");
 const User = require('../../models/user');
-
+const bricklinkPlus = require("bricklink-plus");
 router.get('/update',checkSignIn,async(req,res,next)=>{
     res.render('welcome',{
         titleJumbo:"Update profile",
@@ -17,8 +17,18 @@ router.get('/update',checkSignIn,async(req,res,next)=>{
     }) ;
  });
  
- router.get("/dashboard",(req,res)=>{
-    res.render("dashboard",{active:"dashboard"});
+ router.get("/dashboard",async(req,res)=>{
+    let orders = await bricklinkPlus.api.order.getOrders({},{
+        TOKEN_VALUE: req.session.user.TOKEN_VALUE,
+        TOKEN_SECRET: req.session.user.TOKEN_SECRET,
+        CONSUMER_KEY: req.session.user.CONSUMER_KEY,
+        CONSUMER_SECRET: req.session.user.CONSUMER_SECRET
+      });
+      let info = {}
+      if(orders && orders.data && orders.data.length > 0){
+        info= await bricklinkPlus.plus.stores.getStoreStats(orders.data[0].seller_name);
+      }
+    res.render("dashboard",{active:"dashboard",info:info});
 });
 
  router.post('/register', async (req,res,next)=>{

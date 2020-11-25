@@ -19,13 +19,12 @@ button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar'
                             i.menu-icon.far.fa-plus-square
                             span.sub-menu-title Add items
         li
-            .dropdown
-                a.narrow#orders.not-active.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+            a.narrow#orders.not-active.nav-item.nav-link(href='/account/orders/new' role='button')
                     |    Orders
-                    .dropdown-menu(aria-labelledby='orders')
-                        a.dropdown-item(href='/account/orders/new')
-                            i.menu-icon.fas.fa-file-invoice
-                            span.sub-menu-title new orders
+                    //- .dropdown-menu(aria-labelledby='orders')
+                    //-     a.dropdown-item(href='/account/orders/new')
+                    //-         i.menu-icon.fas.fa-file-invoice
+                    //-         span.sub-menu-title new orders
         li
             .dropdown
                 a.narrow#account.nav-item.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')

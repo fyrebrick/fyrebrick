@@ -1,6 +1,5 @@
 .bl_img{
     width:150px;
-    border-radius: 15px;
     min-width: 80px;
 }
 .checkbox_box{
@@ -26,14 +25,20 @@ td:first-child{
 .color_name{
 
 }
+.modal-footer{
+    justify-content: center !important;
+}
 td{
     vertical-align: inherit !important;
+}
+thead th:nth-child(2),thead th:nth-child(3){
+    text-align: center;
 }
 .remarks{
     font-size: 32px;
     border:1px solid black;
     display:inline;
-    border-radius:10px;
+    border-radius: .25rem;
     padding: 0 5px 0 5px;
     background-color: #FFFFFF;
 }
@@ -58,7 +63,7 @@ td{
     transform:translate(6rem, -2rem);
     font-size: 19px;
     font-weight: 500;
-    border-radius: 9px;
+    border-radius: .25rem;
     background-color: #717273a1;
     color: #FFFFFF;
 }

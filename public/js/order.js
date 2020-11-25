@@ -2,6 +2,8 @@ $(document).ready(function () {
     getItems();
     add_order_to_headers("mainTable")
     request_progress(PUG_order_id);
+    addModalEvents();
+    let orderData = {};
     function request_checkbox(e){
         const id = e.target.id.substr(1);
         //console.log(id);
@@ -45,7 +47,9 @@ $(document).ready(function () {
         }).done(function(data){
             try{
                 data = JSON.parse(data);
-            }catch(e){}
+            }catch(e){};
+            orderData = data;
+            console.log(orderData)
             data.data[0].forEach(function(item){
                 let t = "<tr id='row"+item.inventory_id+"'>"; 
                     t += "<td data-order='"+item.new_or_used.charCodeAt()+"'>";//images
@@ -148,8 +152,16 @@ $(document).ready(function () {
     }
     function show_modal(e){
         const src = $("#"+e.target.id).attr('src');
+        console.log(orderData);
+        orderData.data[0].forEach(function(i){
+            console.log(i.inventory_id,e.target.id.substr(3))
+           if(i.inventory_id==e.target.id.substr(3)){
+            $("#enlargedTitleLabel").text("Item no. "+i.item.no+" price: "+i.unit_price_final+" "+i.currency_code);
+            $("#enlargedFooter").text(unescape(i.item.name)); //does not wat to unescape
+           } 
+        });
         $("#enlargedImg").attr('src',src);
-        $('#enlarge').modal('show')
+        $('#enlarge').modal('show');
     }
     function render_checkbox(inventory_id) {
         //here check value of checkbo
@@ -230,6 +242,18 @@ $(document).ready(function () {
             +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+data.orders_total+"</div></div></div>"
         );
         $("#P"+data.order_id).attr("data-order",width);
+    }
+    function addModalEvents(){
+        console.log(window.history);
+        if (window.history && window.history.pushState) {
+            window.history.pushState('forward', null, null);
+            $(window).on('popstate', function () {
+                if($("#enlarge").hasClass("show")){
+                    //$("#enlarge").modal('hide'); //roken, only works once
+                    window.location.href = window.location.href;
+                }
+            });
+          }
     }
     function setColor(color_name) {
         let css = "<span class=\"badge\" ";

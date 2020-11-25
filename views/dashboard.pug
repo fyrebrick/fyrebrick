@@ -1,6 +1,29 @@
 extends layout
 block content
-    
+    .container-fluid
+        .row
+            .col
+                .card
+                    .card-body
+                        .jumbotron
+                            h2.display-4=info.name
+                            hr.my-4
+                            p.lead Store stats
+                            ul.list-group.list-group-flush
+                                li.list-group-item 
+                                    .statbox
+                                        .stat="Items: "+info.n4totalItems
+                                        .rank Rank #
+                                li.list-group-item 
+                                    .statbox
+                                        .stat="Lots: "+info.n4totalLots
+                                        .rank Rank #
+                                li.list-group-item
+                                    .statbox 
+                                        .stat="Views: "+info.n4totalViews
+                                        .rank Rank #
+
+                        //This should have: store info ( items, lots, views and ranking), new orders ( amount, in progress)
 block styles
     link(rel="stylesheet", href="/css/dashboard.css")
 block scripts

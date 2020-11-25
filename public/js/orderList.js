@@ -195,10 +195,15 @@ $(document).ready(function () {
         let s = "<span class=\"status-badge badge badge-pill\" style=\"color:"+bg_color+";background-color:"+color+";\">"+icon_i+"<span class=\"status-name\">"+status.toLowerCase()+"</span>"+"</button>";
         return {span:s,bg_color:bg_color};
     }
-    function render_date_ordered(date,month_lenght){
+    function render_date_ordered(date,length){
         let d = new Date(date);
-        const options = { year: 'numeric', month: month_lenght, day: 'numeric'};
-        return d.toLocaleDateString('en-UK', options);
+        let options;
+        if(length==="long") {
+            options = { year: 'numeric', month: 'long', day: 'numeric'};
+        }else if (length==="short"){
+            options = { year: 'numeric', month: 'numeric', day: 'numeric'};
+        }
+        return d.toLocaleDateString('nl-BE', options);
     }
     function render_order_id (order_id) {
         return "<a href=\"\/account/orders\/"+order_id+"\/items\" id=\"o"+order_id+"\" class=\"order_id badge badge-primary\" >" +order_id + "</a>";

@@ -28,6 +28,13 @@ block modals
     #enlarge.modal(tabindex="-1")
         .modal-dialog.modal-dialog-centered
             .modal-content
-                img#enlargedImg(src='')
+                .modal-header
+                    h5#enlargedTitleLabel.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    img#enlargedImg(src='')
+                .modal-footer
+                    p.lead#enlargedFooter
 block scripts
     script(src="/js/order.js")

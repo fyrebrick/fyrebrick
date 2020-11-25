@@ -6,12 +6,12 @@
     "start": "node ./app.js",
     "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest",
     "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
-    "dev" : "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable"
+    "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable"
   },
   "dependencies": {
     "after-load": "1.0.4",
     "body-parser": "latest",
-    "bricklink-plus": "1.0.8",
+    "bricklink-plus": "^1.0.9",
     "cookie-parser": "1.4.5",
     "debug": "4.3.1",
     "dotenv": "8.2.0",

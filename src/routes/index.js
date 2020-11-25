@@ -10,7 +10,6 @@ const accountRoutes = require("./account");
 router.use('/account',checkSignIn,accountRoutes);
 router.use('/api',checkSignIn,apiRoutes)
 router.use('/plus',checkSignIn,(req,res,next)=>{
-    console.log('adding header...')
     res.setHeader('Content-Type', 'application/json');
     next();
 },plusRoutes);
@@ -30,11 +29,10 @@ router.get('/',(req,res)=>{
         res.render('logon');
     }
 });
-
 router.get('/logon',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
-            res.render("dashboard",{active:"dashboard"});
+            res.redirect("/account/dashboard");
             return;
         }else{
             res.render("welcome",{
