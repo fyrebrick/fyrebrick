@@ -17,6 +17,10 @@
 td:first-child{
     vertical-align: inherit;
 }
+.all-info{
+    display: flex;
+    justify-content: space-evenly;
+}
 .qtbox{
 }
 .quantity{
@@ -24,6 +28,11 @@ td:first-child{
 }
 .color_name{
 
+}
+.scrollable-table{
+    height: 79vh;
+    overflow-y:scroll;
+    display:block;
 }
 .modal-footer{
     justify-content: center !important;
@@ -46,6 +55,9 @@ thead th:nth-child(2),thead th:nth-child(3){
     text-align: center;
     font-size: 32px;
 }
+.main-info div, .side-info div{
+    //margin-bottom: 19%;
+}
 .color_name{
     font-size: 27px;
 }
@@ -55,7 +67,7 @@ thead th:nth-child(2),thead th:nth-child(3){
 .checkbox-row{
     text-align: center;
 }
-.new_or_used{
+.remove me {
     position: absolute;
     margin-top: 0;
     margin-left: 0;

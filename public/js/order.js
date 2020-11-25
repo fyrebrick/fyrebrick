@@ -4,9 +4,9 @@ $(document).ready(function () {
     request_progress(PUG_order_id);
     addModalEvents();
     let orderData = {};
+    let itemData = [];
     function request_checkbox(e){
         const id = e.target.id.substr(1);
-        //console.log(id);
         $.ajax({
             method: "PUT",
             url: "/account/order/"+PUG_order_id,
@@ -49,19 +49,28 @@ $(document).ready(function () {
                 data = JSON.parse(data);
             }catch(e){};
             orderData = data;
-            console.log(orderData)
-            data.data[0].forEach(function(item){
-                let t = "<tr id='row"+item.inventory_id+"'>"; 
+            data.data[0].forEach(async function(item){
+                request_stock(item.inventory_id)
+                let t = "<tr id='row"+item.inventory_id+"'>";
                     t += "<td data-order='"+item.new_or_used.charCodeAt()+"'>";//images
                         t+=render_image(item);
-                        t+="<div class='new_or_used'>"+(item.new_or_used==="N"?"New":"Used")+"</div>"
+                        // t+="<div class='image-footer'>";
+                        //     t+="<div class='new_or_used'>"+(item.new_or_used==="N"?"New":"Used")+"</div>";
+                        //     t+="<div class='stock' id='S"+item.inventory_id+"'></div>";
+                        t+="</div>";
                     t += "</td>";
                     t += "<td data-order='"+orderifyRemarks(item.remarks)+"'>";//info
-                        t+= "<div class='main-info'>";
-                            t +="<div class='info info-text remarks'>"+item.remarks+"</div>";
-                            t +="<div class='info info-text color_name'>"+render_color(item.color_name)+"</div>";
-                            t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+"</div></div>";
-                        t+="</div>";
+                        t+="<div class='all-info'>"
+                            t+= "<div class='main-info'>";
+                                t +="<div class='info info-text remarks'>"+item.remarks+"</div>";
+                                t +="<div class='info info-text color_name'>"+render_color(item.color_name)+"</div>";
+                                t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+"</div>";
+                            t+="</div>";
+                            t+="<div class='side-info'>";
+                                t+="<div class='new_or_used'>"+(item.new_or_used==="N"?"New":"Used")+"</div>";
+                                t+="<div class='stock' id='S"+item.inventory_id+"'>";
+                            t+="</div>";
+                        t+="</div>"
                     t += "</td>";
                     t += "<td data-order='0' class='checkbox-row'>";
                         t+=render_checkbox(item.inventory_id);
@@ -80,6 +89,18 @@ $(document).ready(function () {
             $(this).append(sort);
         })
         $("#"+table_id+" th.sortable").attr('data-type','desc');
+    }
+    function request_stock (id) {
+        $.ajax({
+            method:'GET',
+            url:"/plus/inventories/item/"+id
+        }).done(function(item){
+            let stock = 0;            
+            if(item && item.quantity){
+                stock = item.quantity;
+            }
+            $("#S"+id).text(stock);
+        })
     }
     function sort_table(e){
         const table_id = "mainTable";
@@ -152,11 +173,9 @@ $(document).ready(function () {
     }
     function show_modal(e){
         const src = $("#"+e.target.id).attr('src');
-        console.log(orderData);
         orderData.data[0].forEach(function(i){
-            console.log(i.inventory_id,e.target.id.substr(3))
            if(i.inventory_id==e.target.id.substr(3)){
-            $("#enlargedTitleLabel").text("Item no. "+i.item.no+" price: "+i.unit_price_final+" "+i.currency_code);
+            $("#enlargedTitleLabel").text("Item no. "+i.item.no+" price: "+Number(i.unit_price_final).toFixed(2)+" "+i.currency_code);
             $("#enlargedFooter").text(unescape(i.item.name)); //does not wat to unescape
            } 
         });
@@ -219,7 +238,6 @@ $(document).ready(function () {
         }).done(render_progress);
     }
     function render_progress (data) {
-        
         //let text_progress = data.orders_checked + "/" + data.orders_total;
         let not_started = "background-color:#dc3545;"
         let done = "background-color:#28a745;";
@@ -244,7 +262,6 @@ $(document).ready(function () {
         $("#P"+data.order_id).attr("data-order",width);
     }
     function addModalEvents(){
-        console.log(window.history);
         if (window.history && window.history.pushState) {
             window.history.pushState('forward', null, null);
             $(window).on('popstate', function () {
