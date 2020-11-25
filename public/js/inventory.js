@@ -12,8 +12,8 @@ let lastUsedChange = 0;
 let delay = 20;
 document.addEventListener("DOMContentLoaded", function () {
     add_order_to_headers("mainTable");
-    document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
-    document.getElementById("changeRemarkFinish").addEventListener("click",changeRemarkFinish);
+    //document.getElementById("activateChangeRemarkButton").addEventListener("click",activateChangeRemarkButton);
+    //document.getElementById("changeRemarkFinish").addEventListener("click",changeRemarkFinish);
     document.getElementById('search').addEventListener('onsearch', function (e) {
                 document.getElementById("searchButton").click();
         });
@@ -118,7 +118,6 @@ function listenersWhenSearchIsComplete (){
             e.target.select();
         });
     });
-
     document.querySelectorAll("img").forEach(function (item) {
         item.addEventListener('click', imgThumbnail);
     });
@@ -309,8 +308,13 @@ function checkers(e) {
 function imgThumbnail(e) {
     e.preventDefault();
     if ($(e.target).is('img.img-thumbnail')) {
-        let modalId = "#modal" + this.id.substr(3, this.id.length);
-        $(modalId).modal('show');
+        console.log(e.target.id);
+        console.log($("#"+e.target.id+"-imgModalTitle").text());
+        $("#imgModalTitle").empty().append($("#"+e.target.id+"-imgModalTitle").text());
+        $("#imgModalbody").empty().append($("#"+e.target.id+"-imgModalbody").text());
+        $("#imgModalImg").attr('src',$("#"+e.target.id).attr('src'));
+        $("#itemModalLink").attr('href',$("#"+e.target.id+"-itemModalLink").text());
+        $("#imgModal").modal('show');
     }
 }
 function search(e) {
@@ -350,8 +354,8 @@ function search(e) {
                 if (item.color_name === "(Not Applicable)") {
                     tr += "<i class=\"fas fa-tint-slash\"></i>";
                 } else {
-                    tr += getColorSelect(item.inventory_id);
-                    tr += "<p id='CM"+item.inventory_id+"'>"+ setColor(item.color_name) +"</p>"
+                    //tr += getColorSelect(item.inventory_id); //bricklink does allow this
+                    tr += "<div id='CM"+item.inventory_id+"'>"+ setColor(item.color_name) +"</div>"
                 }
             }
             tr += "</td><td data-order='"+item.quantity+"' >";//start 3nd column
@@ -371,27 +375,9 @@ function search(e) {
 
     function getPic(row) {
         //row param is the item
+        console.log(row);
         let id = row.color_id + row.item.no;
-        let modal = "<div class=\"modal fade\" id=\"modal" + id + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modalTitle" + id + "\" aria-hidden=\"true\">\n" +
-            "  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n" +
-            "    <div class=\"modal-content\">\n" +
-            "      <div class=\"modal-header\">\n" +
-            "        <h5 class=\"modal-title\" id=\"modalTitel" + id + "\">Item no " + row.item.no + "</h5>\n" +
-            "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n" +
-            "          <span aria-hidden=\"true\">&times;</span>\n" +
-            "        </button>\n" +
-            "      </div>\n" +
-            "      <div class=\"modal-body\">\n" +
-            "        " + row.item.name +
-            "      </div>\n" +
-            "      <div class=\"modal-footer\">\n" +
-            "        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
-            "      </div>\n" +
-            "    </div>\n" +
-            "  </div>\n" +
-            "</div>";
-        let _type = row.item.type.substr(0, 1);
-
+        let modal = "<div class='hideThese'> <div id='img"+id+"-imgModalTitle'>Item no "+row.item.no+"</div><div id='img"+id+"-imgModalbody'>"+row.item.name+"</div><div id='img"+id+"-itemModalLink'>https://www.bricklink.com/v2/inventory_detail.page?invID="+row.inventory_id+"</div></div>";
         switch (row.item.type) {
             case "SET":
                 return modal + "\n" +

@@ -18,15 +18,17 @@ router.get('/search',async (req,res)=>{
     }
     let search = req.query.search.toLowerCase();
     let newData = [];
-    for (let i = 0, len = data.data.length; i < len; i++) {
-        if (data.data[i].remarks) {
-            if(req.query.exact==="Y"){
-                if (data.data[i].remarks.toLowerCase()===search) {
-                    newData.push(data.data[i]);
-                }
-            }else{
-                if (data.data[i].remarks.toLowerCase().includes(search)) {
-                    newData.push(data.data[i]);
+    if(data.data){
+        for (let i = 0, len = data.data.length; i < len; i++) {
+            if (data.data[i].remarks) {
+                if(req.query.exact==="Y"){
+                    if (data.data[i].remarks.toLowerCase()===search) {
+                        newData.push(data.data[i]);
+                    }
+                }else{
+                    if (data.data[i].remarks.toLowerCase().includes(search)) {
+                        newData.push(data.data[i]);
+                    }
                 }
             }
         }
