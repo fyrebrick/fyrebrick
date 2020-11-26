@@ -52,24 +52,24 @@ $(document).ready(function () {
             data.data[0].forEach(async function(item){
                 request_stock(item.inventory_id)
                 let t = "<tr id='row"+item.inventory_id+"'>";
-                    t += "<td data-order='"+item.new_or_used.charCodeAt()+"'>";//images
+                    t += "<td>";//images
                         t+=render_image(item);
-                        // t+="<div class='image-footer'>";
-                        //     t+="<div class='new_or_used'>"+(item.new_or_used==="N"?"New":"Used")+"</div>";
-                        //     t+="<div class='stock' id='S"+item.inventory_id+"'></div>";
+                        t+="<div class='stock' id='S"+item.inventory_id+"'>";
                         t+="</div>";
                     t += "</td>";
+                    t += "<td data-order='"+item.new_or_used.charCodeAt()+"'>"
+                        t+="<div class='side-info'>";
+                            t+="<div class='new_or_used-big'>"+(item.new_or_used==="N"?
+                            "New":"Used")+"</div>";
+                            t+="<div class='new_or_used-small'>"+item.new_or_used+"</div>";
+                        t+="</div>";
+                    t += "</td>"
                     t += "<td data-order='"+orderifyRemarks(item.remarks)+"'>";//info
                         t+="<div class='all-info'>"
                             t+= "<div class='main-info'>";
                                 t +="<div class='info info-text remarks'>"+item.remarks+"</div>";
                                 t +="<div class='info info-text color_name'>"+render_color(item.color_name)+"</div>";
                                 t += "<div class='info info-text quantity'><div class='qtbox'>"+item.quantity+"</div>";
-                            t+="</div>";
-                            t+="<div class='side-info'>";
-                                t+="<div class='new_or_used'>"+(item.new_or_used==="N"?"New":"Used")+"</div>";
-                                t+="<div class='stock' id='S"+item.inventory_id+"'>";
-                            t+="</div>";
                         t+="</div>"
                     t += "</td>";
                     t += "<td data-order='0' class='checkbox-row'>";
@@ -175,8 +175,9 @@ $(document).ready(function () {
         const src = $("#"+e.target.id).attr('src');
         orderData.data[0].forEach(function(i){
            if(i.inventory_id==e.target.id.substr(3)){
+            const encode_str = i.item.name.replaceAll('&#40;','(').replaceAll("&#41;",")");
             $("#enlargedTitleLabel").text("Item no. "+i.item.no+" price: "+Number(i.unit_price_final).toFixed(2)+" "+i.currency_code);
-            $("#enlargedFooter").text(unescape(i.item.name)); //does not wat to unescape
+            $("#enlargedFooter").text(unescape(encode_str)); //does not wat to unescape
            } 
         });
         $("#enlargedImg").attr('src',src);
@@ -263,8 +264,8 @@ $(document).ready(function () {
     }
     function addModalEvents(){
         if (window.history && window.history.pushState) {
-            window.history.pushState('forward', null, null);
             $(window).on('popstate', function () {
+                window.history.pushState('forward', null, null);
                 if($("#enlarge").hasClass("show")){
                     //$("#enlarge").modal('hide'); //roken, only works once
                     window.location.href = window.location.href;

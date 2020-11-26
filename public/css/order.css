@@ -4,12 +4,37 @@
 }
 .checkbox_box{
 }
+.badge{
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    max-width: 127px;
+}
+.new_or_used-big{
+    font-size: 24px;
+    text-align: center;
+    vertical-align: inherit;
+}
 .checkbox-scale{
     -ms-transform: scale(4.3); 
     -moz-transform: scale(4.3); 
     -webkit-transform: scale(4.3); 
     -o-transform: scale(4.3);
     transform: scale(4.3);
+}
+.stock{
+    position: relative;
+    transform: translate(0px, -22px);
+    font-size: 16px;
+    background-color: white;
+    width: 150px;
+    min-width: 80px;
+    color: white;
+    text-align: center;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color: rgb(0 0 0 / 35%);
 }
 .info{
     padding-top: 5%;
@@ -29,18 +54,17 @@ td:first-child{
 .color_name{
 
 }
-.scrollable-table{
-    height: 79vh;
-    overflow-y:scroll;
-    display:block;
+.used-new-head{
+    min-width: 76px;
 }
+
 .modal-footer{
     justify-content: center !important;
 }
 td{
     vertical-align: inherit !important;
 }
-thead th:nth-child(2),thead th:nth-child(3){
+thead th:nth-child(2),thead th:nth-child(3),thead th:nth-child(4){
     text-align: center;
 }
 .remarks{
@@ -56,7 +80,7 @@ thead th:nth-child(2),thead th:nth-child(3){
     font-size: 32px;
 }
 .main-info div, .side-info div{
-    //margin-bottom: 19%;
+    
 }
 .color_name{
     font-size: 27px;
@@ -97,19 +121,33 @@ thead th:last-child{
 tbody tr:nth-child(even){
     background-color: #f1f1f1;
 }
-@media (max-width:486px){
+.new_or_used-small{
+    display: none;
+}
+tr td:nth-child(2) {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+@media (max-width:541px ){
     .info{
         font-size: 27px;
     }
     .color_name{
         font-size: 23px;
     }
-    .new_or_used{
-        transform: translate(0rem, -2rem);
-        font-size: 14px;
-        margin-top: 10px;
+    .new_or_used-big{
+        display: none;
     }
-    .bl_img{
+    .new_or_used-small{
+        display: block;
+        
+        font-size: 24px;
+        text-align: center;
+        vertical-align: inherit;
+    }
+    .bl_img, .stock{
         width:100px;
     }
     .checkbox-scale{
@@ -119,4 +157,50 @@ tbody tr:nth-child(even){
         -o-transform: scale(3);
         transform: scale(3);
     }
+}
+@media (max-width:443px){
+    .bl_img, .stock {
+        width: 75px;
+    }
+}
+/**https://algoart.fr/articles/css-table-fixed-header**/
+body{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+ 
+  .table-responsive{
+    overflow-y: scroll;
+    height: 81vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .table-responsive th{
+      position: sticky;
+      top: 0;
+      background-color: white;
+        top: -2px;
+
+        border-bottom: 2px solid #dee2e6;
+        z-index: 40;
+  }
+  
+  table{
+    border-collapse: collapse;
+  }
+  /**end**/
+  .table td, .table th {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.contents{
+    overflow-y:hidden;
 }
