@@ -40,7 +40,7 @@ router.get('/update',checkSignIn,async(req,res,next)=>{
         setUpComplete:true,
     };
     await User.updateOne({_id:req.session._id},updateUser);
-    res.session.user = updateUser;
+    req.session.user = updateUser;
     req.session.logged_in = true;
     res.redirect('/');
 });
