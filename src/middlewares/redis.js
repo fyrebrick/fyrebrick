@@ -1,5 +1,6 @@
 const redis = require('redis');
-let client;
+const session = require('express-session');
+const store = require('connect-redis')(session);
 
 /**
  * The cache's IDs are set up like this:
@@ -8,15 +9,40 @@ let client;
  * 
  * all other cache's ID are not written down yet. 
  */
-
-
+let redisStore,client;
 if(process.env.DEVELOP==='true'){
-    console.log(process.env.DEVELOP_REDIS_HOST);
     client = redis.createClient(process.env.REDIS_PORT,process.env.DEVELOP_REDIS_HOST);
+    client.on('connect',(data)=>{
+        console.log(data);
+        redisStore = new store({
+            host: process.env.DEVELOP_REDIS_HOST,
+            port: process.env.REDIS_PORT,
+            client: client,
+            prexis:'session',
+            ttl: 259200 });
+    });
 }else{
-    console.log(process.env.PRODUCTION_REDIS_HOST);
     client = redis.createClient(process.env.REDIS_PORT,process.env.PRODUCTION_REDIS_HOST);
+    client.on('connect',(data)=>{
+    console.log(data);
+        redisStore = new store({
+            host: process.env.PRODUCTION_REDIS_HOST,
+            port: process.env.REDIS_PORT,
+            client: client,
+            prexis:'session',
+            ttl: 259200 
+        });
+    });
 }
+client.on('ready', (data)=> {console.log(data)})
+client.on('connect', (data)=> {console.log(data)})
+client.on('end', (data)=> {console.log(data)})
+client.on('drain', (data)=>{ console.log(data)})
+client.on('warn', (data)=> {console.log(data)})
+//console.log(redis);
+//console.log(redisStore);
+module.exports.client = client;
+module.exports.redisStore = this.redisStore
 const OAuth = require('oauth');
 const { parse } = require('path');
 //const bricklinkPlus = require('bricklink-plus');
@@ -120,12 +146,16 @@ const BL_make = (user,url,bl_url) => {
         "HMAC-SHA1"
     )
     oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {
+        data = JSON.parse(data);
         //only save data that have a status code of 200
         if(data && data.meta && data.meta.code==200){
+            console.log('succesfully got inventory data. inventory has '+data.data.length+' items');
             client.set(user.CONSUMER_KEY+":"+url,JSON.stringify(data));
             client.expire(user.CONSUMER_KEY+":"+url,TTL);
+            console.log('succefully saved inventory data in cache database');
             return true;
         }else{
+            console.log('something went wrong found status code '+data.meta.code);
             return false;
         }
     });                              

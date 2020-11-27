@@ -1,4 +1,5 @@
 const express = require("express");
+const {redisStore} = require("../middlewares/redis");
 const bodyParser = require("body-parser");
 const path = require("path");
 const pug = require("pug");
@@ -23,7 +24,8 @@ module.exports.default = function (app) {
             secret: process.env.SESSION_SECRET,
             saveUninitialized: false,
             resave: false,
-            cookie :{}
+            cookie :{},
+            store: redisStore
         })
     );
     app.use(flash());

@@ -337,7 +337,7 @@ function search(e) {
         data.data.forEach(function (item) {
             let tr = "<tr id=" + item.inventory_id + ">"; //start row
             tr+="<td >";
-            tr+="<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank' class=\"btn btn-primary btn-lg active\" role=\"button\" aria-pressed=\"true\"> " +
+            tr+="<a href='https://www.bricklink.com/inventory_detail.asp?pg=1&invID=" + item.inventory_id + "' target='_blank' class=\"btn btn-primary btn-sm \" role=\"button\" aria-pressed=\"true\"> " +
                 "<i class=\"fas fa-external-link-alt fa-3x\"></i>" +
                 "</a>"
             tr+="</td >";
@@ -364,7 +364,6 @@ function search(e) {
             tr += "<input type=\"text\" class=\"form-control inputUsed\" id=\"U" + item.inventory_id + "\" placeholder=\"" + item.new_or_used + "\" value=\"" + item.new_or_used + "\">\n";
             tr += "</td><td>";//start 5nd column
             tr += getPic(item);
-            tr += "<a target='_blank' href='https://www.bricklink.com/v2/inventory_detail.page?invID="+item.inventory_id+"' class='item-no'>Item "+item.item.no+"</a>";
             tr += "</td></tr>";
             $('#bodyOfTable').append(tr);
             searchValue = $("#search").val();

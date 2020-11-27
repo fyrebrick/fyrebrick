@@ -1,7 +1,6 @@
-const mongooseLoader = require('./mongoose.js');
-const expressLoader = require('./express.js');
+const mongooseLoader = require('./mongoose.js'); //first database
+const expressLoader = require('./express.js'); //then express
 const google = require('../middlewares/google.js');
-require("../middlewares/redis");
 module.exports.load = async function load(app) {
     google.startUp();
     await mongooseLoader.default();

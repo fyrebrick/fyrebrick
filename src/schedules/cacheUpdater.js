@@ -9,7 +9,9 @@ exports.default = async ()=>{
     schedule.scheduleJob(every_3_minutes,async ()=>{
         console.log('[INFO]: running update inventory job...');
         const users = await User.find({setUpComplete:true}); //Only get users that have their setup complete
+        console.log('found '+users.length+" users");
         users.forEach((user)=>{
+            console.log("starting for user "+user.email);
             BL_make(user,"/plus/inventories/items/search",'/inventories');
         });
     })
