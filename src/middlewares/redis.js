@@ -146,6 +146,9 @@ const BL_make = (user,url,bl_url) => {
         "HMAC-SHA1"
     )
     oauth.get(uri,oauth._requestUrl, oauth._accessUrl, (err, data) => {
+        if(!data || data === undefined){
+            return false;
+        }
         data = JSON.parse(data);
         //only save data that have a status code of 200
         if(data && data.meta && data.meta.code==200){
