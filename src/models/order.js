@@ -1,16 +1,10 @@
 const mongoose = require('mongoose');
 
 const Order = new mongoose.Schema({
-        order_id:{
-            required:true,
-            type:Number
-        },
+        order_id:Number,
         items:[
             {
-                inventory_id: {
-                    required:true,
-                    type:Number
-                },
+                inventory_id:Number,
                 item: {
                     no:String,
                     name:String,
@@ -33,10 +27,7 @@ const Order = new mongoose.Schema({
                 weight:Number
             }
         ],
-        consumer_key:{
-            required:true,
-            type:String
-        },
+        consumer_key:String,
         description:{
             default:"",
             type:String
@@ -120,6 +111,7 @@ const Order = new mongoose.Schema({
             }
         }
     },
+    { typeKey: '$type' }
 );
 
 const order = mongoose.model('Order', Order);

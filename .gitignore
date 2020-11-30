@@ -111,3 +111,4 @@ dist
 .env.develop
 /node_modules
 /vscode
+/.vscode
