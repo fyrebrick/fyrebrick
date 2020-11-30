@@ -4,6 +4,10 @@ const User = new mongoose.Schema({
         name: {
             type: String,
         },
+        update_interval:{
+            type:Number,
+            default:5
+        },
         googleId: {
             type: String,
             unique: true

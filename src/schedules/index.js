@@ -1,5 +1,5 @@
 const statsUpdater = require('./statsUpdater');
-const cacheUpdater = require('./cacheUpdater');
+const cacheUpdater = require('./modelUpdater');
 
 module.exports.start = () =>{
     statsUpdater.default();

@@ -8,11 +8,14 @@ const plusRoutes = require('./plus');
 const accountRoutes = require("./account");
 
 router.use('/account',checkSignIn,accountRoutes);
+
 router.use('/api',checkSignIn,apiRoutes)
+
 router.use('/plus',checkSignIn,(req,res,next)=>{
     res.setHeader('Content-Type', 'application/json');
     next();
 },plusRoutes);
+
 router.get('/',(req,res)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
@@ -29,6 +32,7 @@ router.get('/',(req,res)=>{
         res.render('logon');
     }
 });
+
 router.get('/logon',(req,res,next)=>{
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
@@ -50,7 +54,6 @@ router.get('/logout',(req,res,next)=>{
     res.redirect('/');
 });
 
-//test
 router.get('/redirect',async (req,res,next)=>{
     let googleCode = await google.getGoogleAccountFromCode(req.query.code);
     req.session.email = googleCode.email;

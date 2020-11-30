@@ -9,6 +9,7 @@ const orderRoutes = require("./orderRoutes");
 const {checkSignIn} = require("../../middlewares/index");
 const User = require('../../models/user');
 const bricklinkPlus = require("bricklink-plus");
+
 router.get('/update',checkSignIn,async(req,res,next)=>{
     res.render('welcome',{
         titleJumbo:"Update profile",
@@ -46,10 +47,15 @@ router.get('/update',checkSignIn,async(req,res,next)=>{
 });
 
 router.use("/inventories",inventoriesRoutes);
+
 router.use("/investigate",investigateRoutes);
+
 router.use("/settings",settingsRoutes);
+
 router.use("/stats",statsRoutes);
+
 router.use("/orders",ordersRoutes);
+
 router.use("/order",orderRoutes);
 
 module.exports = router;
