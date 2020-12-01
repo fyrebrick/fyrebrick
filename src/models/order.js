@@ -3,39 +3,35 @@ const mongoose = require('mongoose');
 const Order = new mongoose.Schema({
         order_id:Number,
         items:[
-            {
-                inventory_id:Number,
-                item: {
-                    no:String,
-                    name:String,
-                    type:String,
-                    category_id:Number,
-                },
-                color_id:Number,
-                color_name:Number,
-                quantity:Number,
-                new_or_used:String,
-                completeness:String,
-                unit_price: Number,
-                unit_price_final:Number,
-                disp_unit_price:Number,
-                disp_unit_price_final:Number,
-                currency_code:String,
-                disp_currency_code:String,
-                remarks:String,
-                description:String,
-                weight:Number
-            }
+            [
+                {
+                    inventory_id:Number,
+                    item: {
+                        no:String,
+                        name:String,
+                        type:String,
+                        category_id:Number,
+                    },
+                    color_id:Number,
+                    color_name:String,
+                    quantity:Number,
+                    new_or_used:String,
+                    completeness:String,
+                    unit_price: String,
+                    unit_price_final:String,
+                    disp_unit_price:String,
+                    disp_unit_price_final:String,
+                    currency_code:String,
+                    disp_currency_code:String,
+                    remarks:String,
+                    description:String,
+                    weight:String
+                }
+            ]
         ],
         consumer_key:String,
-        description:{
-            default:"",
-            type:String
-        },
-        orders_checked:{
-            type:Number,
-            default:0
-        },
+        description:String,
+        orders_checked:Number,
         orders_total:Number,   
         order_id : String,
         date_ordered : Date,

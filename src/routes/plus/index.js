@@ -2,8 +2,8 @@ const router = require("express").Router();
 const OAuth = require('oauth');
 const bricklinkPlus = require('bricklink-plus');
 const User = require('../../models/user');
-const iventoriesRoutes = require("./inventories");
+const inventoriesRoutes = require("./inventories");
 
-router.use('/inventories',iventoriesRoutes);
+router.use('/inventories',inventoriesRoutes);
 
 module.exports = router;

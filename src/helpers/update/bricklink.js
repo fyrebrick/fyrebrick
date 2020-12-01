@@ -3,6 +3,7 @@ const inventory = require('../../models/inventory');
 const Inventory = require('../../models/inventory');
 const Order = require("../../models/order");
 const {isObjectsSame} = require('../../helpers/objects');
+
 module.exports.inventorySingle = async (user,inventory_id) => {
     const item = await Inventory.findOne({CONSUMER_KEY:user.CONSUMER_KEY},(err, data)=>{
         if(err){
@@ -20,10 +21,23 @@ module.exports.inventorySingle = async (user,inventory_id) => {
                 null,
                 "HMAC-SHA1"
             );
+            oauth.get("https://api.bricklink.com/api/store/v1/inventories/"+inventory_id,oauth._requestUrl, oauth._accessUrl, 
+            async (err, data) => {
+                if(data && data.meta && data.meta==200){
+                    let updatedInventoryItem = {
+                        CONSUMER_KEY:user.CONSUMER_KEY,
+                        ...data
+                    }
+                    await Inventory({CONSUMER_KEY:user.CONSUMER_KEY,inventory_id:inventory_id},updatedInventoryItem);
+                    return true;
+                }else{
+                    console.log("[ERROR]: Could not update single inventory "+inventory_id+" for user "+user.email);
+                    return false;
+                }
+            });
         }
     });
 }
-
 
 /**
  * @description updates and rewrites the users inventory model
@@ -87,7 +101,7 @@ module.exports.inventoryAll = (user) => {
     );
 }
 
-module.exports.ordersAll = (user)=>{
+module.exports.ordersAll = (user,query="")=>{
     const oauth = new OAuth.OAuth(
         user.TOKEN_VALUE,
         user.TOKEN_SECRET,
@@ -97,7 +111,7 @@ module.exports.ordersAll = (user)=>{
         null,
         "HMAC-SHA1"
     );
-    oauth.get("https://api.bricklink.com/api/store/v1/orders",oauth._requestUrl, oauth._accessUrl, 
+    oauth.get("https://api.bricklink.com/api/store/v1/orders"+query,oauth._requestUrl, oauth._accessUrl, 
         async (err, data) => {
             data = JSON.parse(data);
             if(data && data.meta && data.meta.code==200){
@@ -108,7 +122,6 @@ module.exports.ordersAll = (user)=>{
                         oauth.get("https://api.bricklink.com/api/store/v1/orders/"+order.order_id+"/items",oauth._requestUrl, oauth._accessUrl, 
                         async (err, data_items) => {
                             data_items = JSON.parse(data_items);
-                            console.log(data_items);
                             if(data_items && data_items.meta && data_items.meta.code==200){
                                 if(!order_db){
                                     console.log("[INFO]: Order of id "+order.order_id+" not found in our database for user "+user.email);
@@ -117,7 +130,7 @@ module.exports.ordersAll = (user)=>{
                                         description:"",
                                         consumer_key:user.CONSUMER_KEY,
                                         ...order,
-                                        items:data_items.data                             
+                                        items:data_items.data
                                     });
                                     newOrder.save((err,data)=>{
                                         if(err){

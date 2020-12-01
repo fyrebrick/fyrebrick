@@ -55,6 +55,7 @@ router.get('/logout',(req,res,next)=>{
 });
 
 router.get('/redirect',async (req,res,next)=>{
+    console.log('!');
     let googleCode = await google.getGoogleAccountFromCode(req.query.code);
     req.session.email = googleCode.email;
     req.session.googleId = googleCode.googleId;

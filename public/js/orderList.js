@@ -23,49 +23,36 @@ $(document).ready(function () {
 
     }
     function getData (){
-        $.ajax({
-            method:'GET',
-            url: '/api/orders?direction=in&status=pending,updated,processing,ready,paid,packed',
-            beforeSend: startLoading()
-        }).done(function(data){
-            if(data){
-                try{
-                    data = JSON.parse(data);
-                }catch(e){}
-                console.log(data);
-                if(data.data){
-                    if(data.data.length !== 0){
-                        data.data.forEach(function(order){
-                        let t = "<tr id='"+order.order_id+"'>";
-                                t += "<td data-order='"+order.order_id+"'class='table-data order_number d-flex justify-content-center'>";
-                                    t+=render_order_id(order.order_id);
-                                t += "</td>";
-                                t += "<td data-order='"+new Date(order.date_ordered).getTime()+"' class='table-data order_date'>";
-                                    t+="<div class='long_date'>"+render_date_ordered(order.date_ordered,'long')+"</div>";
-                                    t+="<div class='short_date'>"+render_date_ordered(order.date_ordered,'short')+"</div>";
-                                t += "</td>";
-                                t += "<td>";
-                                    t+=render_status(order.status).span;
-                                t += "</td>";
-                                t += "<td class='table-data progress-col' id='P"+order.order_id+"'>";
-                                  t += "</td>";   
-                            t+="</tr>";
-                            $("#dynamicTable").append(t);
-                            render_progress(order);
-                        });
-                    }else{
-                        $("#mainTable").empty().append("<div class='nothing-found'>We couldnt find any orders.</div>")
-                    }
-                }else{
-                    $("#mainTable").empty().append("<div class='no-data-in-data'>Something went wrong (0001)</div>")
-                }
+        console.log(PUG_data);
+        if(PUG_data.orders){
+            if(PUG_data.orders.length !== 0){
+                PUG_data.orders.forEach(function(order){
+                let t = "<tr id='"+order.order_id+"'>";
+                        t += "<td data-order='"+order.order_id+"'class='table-data order_number d-flex justify-content-center'>";
+                            t+=render_order_id(order.order_id);
+                        t += "</td>";
+                        t += "<td data-order='"+new Date(order.date_ordered).getTime()+"' class='table-data order_date'>";
+                            t+="<div class='long_date'>"+render_date_ordered(order.date_ordered,'long')+"</div>";
+                            t+="<div class='short_date'>"+render_date_ordered(order.date_ordered,'short')+"</div>";
+                        t += "</td>";
+                        t += "<td>";
+                            t+=render_status(order.status).span;
+                        t += "</td>";
+                        t += "<td class='table-data progress-col' id='P"+order.order_id+"'>";
+                            t += "</td>";   
+                    t+="</tr>";
+                    $("#dynamicTable").append(t);
+                    render_progress(order);
+                });
             }else{
-                $("#mainTable").empty().append("<div class='no-data-in-data'>Something went wrong (0002)</div>")
+                $("#mainTable").empty().append("<div class='nothing-found'>We couldnt find any orders.</div>")
             }
+        }else{
+            $("#mainTable").empty().append("<div class='no-data-in-data'>Something went wrong (0001)</div>")
+        }
             addListenersTable();
             $("#0").click();
             stopLoading();
-        });
     }
     function add_order_to_headers(table_id){
         const sort = "<i class=\"fas fa-sort sort-button sort-inactive\"></i>";
