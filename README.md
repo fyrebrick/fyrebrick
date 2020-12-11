@@ -9,8 +9,8 @@ A bricklink store manager.
 
 Fyrebrick system includes:
 
- - [Fyrebrick web backend](https://github.com/snakehead007/fyrebrick)
- - [Fyrebrick model updater](https://github.com/snakehead007/fyrebrick-updater)
- - [Fyrebrick webscraper](https://github.com/snakehead007/fyrebrick-scraper)
- - [Fyrebrick updater api server](https://github.com/snakehead007/fyrebrick-updater-api)
- - [bricklink-plus api (package for bricklink)](https://github.com/snakehead007/bricklink-plus)
+ - [Fyrebrick](https://github.com/snakehead007/fyrebrick) ([Docker](https://hub.docker.com/r/snakehead007/fyrebrick))
+ - [Fyrebrick-updater](https://github.com/snakehead007/fyrebrick-updater) ([Docker](https://hub.docker.com/r/snakehead007/fyrebrick-updater))
+ - [Fyrebrick-scraper](https://github.com/snakehead007/fyrebrick-scraper) ([Docker](https://hub.docker.com/r/snakehead007/brickscraper))
+ - [Fyrebrick-updater-api](https://github.com/snakehead007/fyrebrick-updater-api) ([Docker](https://hub.docker.com/r/snakehead007/fyrebrick-updater-api))
+ - [bricklink-plus api (package for bricklink)](https://github.com/snakehead007/bricklink-plus) ([npm](https://www.npmjs.com/package/bricklink-plus))
