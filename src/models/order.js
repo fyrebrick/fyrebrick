@@ -6,6 +6,7 @@ const Order = new mongoose.Schema({
             [
                 {
                     inventory_id:Number,
+                    isChecked:Boolean,
                     item: {
                         no:String,
                         name:String,
@@ -32,7 +33,7 @@ const Order = new mongoose.Schema({
         consumer_key:String,
         description:String,
         orders_checked:Number,
-        orders_total:Number,   
+        orders_total:Number,
         order_id : String,
         date_ordered : Date,
         date_status_changed : Date,

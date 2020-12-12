@@ -1,15 +1,18 @@
 extends layout
 block styles
     link(rel="stylesheet", href="/css/order.css")
-
 block content
     .container-fluid
         .row
             .col-lg-12
                 .card
                     .card-body
-                        h3="Order "+data.orderDB.order_id
-                        div(id="P"+data.orderDB.order_id)
+                        h3="Order "+order.order_id
+                        div(id="P"+order.order_id)
+                            .progress(height='20px')
+                                .progress-bar(role='progressbar', style=fn.render_progress(order).progressBar.status+'width:'+fn.render_progress(order).progressBar.width+'%;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
+                                    .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
+                                        span=order.orders_checked+"/"+order.unique_count
                 .card
                     .card-body
                             .table-responsive
@@ -24,7 +27,37 @@ block content
                                             th#3.sortable(data-type='asc') Picked
                                                 .sort-box
                                     tbody#dynamicTable
-
+                                        each batch in order.items
+                                            each item, index in batch
+                                                tr(id='row'+item.inventory_id, class=(item.isChecked)?'row_checked':'')
+                                                    td
+                                                        - const imageSrc = fn.getImageSrcFromItem(item)
+                                                        if imageSrc
+                                                            img.normal_img_shadow.bl_img.img-thumbnail(id='img'+item.inventory_id, src=imageSrc)
+                                                        else
+                                                            i.fas.fa-image
+                                                        .stock(id='S'+item.inventory_id)=stock[index].qty
+                                                    td(data-order=item.new_or_used.charCodeAt())
+                                                        .side-info
+                                                            .new_or_used-big=(item.new_or_used==="N"?"New":"Used")
+                                                            .new_or_used-small=item.new_or_used
+                                                    td(data-order=fn.orderifyRemarks(item.remarks))
+                                                        .all-info
+                                                            .main-info
+                                                                .info.info-text.remarks=item.remarks
+                                                                .info.info-text.color_name
+                                                                    if item.color_name==="(Not Applicable)"
+                                                                        i.fas.fa-tint-slash
+                                                                    else
+                                                                        span.badge(style=fn.getColorInlineStyle(item.color_name).style)=item.color_name
+                                                                .info.info-text.quantity
+                                                                    .qtbox=item.quantity
+                                                    td.checkbox-row(data-order='0')
+                                                        .inner_checkbox.form-check.checkbox_box
+                                                            if item.isChecked
+                                                                input.checkbox-scale.form-check-input(type='checkbox', data-order='2', id='C'+item.inventory_id, checked='checked')
+                                                            else
+                                                                input.checkbox-scale.form-check-input(type='checkbox', data-order='1', id='C'+item.inventory_id)
 block modals
     #enlarge.modal(tabindex="-1")
         .modal-dialog.modal-dialog-centered
@@ -39,3 +72,5 @@ block modals
                     p.lead#enlargedFooter
 block scripts
     script(src="/js/order.js")
+    script(src='/js/helpers/sortTable.js')
+    script(src="/js/helpers/progress.js")

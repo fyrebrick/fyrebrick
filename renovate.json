@@ -1,6 +1,7 @@
 {
-  "extends": [
-    "config:base"
-  ],
-  "assignAutomerge":true
-}
+    "extends": [
+      "config:base"
+    ],
+    "assignAutomerge":true
+  }
+  

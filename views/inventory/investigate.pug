@@ -1,0 +1,70 @@
+extends layout
+block styles
+    link(rel="stylesheet", href="/css/invest.css")
+block content
+    #qtyModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
+        .modal-dialog.modal-xl
+            .modal-content
+                .modal-header
+                    p#qtyId(style='display:none;')
+                    h5#qtyTitle.modal-title Add or remove quantity to this item
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    .form
+                        .form-group
+                            p.lead#qtyLabelCurrent(for="qtyInput") Current :
+                                span#qtyNumberCurrent.qtyNumber 0
+                            p.lead#qtyLabelNext(for="qtyInput") Updated :
+                                span.qtyNumber#qtyNumberNext ?
+                            .input-group
+                                .input-group-prepend
+                                    span#inputIndicator.input-group-text ?
+                                input#qtyInput.form-control(type="number", step="1" min="0", placeholder="Quantity to add or remove")
+                        .row
+                            button#qtyButtonAdd.buttonBig.buttonModal.btn.btn-success(type="button") Add
+                            button#qtyButtonRemove.buttonBig.buttonModal.btn.btn-danger(type="button") Remove
+                .modal-footer
+                    button#qtyButtonSubmit.buttonBig.btn.btn-secondary(type="submit") update
+    .container-fluid
+        .row
+            .col
+                h2
+                    span#color.badge
+        .row
+            .col.d-flex.justify-content-center
+                #loadingSection
+        .row
+            .col.d-flex.justify-content-center
+                nav(aria-label='...')
+                    ul.pagination
+                        li#previous.page-item
+                            a.page-link(href="#previous") Previous
+                        li#firstButton.page-item(aria-current='page')
+                            a.page-link(href='#first')
+                                span#first 1
+                        li.page-item.disabled
+                            a.page-link(href='#')
+                                span ...
+                        li#currentButton.page-item.active(aria-current='page')
+                            a.page-link(href='#current')
+                                span#current ??
+                                span.sr-only (current)
+                        li.page-item.disabled
+                            a.page-link(href='#')
+                                span ...
+                        li#lastButton.page-item
+                            a.page-link(href='#last')
+                                span#last ??
+                        li#next.page-item
+                            a.page-link(href='#next') Next
+        table.table.table-striped
+            thead.thead-dark
+                tr
+                    th(scope="col") Remark
+                    th(scope="col") Qty
+                    th(scope="col") Foto
+            tbody#dynamicTbody
+block scripts
+    script(src="/js/invest.js")
+        
