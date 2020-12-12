@@ -15,7 +15,7 @@ const start = async () => {
         mongoose.connection.on('close', () => {
             logger.warn(`mongodb connection opened at ${db_uri}`);
         });
-        mongoose.connect.on('error',(err)=>{
+        mongoose.connection.on('error',(err)=>{
             logger.error(`MongoDB gave an error ${err}`);
             logger.debug(`retrying connection...`);
             mongoose.connect(db_uri, {
@@ -25,6 +25,7 @@ const start = async () => {
             });
         })
     } catch (e) {
+        logger.error(`caught err: ${e}`);
         process.exit(1);
     }
 };
