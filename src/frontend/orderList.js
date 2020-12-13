@@ -26,65 +26,116 @@ function render_date_ordered(date,length){
     return d.toLocaleDateString('nl-BE', options);
 }
 function render_status(status){
-    let icon ='error';
-    let color = "";
+    let icon ="fas fa-times-circle";
+    let color = "#FFFFFF";
     let bg_color = "#000000";
-    switch(status){
+    let text = status.substr(0,1).toUpperCase()+status.substr(1).toLowerCase();
+    let order;
+    switch(status.toUpperCase()) {
         case 'COMPLETED':
             color="#39ff1c";
-            icon= "fas fa-check-double data-status";
+            icon= "fas fa-check-double";
+            order=9;
             break;
         case 'READY':
             color = "#a4ff1c";
-            icon= "fas fa-check data-status";
+            icon= "fas fa-check";
+            order=4;
             break;
         case 'PAID':
             color = "#1cff6b";
-            icon= "fas fa-dollar-sign data-status";
+            icon= "fas fa-dollar-sign";
+            order=5;
             break;
         case 'PACKED':
             color = "#d5ff1c";
-            icon= "fas fa-box data-status";
+            icon= "fas fa-box";
+            order=6;
             break;
         case 'SHIPPED':
             color = "#ffe91c";
-            icon= "fas fa-shipping-fast data-status";
+            icon= "fas fa-shipping-fast";
+            order=7;
             break;
         case 'RECEIVED':
-            color = "#ff00d9";
+            color = "#003cff";
             bg_color = "#FFFFFF";
-            icon= "fas fa-box-open data-status";
+            icon= "fas fa-box-open";
+            order=8;
             break;
         case 'UPDATED':
             color = "#1cbbff";
-            icon= "fas fa-clipboard-list data-status";
+            icon= "fas fa-clipboard-list";
+            order=2;
             break;
         case 'PENDING':
             color = "#ffa81c";
-            icon= "fas fa-hourglass data-status";
+            icon= "fas fa-hourglass";
+            order=1;
             break;
         case 'CANCELLED':
             color = "#6c757d";
             bg_color = "#FFFFFF"
-            icon= "fas fa-ban data-status";
+            icon= "fas fa-ban";
+            order=15;
             break;
         case 'PURGED':
             color = "#ff1c1c";
             bg_color = "#FFFFFF";
-            icon= "fas fa-window-close data-status";
+            icon= "fas fa-window-close";
+            break;
+        case 'PROCESSING':
+            color="#1cdaff";
+            icon="fas fa-sync";
+            order=3;
+            break;
+        case 'NPB':
+            text="Non-Paying Buyer Alert";
+            color= "#f32d2d";
+            bg_color="#FFFFFF";
+            order=11;
+            break;
+        case 'OCR':
+            text='Order Cancel Request';
+            color= "#f32d2d";
+            bg_color="#FFFFFF";
+            order=10;
+            break;
+        case 'NPX':
+            text='Non-Paying Buyer Alert';
+            color= "#f32d2d";
+            bg_color="#FFFFFF";
+            order=12;
+            break;
+        case 'NRS':
+            text='Non-Responding Seller Alert'
+            color= "#f32d2d";
+            bg_color="#FFFFFF";
+            order=13;
+            break;
+        case 'NSS':
+            text='Non-Shipping Seller Alert';
+            color= "#f32d2d";
+            bg_color="#FFFFFF";
+            order=14;
             break;
         default:
-            icon= "error";
+            text='Unknown Status';
+            color= "#f32d2d";
+            bg_color="#FFFFFF";
+            order=16;
             break;
     }
+    icon+=" data-status";
     let s = "span(class='status-badge badge badge-pill'style='color:"+bg_color+";background-color:"+color+";')\n"
                 "\t"+"i(style='color:"+bg_color+";' class='"+icon+"')\n"+
                 "\tspan.status-name"+status.toLowerCase();
-
     return {
-        span:{
+        order:order
+        ,span:{
             color:bg_color,
             backgroundColor:color,
+            text:text
             },
         i:{
             color:bg_color,

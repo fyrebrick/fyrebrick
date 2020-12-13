@@ -6,8 +6,9 @@ const superagent = require('superagent');
 const { set } = require("mongoose");
 
 const register = {
-    get:(req,res,next)=>{
-        res.render('register');
+    get:async (req,res,next)=>{
+        const user = await User.findById(req.session._id);
+        res.render('register',{user:user});
     },
     post:async(req,res,next)=>{
         let userInfo = {
@@ -17,10 +18,11 @@ const register = {
             TOKEN_VALUE:req.body.tokenValue.trim(),
             setUpComplete:false
         };
+        console.log(req.session);
         const test = await bricklinkPlus.api.item.getItem("PART","3001",userInfo);
         logger.info(`Test of bricklink API keys : status code ${test.meta.code}`);
         if(test.meta.code==200){
-            logger.info(`Test complete, user ${req.session.user.email} has provided with valid keys`);
+            logger.info(`Test complete, user ${req.session.email} has provided with valid keys`);
             userInfo.setUpComplete=true;
             const user = await User.findOne({_id:req.session._id}); //find out if user is returning user
             if(!user){
@@ -44,8 +46,8 @@ const register = {
             req.session.logged_in = true;
             res.redirect('/');
           }else{
-            logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`)
-            res.render('register',);
+            logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`);
+            res.render('register',{user:userInfo});
           }
     }
 }

@@ -5,14 +5,9 @@ const controllers = {
 }
 
 router.get('/',controllers.orders.index);
-router.get('/db',async(req,res,next)=>{
-    logger.debug(`received db get request`);
-    const {ordersAll} = require('../../helpers/bricklink/bricklink');
-    const user = await (require('../../models/user')).findOne({_id:req.session._id})
-    logger.debug(`user : ${user.email}`);
-    ordersAll(user);
-    res.send('updating orders...');
-})
+
+router.get('/all',controllers.orders.all);
+
 router.get('/:order_id',controllers.orders.order_id);
 
 router.put('/:order_id',controllers.orders.put);

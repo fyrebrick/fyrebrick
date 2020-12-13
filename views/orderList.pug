@@ -13,7 +13,8 @@ block content
                                                 .sort-box
                                             th#1.sortable.order_date Date
                                                 .sort-box
-                                            th Status
+                                            th#2.sortable Status
+                                                .sort-box
                                             th#3.sortable Progress
                                                 .sort-box
                                     tbody#dynamicTable
@@ -27,13 +28,14 @@ block content
                                                         span=fn.render_date_ordered(order.date_ordered,'long')
                                                     .short_date
                                                         span=fn.render_date_ordered(order.date_ordered,'short')
-                                                td
-                                                    - const status = fn.render_status(order.status)
-                                                    span.status-badge.badge.badge-pill(style='color:'+status.span.color+'; background-color:'+status.span.backgroundColor+';' )
+                                                - const status = fn.render_status(order.status)
+                                                td.table-data( data-order=status.order)
+                                                    span.status-badge.badge.badge-pill( style='color:'+status.span.color+'; background-color:'+status.span.backgroundColor+';' )
                                                         i(class=status.i.class style='color: '+status.i.color)
-                                                        span.status-name=order.status.toLowerCase()
-                                                td.table-data.progress-col(id='P'+order.order_id)
-                                                    - const progress = fn.render_progress(order)
+                                                        span.status-name=status.span.text
+                                                        
+                                                - const progress = fn.render_progress(order)
+                                                td.table-data.progress-col(id='P'+order.order_id, data-order=progress.progressBar.width)
                                                     .progress(style='height: 20px;')
                                                         .progress-bar(role='progressbar', style=progress.progressBar.status+'width:'+progress.progressBar.width+'%;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100')
                                                     .progress-numbers(style=progress.progressNumbers.style)=order.orders_checked+'/'+progress.total

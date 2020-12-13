@@ -13,6 +13,13 @@ const orders = {
             fn:frontend
         })  
     },
+    all: async (req, res, next) => {
+        const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
+        res.render('orderList',{
+            orders:orders,
+            fn:frontend
+        })
+    },
     order_id: async (req,res,next) => {
         const order = await Order.findOne({order_id:req.params.order_id});
         if(!order){
@@ -21,12 +28,19 @@ const orders = {
                 status:'404 Not found',
                 message:'we could not find this order id'
             })
+            return;
         }
         const stock = [];
         let totalItems = 0;
         order.items.forEach((batch)=>{
             totalItems+=batch.length;
         })
+        if(totalItems===0){
+            res.status(404).render('error',{
+                status:'404 Not found',
+                message:'This order has no items'
+            })
+        }
         logger.debug(`iterating ${totalItems} items in order ${order.order_id}`);
         order.items.forEach(batch=>{
             batch.forEach(async item=>{

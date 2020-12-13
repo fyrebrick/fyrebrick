@@ -4,11 +4,11 @@ html
   body
     .container-fluid
       .jumbotron
-        h1.display-4=titleJumbo
+        h1.display-4=titleJumbo||"Your Bricklink keys"
         p.lead
-          | The information we need from you below, you can find to login
-          a(href="https://www.bricklink.com/v2/api/register_consumer.page", target="_blank", rel="noopener noreferrer")
-          | here for Ip 0.0.0.0 and mask 0.0.0.0
+          span="The information we need from you below, you can find to login "
+          a(href="https://www.bricklink.com/v2/api/register_consumer.page", target="_blank", rel="noopener noreferrer") here
+          span=" (IP Address 0.0.0.0 and IP Mask 0.0.0.0)"
         hr.my-4
         form.row(action="/register"  , method='post')
           #consumerSection.box
