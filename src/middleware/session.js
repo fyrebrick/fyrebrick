@@ -5,9 +5,13 @@ const isSignedIn = (req,res,next) => {
     if(req.session.logged_in){ 
         next();
     }else{
-        res.session.destroy((err)=>{
-            logger.error(`could not destory session ${err.message}`);
-        });
+        if(req.session){
+            res.session.destroy((err)=>{
+                if(err){
+                    logger.error(`could not destory session ${err.message}`);
+                }
+            });
+        }
         res.redirect('/');
     }
 };

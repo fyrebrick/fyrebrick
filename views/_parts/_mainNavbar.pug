@@ -5,13 +5,13 @@ button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar'
 #navbar.collapse.navbar-collapse
     ul.navbar-nav.mr-auto.mt-lg-0.mt-2
         li
-            a.narrow#inventory.not-active.nav-item.nav-link.disabled(href='/my/inventory' role='button' aria-haspopup='true' aria-expanded='false' )
+            a.narrow#inventory.not-active.nav-item.nav-link(href='/my/inventory' role='button' aria-haspopup='true' aria-expanded='false' )
                 |   Inventory
         li
             a.narrow#orders.not-active.nav-item.nav-link(href='/my/orders' role='button')
                 |    Orders
         li
-            a.narrow#account.nav-item.nav-link.disabled(href='/my/settings' role='button' aria-haspopup='true' aria-expanded='false')
+            a.narrow#account.nav-item.nav-link(href='/my/settings' role='button' aria-haspopup='true' aria-expanded='false')
                 |   Account
 
     span.navbar-text="v"+version+" "+mode+" "+type

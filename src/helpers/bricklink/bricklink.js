@@ -108,7 +108,7 @@ module.exports.ordersAll = (user,query="")=>{
         async (err, data) => {
             data = JSON.parse(data);
             if(data && data.meta && data.meta.code==200){
-                console.log("[INFO]: Found "+data.data.length+" orders for user "+user.email);
+                logger.info(`Found ${data.data.length} orders for user ${user.email}`);
                 data.data.forEach(
                     async (order) => {
                         const order_db = await Order.findOne({consumer_key:user.CONSUMER_KEY,order_id:order.order_id});                                                        

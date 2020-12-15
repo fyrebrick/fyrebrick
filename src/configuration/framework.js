@@ -7,6 +7,7 @@ const session = require("express-session");
 const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const hpp = require('hpp');
+const useragent = require('express-useragent');
 
 //first party
 const {redisStore} = require("../configuration/session");
@@ -25,6 +26,7 @@ const start = function (app) {
     app.use(bodyParser.urlencoded({
         extended: true
     }));
+    app.use(useragent.express());
     app.use(
         session({
             name: "session",
@@ -38,6 +40,11 @@ const start = function (app) {
     app.use(flash());
     app.use(hpp());
     app.use(function (req, res, next) {
+        //updates session
+        if(req.session){
+            req.session.lastUsed = Date.now();
+            req.session.useragent = req.useragent.source;
+        }
         res.locals.session = req.session;
         res.locals.version = vars.fyrebrick.version;
         res.locals.mode = (vars.fyrebrick.develop)?"develop":"live";

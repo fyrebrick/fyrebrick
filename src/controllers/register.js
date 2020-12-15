@@ -34,7 +34,7 @@ const register = {
                 superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/all`)
                 .send({_id:req.session._id})
                 .set('accept','json')
-                .end((err,res)=>{
+                .end((err,result)=>{
                     if(err){
                         logger.error(`giving updater-api request to update all gave err: ${err}`);
                         res.render('register');
