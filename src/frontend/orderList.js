@@ -48,7 +48,7 @@ function render_status(status){
             order=5;
             break;
         case 'PACKED':
-            color = "#d5ff1c";
+            color = "#fff81c";
             icon= "fas fa-box";
             order=6;
             break;
@@ -157,10 +157,9 @@ function render_progress (data) {
     const STYLEBGC = "background-color:";
     let total = data.unique_count;
     let width = Math.round((Number(data.orders_checked)/Number(total))*100.0);
-    if (data.orders_checked <= 0) {
+    if (data.orders_checked === 0) {
         status = STYLEBGC+not_started
         backgroundColor = not_started;
-
     } else if (data.orders_checked < total) {
         status = STYLEBGC+in_progress;
         backgroundColor = in_progress;
@@ -171,19 +170,19 @@ function render_progress (data) {
         status = STYLEBGC+on_error;
         backgroundColor = on_error;
     }
-    let progress ="<div class='progress' style='height: 20px;'><div class='progress-bar' role='progressbar' style='"+status+"width:"+width+"%;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div></div>"   
-        +"<div class='progress-numbers' style='"+((status===done)?'color:#FFF':'color:#000')+"'>"+data.orders_checked+"/"+total+"</div>"+
-        "<span style='"+status+((status===done||status===not_started)?'color:#FFF':'color:#000')+"'class='progress-small badge'>"+data.orders_checked+"/"+total+"</span>";
+    if(width===0){
+        width=100;
+    }
     return {
         progressBar:{
             status,
             backgroundColor,
             width,
         },progressNumbers:{
-            style:((status===done)?'color:#FFF':'color:#000')
+            style:((backgroundColor===done||backgroundColor===not_started)?'color:#FFF':'color:#000')
         },
         span:{
-            style:((status===done||status===not_started)?'color:#FFF':'color:#000')
+            style:((backgroundColor===done||backgroundColor===not_started)?'color:#FFF':'color:#000')
         },
         total
     };

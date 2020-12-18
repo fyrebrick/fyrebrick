@@ -36,7 +36,7 @@ block content
                                                             img.normal_img_shadow.bl_img.img-thumbnail(id='img'+item.inventory_id, src=imageSrc)
                                                         else
                                                             i.fas.fa-image
-                                                        .stock(id='S'+item.inventory_id)=stock[index].qty
+                                                        .stock(id='S'+item.inventory_id)=stock[item.inventory_id]
                                                     td(data-order=item.new_or_used.charCodeAt())
                                                         .side-info
                                                             .new_or_used-big=(item.new_or_used==="N"?"New":"Used")

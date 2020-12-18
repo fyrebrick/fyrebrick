@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 
 const User = new mongoose.Schema({
+        API_call_amount:{
+            daily:{
+                type:Number,
+                default:0
+            },
+            total:{
+                type:Number,
+                default:0
+            }
+        },
         name: {
             type: String,
         },

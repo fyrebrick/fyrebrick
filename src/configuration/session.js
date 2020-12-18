@@ -11,7 +11,7 @@ const redisStore = new store({
     port: process.env.REDIS_PORT,
     client: client,
     prefix:'session',
-    ttl: 259200 
+    ttl: 1209600
 });
 
 client.on('connect',()=>{

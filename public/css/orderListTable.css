@@ -124,7 +124,7 @@ tbody tr:hover{
         font-size: 60%;
     }
 }
-@media (max-width:408px){
+@media (max-width:472px){
     .order_id{
         font-size: 40%;
     }
@@ -143,7 +143,7 @@ tbody tr:hover{
         top: 5px;
         position: relative;
     }
-    .progress-col{
-        text-align: center;
+    .order-date{
+        display:none;
     }
 }

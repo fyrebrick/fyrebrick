@@ -1,4 +1,8 @@
-var searched = [];
+let searched = [];
+let lastRemarksChange = 0;
+let lastQuantityChange = 0;
+let lastUsedChange = 0;
+let delay = 100;
 $(document).ready(function(){
     sortableTableId = "mainTable";
     addSortIcons();
@@ -88,6 +92,9 @@ function listenersWhenSearchIsComplete (){
 }
 function changeUsed(e){
     e.preventDefault();
+    if (lastUsedChange >= (Date.now() - delay))
+    return;
+    lastUsedChange = Date.now();
     let id = e.target.id.substr(1).trim();
     let thisButton = "#" + e.target.id;
     let newUsed = $(thisButton).val();
@@ -95,7 +102,7 @@ function changeUsed(e){
         method: "POST",
         url: '/my/inventory/update/new_or_used',
         data: {
-            id: id,
+            inventory_id: id,
             new_or_used: newUsed
         },
         beforeSend: function () {
@@ -103,16 +110,23 @@ function changeUsed(e){
             $(thisButton).removeClass("is-invalid");
         }
     }).done(function (data) {
+        try{
+            data = JSON.parse(data);
         if (data.meta.code !== 200||data.data.new_or_used!==newUsed) {
             $(thisButton).addClass("is-invalid");
         } else {
             $(thisButton).addClass("is-valid");
+        }}catch(err){
+            $(thisButton).addClass("is-invalid");
         }
     });
 }
 
 function changeQuantity(e){
     e.preventDefault();
+    if (lastQuantityChange >= (Date.now() - delay))
+    return;
+    lastQuantityChange = Date.now();
     let id = e.target.id.substr(1).trim();
     let thisButton = "#" + e.target.id;
     let newQuantity = $(thisButton).val();
@@ -120,7 +134,7 @@ function changeQuantity(e){
         method: "POST",
         url: '/my/inventory/update/quantity',
         data: {
-            id: id,
+            inventory_id: id,
             quantity: newQuantity
         },
         beforeSend: function () {
@@ -128,18 +142,26 @@ function changeQuantity(e){
             $(thisButton).removeClass("is-invalid");
         }
     }).done(function (data) {
+        try{
+            
+            data = JSON.parse(data);
         if (data.meta.code !== 200||data.data.quantity!=newQuantity
-
         ) {
             $(thisButton).addClass("is-invalid");
         } else {
             $(thisButton).addClass("is-valid");
+        }}catch(err){
+            $(thisButton).addClass("is-invalid");
         }
+
     });
 }
 
 function changeRemarks(e) {
     e.preventDefault();
+    if (lastRemarksChange >= (Date.now() - delay))
+    return;
+    lastRemarksChange = Date.now();
         let id = e.target.id.substr(1).trim();
         let thisButton = "#"+e.target.id;
         let newRemarkName = $(thisButton).val();
@@ -147,7 +169,7 @@ function changeRemarks(e) {
             method: "POST",
             url: '/my/inventory/update/remarks',
             data: {
-                id: id,
+                inventory_id: id,
                 remarks: newRemarkName
             },
             beforeSend: function () {
@@ -155,10 +177,15 @@ function changeRemarks(e) {
                 $(thisButton).removeClass("is-invalid");
             }
         }).done(function (data) {
+            try{
+                data = JSON.parse(data);
             if (data.meta.code !== 200||data.data.remarks!==newRemarkName) {
                 $(thisButton).addClass("is-invalid");
             } else {
                 $(thisButton).addClass("is-valid");
+            }
+            }catch(err){
+                $(thisButton).addClass("is-invalid");
             }
         });
 }

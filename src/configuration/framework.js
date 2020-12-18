@@ -43,13 +43,11 @@ const start = function (app) {
         //updates session
         if(req.session){
             req.session.lastUsed = Date.now();
-            req.session.useragent = req.useragent.source;
         }
         res.locals.session = req.session;
         res.locals.version = vars.fyrebrick.version;
         res.locals.mode = (vars.fyrebrick.develop)?"develop":"live";
         res.locals.type = vars.fyrebrick.type;
-        res.locals.in_production = vars.fyrebrick.develop;
         //pug variables
         res.locals.frontend = {};
         next();

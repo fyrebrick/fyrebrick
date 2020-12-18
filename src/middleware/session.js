@@ -7,15 +7,6 @@ const isSignedIn = (req,res,next) => {
             next();
         }else if(!req.session.logged_in){
             logger.info(`Not logged in anymore, redirecting to homepage`);
-            try{
-                req.session.destroy((err)=>{
-                    if(err){
-                        logger.error(`Caught error on destroying session in callback`);
-                    }
-                });
-            }catch(err){
-                logger.error(`Caught error on destroying session`);
-            }
             res.redirect('/');
         }
     }else{

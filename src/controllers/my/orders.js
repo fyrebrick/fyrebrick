@@ -30,8 +30,9 @@ const orders = {
             })
             return;
         }
-        const stock = [];
+        const stock = {};
         let totalItems = 0;
+        let itemProcessed = 0;
         order.items.forEach((batch)=>{
             totalItems+=batch.length;
         })
@@ -41,22 +42,20 @@ const orders = {
                 message:'This order has no items'
             })
         }
-        logger.debug(`iterating ${totalItems} items in order ${order.order_id}`);
+        //logger.debug(`iterating ${totalItems} items in order ${order.order_id}`);
         order.items.forEach(batch=>{
             batch.forEach(async item=>{
                 const inventory = await Inventory.findOne({CONSUMER_KEY:req.session.user.CONSUMER_KEY, inventory_id:item.inventory_id});
                 let qty = 0;
                 if(inventory){
-                    logger.debug(`Current inventory id ${item.inventory_id} found, qty : ${inventory.quantity}`);
+                    //logger.debug(`Current inventory id ${item.inventory_id} found, qty : ${inventory.quantity}`);
                     qty = inventory.quantity;
                 }else{
-                    logger.debug(`Current inventory id ${item.inventory_id} not found`);
+                    logger.warn(`Current inventory id ${item.inventory_id} not found`);
                 }
-                stock.push({
-                    inventory_id:item.inventory_id,
-                    qty:qty
-                })
-                if(stock.length===totalItems){
+                stock[item.inventory_id] = qty
+                itemProcessed++;
+                if(itemProcessed===totalItems){
                     render()
                 }
             })
@@ -101,6 +100,7 @@ const orders = {
                         order.orders_checked++;
                     }
                     item.isChecked = !item.isChecked;
+                    logger.info(`Setting item ${item.inventory_id} checked value to ${item.isChecked}`);
                     await Order.updateOne({consumer_key:req.session.user.CONSUMER_KEY,order_id:order_id},order,(err)=>{
                         if(err){
                             logger.error(`user ${req.session.user.email} tried updating checkbox of item ${item_id} in order ${order_id}`);

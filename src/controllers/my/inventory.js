@@ -2,6 +2,9 @@ const Inventory = require('../../models/inventory');
 const {logger} = require('../../configuration/logger');
 const bricklinkPlus = require('bricklink-plus');
 const User = require('../../models/user');
+const superagent = require('superagent');
+const {vars} = require('../../helpers/constants/vars');
+const FYREBRICK_UPDATER_API_URL = `${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}`;
 const inventory = {
     index:{
         get:(req,res,next)=>{
@@ -50,18 +53,52 @@ const inventory = {
     },
     update:{
         new_or_used:async (req,res,next)=>{
-            await Inventory.updateOne({inventory_id:req.body.id,CONSUMER_KEY:req.session.user.CONSUMER_KEY},{new_or_used:req.body.new_or_used});
-            res.send(await updateInventory(req,{new_or_used:req.body.new_or_used}));
+            await superagent.post(`${FYREBRICK_UPDATER_API_URL}/update/new_or_used`)
+                .send({
+                    _id:req.session._id,
+                    inventory_id:req.body.inventory_id,
+                    CONSUMER_KEY:req.session.user.CONSUMER_KEY,
+                    new_or_used:req.body.new_or_used
+                })
+                .set('accept','json')
+                .end((err,result)=>{
+                    if(err){
+                        logger.error(`giving updater-api request to update inventory new_or_used gave err: ${err}`);
+                    }
+                    res.send(result.text);
+                })
         },
         remarks: async(req,res,next)=>{
-            await Inventory.updateOne({inventory_id:req.body.id,CONSUMER_KEY:req.session.user.CONSUMER_KEY},{remarks:req.body.remarks});
-            res.send(await updateInventory(req,{remarks:req.body.remarks}));
+           await superagent.post(`${FYREBRICK_UPDATER_API_URL}/update/remarks`)
+                .send({
+                    _id:req.session._id,
+                    inventory_id:req.body.inventory_id,
+                    CONSUMER_KEY:req.session.user.CONSUMER_KEY,
+                    remarks:req.body.remarks
+                })
+                .set('accept','json')
+                .end((err,result)=>{
+                    if(err){
+                        logger.error(`giving updater-api request to update inventory remarks gave err: ${err}`);
+                    }
+                    res.send(result.text);
+                })
         },
         quantity:async (req,res,next)=>{
-            await Inventory.updateOne({inventory_id:req.body.id,CONSUMER_KEY:req.session.user.CONSUMER_KEY},{quantity:req.body.quantity});
-            res.send(await updateInventory(req,{
-                quantity:req.body.quantity
-            }));
+           await superagent.post(`${FYREBRICK_UPDATER_API_URL}/update/quantity`)
+                .send({
+                    _id:req.session._id,
+                    inventory_id:req.body.inventory_id,
+                    CONSUMER_KEY:req.session.user.CONSUMER_KEY,
+                    quantity:req.body.quantity
+                })
+                .set('accept','json')
+                .end((err,result)=>{
+                    if(err){
+                        logger.error(`giving updater-api request to update inventory quantity gave err: ${err}`);
+                    }
+                    res.send(result.text);
+                })
         },
     }
 }
@@ -75,4 +112,5 @@ const updateInventory = async (req,body) =>{
         TOKEN_SECRET:user.TOKEN_SECRET
     });
 };
+
 module.exports.inventory = inventory;

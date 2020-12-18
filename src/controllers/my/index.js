@@ -3,9 +3,15 @@ const bricklinkPlus = require("bricklink-plus");
 
 const dashboard = async (req,res,next) =>{
     let order = await Order.findOne({consumer_key:req.session.user.CONSUMER_KEY});
-    let info = {}
+    let info = {
+      n4totalLots: "#",
+      n4totalItems: "#",
+      n4totalViews: "#"
+    }
     if(order){
-      info =await bricklinkPlus.plus.stores.getStoreStats(order.seller_name);
+      if(!await bricklinkPlus.plus.maintanceCheck.monthly()){
+        info =await bricklinkPlus.plus.stores.getStoreStats(order.seller_name);
+      }
     }
     res.render("dashboard",{active:"dashboard",info:info});
 };
