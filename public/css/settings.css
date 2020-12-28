@@ -27,4 +27,31 @@
 }
 .settings{
     display: none;
+    padding-top: 13px;
+}
+.banner:hover{
+    background: linear-gradient(to left, #ffffff00 0%, rgb(178, 215, 255) 100%) right;
+}
+.banner{
+    padding-top: 10px;
+    display: block;
+    margin-top: -13px;
+    padding-left: 15px;
+    margin-left: -21px;
+    padding-right: 15px;
+    margin-right: -21px;
+    padding-bottom: 10px;
+    margin-bottom: -13px;
+}
+.link-banner.red:hover{
+    background: linear-gradient(to left, #ffffff00 0%, rgb(255 0 0 / 41%) 101%) right;
+}
+.link-banner.yellow:hover{
+    background: linear-gradient(to left, #ffffff00 0%, rgb(255 229 0 / 43%) 100%) right;
+}
+.extra-bottom{
+    margin-bottom: 5rem;
+}
+#apiButton{
+    width: 100%;
 }
