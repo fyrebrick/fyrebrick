@@ -35,19 +35,18 @@ function makeCheckboxRequest (e) {
             }
         }
     }).done(function (data) {
-        const progress = render_progress(data.order); //progressBar(status,width), progressNumbers(style)
-        console.log(progress);  
-        console.log('%c'+progress.progressBar.backgroundColor, progress.progressBar.status);
+        const progress = render_progress(data.order);
         $('.progress-bar').css("background-color",progress.progressBar.backgroundColor)
         $('.progress-bar').css('width',progress.progressBar.width+"%");
         $('.progress-numbers').css('color',progress.progressNumbers.style);
-        console.log(data);
         data.order.items.forEach(function(batch){
             batch.forEach(function(item){
                 if(item.isChecked){
                     $("#row"+item.inventory_id).addClass('row_checked');
+                    $("#C"+item.inventory_id).parent().parent().attr('data-order',2);
                 }else{
                     $("#row"+item.inventory_id).removeClass('row_checked');
+                    $("#C"+item.inventory_id).parent().parent().attr('data-order',1);
                 }
             })
         })

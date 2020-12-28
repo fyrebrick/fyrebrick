@@ -1,9 +1,8 @@
 const bricklinkPlus = require("bricklink-plus");
-const User = require('../models/user');
-const {logger} = require('../configuration/logger');
+const {User} = require("fyrebrick-helper").models;
+const {logger} = require("fyrebrick-helper").helpers;
 const {vars} = require('../helpers/constants/vars');
 const superagent = require('superagent');
-const { set } = require("mongoose");
 
 const register = {
     get:async (req,res,next)=>{

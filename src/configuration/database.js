@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {logger} = require("../configuration/logger");
+const {logger} = require("fyrebrick-helper").helpers;
 const {vars} = require('../helpers/constants/vars');
 const start = async () => {
     const db_uri = vars.mongodb.uri;

@@ -1,4 +1,4 @@
-const Order = require('../../models/order');
+const {Order} = require("fyrebrick-helper").models
 const bricklinkPlus = require("bricklink-plus");
 
 const dashboard = async (req,res,next) =>{

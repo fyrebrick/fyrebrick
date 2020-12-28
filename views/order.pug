@@ -37,27 +37,62 @@ block content
                                                         else
                                                             i.fas.fa-image
                                                         .stock(id='S'+item.inventory_id)=stock[item.inventory_id]
-                                                    td(data-order=item.new_or_used.charCodeAt())
-                                                        .side-info
-                                                            .new_or_used-big=(item.new_or_used==="N"?"New":"Used")
-                                                            .new_or_used-small=item.new_or_used
-                                                    td(data-order=fn.orderifyRemarks(item.remarks))
-                                                        .all-info
-                                                            .main-info
-                                                                .info.info-text.remarks=item.remarks
-                                                                .info.info-text.color_name
-                                                                    if item.color_name==="(Not Applicable)"
-                                                                        i.fas.fa-tint-slash
-                                                                    else
-                                                                        span.badge(style=fn.getColorInlineStyle(item.color_name).style)=item.color_name
-                                                                .info.info-text.quantity
-                                                                    .qtbox=item.quantity
-                                                    td.checkbox-row(data-order='0')
+                                                    if item.new_or_used
+                                                        td(data-order=item.new_or_used.charCodeAt())
+                                                            .side-info
+                                                                .new_or_used-big=(item.new_or_used==="N"?"New":"Used")
+                                                                .new_or_used-small=item.new_or_used
+                                                    else 
+                                                        td(data-order=-1)
+                                                            .side-info
+                                                                .new_or_used-big
+                                                                    i.fas.fa-exclamation-circle
+                                                                .new_or_used-small
+                                                                    i.fas.fa-exclamation-circle
+                                                    if item.remarks
+                                                        td(data-order=fn.orderifyRemarks(item.remarks))
+                                                            .all-info
+                                                                .main-info
+                                                                    .info.info-text.remarks=item.remarks
+                                                                    .info.info-text.color_name
+                                                                        if item.color_name
+                                                                            if item.color_name==="(Not Applicable)"
+                                                                                i.fas.fa-tint-slash
+                                                                            else
+                                                                                span.badge(style=fn.getColorInlineStyle(item.color_name).style)=item.color_name
+                                                                        else
+                                                                            i.fas.fa-exclamation-circle
+                                                                    .info.info-text.quantity
+                                                                        if item.quantity
+                                                                            .qtbox=item.quantity
+                                                                        else
+                                                                            .qtbox
+                                                                                i.fas.fa-exclamation-circle
+                                                    else
+                                                        td(data-order=-1)
+                                                            .all-info
+                                                                .main-info
+                                                                    .info.info-text.remarks No remarks
+                                                                    .info.info-text.color_name
+                                                                        if item.color_name
+                                                                            if item.color_name==="(Not Applicable)"
+                                                                                i.fas.fa-tint-slash
+                                                                            else
+                                                                                span.badge(style=fn.getColorInlineStyle(item.color_name).style)=item.color_name
+                                                                        else
+                                                                            i.fas.fa-exclamation-circle
+                                                                    .info.info-text.quantity
+                                                                        if item.quantity
+                                                                            .qtbox=item.quantity
+                                                                        else
+                                                                            .qtbox
+                                                                                i.fas.fa-exclamation-circle
+                                                    td.checkbox-row(data-order=((item.isChecked)?'2':'1'))
                                                         .inner_checkbox.form-check.checkbox_box
                                                             if item.isChecked
-                                                                input.checkbox-scale.form-check-input(type='checkbox', data-order='2', id='C'+item.inventory_id, checked='checked')
+                                                                input.checkbox-scale.form-check-input(type='checkbox', id='C'+item.inventory_id, checked='checked')
                                                             else
-                                                                input.checkbox-scale.form-check-input(type='checkbox', data-order='1', id='C'+item.inventory_id)
+                                                                input.checkbox-scale.form-check-input(type='checkbox', id='C'+item.inventory_id)
 block modals
     #enlarge.modal(tabindex="-1")
         .modal-dialog.modal-dialog-centered

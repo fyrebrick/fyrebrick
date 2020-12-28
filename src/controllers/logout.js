@@ -1,5 +1,4 @@
-const {logger} = require('../configuration/logger');
-
+const {logger} = require("fyrebrick-helper").helpers;
 const logout ={
     get:(req,res,next) => {
         req.session.destroy((err=>{

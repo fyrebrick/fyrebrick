@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const {logger} = require('../../configuration/logger');
 const controllers = {
     orders: require('../../controllers/my/orders')
 }

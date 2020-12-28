@@ -1,4 +1,4 @@
-const {logger} = require('../configuration/logger');
+const {logger} = require("fyrebrick-helper").helpers;
 
 const isSignedIn = (req,res,next) => {
     //TODO check if successful signed in

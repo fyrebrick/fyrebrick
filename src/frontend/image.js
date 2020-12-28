@@ -1,4 +1,4 @@
-const logger = require("../configuration/logger");
+const {logger} = require("fyrebrick-helper").helpers;
 
 module.exports.getImageSrcFromItem = (data) => {
     let src;

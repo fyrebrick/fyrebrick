@@ -4,7 +4,7 @@ const express = require('express');
 const database = require('./src/configuration/database');
 const framework = require('./src/configuration/framework');
 const app = express();
-const {logger} = require('./src/configuration/logger');
+const {logger} = require("fyrebrick-helper").helpers;
 const route = require('./src/routes/routes');
 const requestLogging = require('./src/middleware/logging').requests;
 

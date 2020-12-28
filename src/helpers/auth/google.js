@@ -1,8 +1,8 @@
 
 const {google} = require("googleapis");
-const User = require('../../models/user')
+const {User} = require("fyrebrick-helper").models;
 const {vars} = require('../../helpers/constants/vars');
-const {logger} = require('../../configuration/logger');
+const {logger} = require("fyrebrick-helper").helpers;
 let googleConfig, defaultScope;
 
 exports.startUp = () => {

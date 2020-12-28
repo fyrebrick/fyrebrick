@@ -1,5 +1,5 @@
 const google = require('../helpers/auth/google');
-const User = require('../models/user');
+const {User} = require("fyrebrick-helper").models;
 const redirect={
     get:async(req,res,next)=>{
         let googleCode = await google.getGoogleAccountFromCode(req.query.code);

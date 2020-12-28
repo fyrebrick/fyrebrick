@@ -1,6 +1,6 @@
 const { multiply } = require("lodash")
 
-const {logger} = require('../configuration/logger');
+const {logger} = require("fyrebrick-helper").helpers;
 
 const requests = (req,res,next) => {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

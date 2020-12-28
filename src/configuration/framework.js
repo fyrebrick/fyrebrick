@@ -12,7 +12,7 @@ const useragent = require('express-useragent');
 //first party
 const {redisStore} = require("../configuration/session");
 const {vars} = require("../helpers/constants/vars");
-const {logger} = require('../configuration/logger');
+const {logger} = require("fyrebrick-helper").helpers;
 const {startUp}= require('../helpers/auth/google');
 
 const start = function (app) {

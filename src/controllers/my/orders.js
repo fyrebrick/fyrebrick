@@ -1,6 +1,6 @@
-const Order = require('../../models/order');
-const {logger} = require('../../configuration/logger');
-const Inventory = require('../../models/inventory');
+const {Order} = require("fyrebrick-helper").models;
+const {logger} = require("fyrebrick-helper").helpers;
+const {Inventory} = require("fyrebrick-helper").models;
 const frontend = require('../../frontend/orderList');
 const {getColorInlineStyle} = require('../../frontend/color');
 const {getImageSrcFromItem} = require('../../frontend/image');
@@ -50,8 +50,6 @@ const orders = {
                 if(inventory){
                     //logger.debug(`Current inventory id ${item.inventory_id} found, qty : ${inventory.quantity}`);
                     qty = inventory.quantity;
-                }else{
-                    logger.warn(`Current inventory id ${item.inventory_id} not found`);
                 }
                 stock[item.inventory_id] = qty
                 itemProcessed++;
