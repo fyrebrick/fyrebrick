@@ -1,0 +1,51 @@
+extends layout
+block styles
+    link(rel="stylesheet", href="/css/settings.css")
+    link(rel="stylesheet", href="/css/welcome.css")
+block content
+        .row
+            .col-lg-12
+                .card
+                    .card-body
+                        .row.justify-content-center
+                            .col-6
+                                ul#list-settings.list-group
+                                    li.list-group-item
+                                        img.data-status(src="/images/bricklink-logo.png", alt="BL logo")
+                                        span.status-name Bricklink API keys
+                                        .settings
+                                            form.row(action="/account/register"  , method='post')
+                                                #consumerSection.box
+                                                .box-inner
+                                                    .form-group
+                                                    label(for='consumerKey') Consumer key
+                                                    input#consumerKey.form-control(name="consumerKey" type='text' aria-describedby='consumerKeyHelp' placeholder='Enter consumer key', value=(user)?user.CONSUMER_KEY:"", required='')
+                                                    small#consumerKeyHelp.form-text.text-muted The consumer key publicly identifies your API account
+                                                    .form-group
+                                                    label(for='consumerSecret') Consumer secret
+                                                    input#consumerSecret.form-control(name="consumerSecret", type='text' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:"", required='')
+                                                    small#consumerSecretHelp.form-text.text-muted The consumer secret is your confidential API password
+                                                    a#next.btn.btn-success.btn-lg.text-white( role='button') next
+                                                #tokenSection(style="display:none;")
+                                                .box-inner
+                                                    .form-group
+                                                    label(for='tokenKey') Token Value
+                                                    input#tokenKey.form-control(name="tokenValue", type='text' aria-describedby='tokenKeyHelp' placeholder='Enter Token Value', value=(user)?user.TOKEN_VALUE:"", required='')
+                                                    small#tokenKeyHelp.form-text.text-muted The token key value for our ip address.
+                                                    .form-group
+                                                    label(for='tokenSecret') Token secret
+                                                    input#tokenSecret.form-control(name="tokenSecret", type='text' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret', value=(user )?user.TOKEN_SECRET:"", required='' )
+                                                    small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
+                                                    a#back.btn.btn-success.btn-lg.text-white( role='button') back
+                                                    input#create.btn.btn-primary.btn-lg(type='submit' role='button', value=buttonTitle)
+                                    li.list-group-item
+                                        i.fas.fa-stopwatch.data-status
+                                        span.status-name Inventory updater
+                                    li.list-group-item
+                                        i.fas.fa-user
+                                        span.status-name My Fyrebrick account
+
+block modals
+block scripts
+    script(src="/js/settings.js")
+    script(src="/js/welcome.js")
