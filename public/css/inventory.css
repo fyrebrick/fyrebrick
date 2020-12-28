@@ -1,0 +1,15 @@
+.status-name{
+    /*names*/
+    font-size: 20px;
+    padding: 0 3px 0 10px;
+}
+.data-status{
+    font-size: 20px;
+    padding-left: 3px;
+    /*icons*/
+}
+.btn{
+    
+    width: 11rem;
+
+}
