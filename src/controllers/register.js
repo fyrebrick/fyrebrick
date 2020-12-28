@@ -14,11 +14,9 @@ const register = {
             CONSUMER_KEY:req.body.consumerKey.trim(),
             CONSUMER_SECRET:req.body.consumerSecret.trim(),
             TOKEN_SECRET:req.body.tokenSecret.trim(),
-            TOKEN_VALUE:req.body.tokenValue.trim(),
-            setUpComplete:false
+            TOKEN_VALUE:req.body.tokenValue.trim()
         };
-        console.log(req.session);
-        const test = await bricklinkPlus.api.item.getItem("PART","3001",userInfo);
+        const test = await bricklinkPlus.api.item.getItem("PART","3002",userInfo);
         logger.info(`Test of bricklink API keys : status code ${test.meta.code}`);
         if(test.meta.code==200){
             logger.info(`Test complete, user ${req.session.email} has provided with valid keys`);
