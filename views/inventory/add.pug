@@ -1,0 +1,18 @@
+extends ../layout
+block content
+    .row.justify-content-between
+        .col-2
+            #loadingSection
+        .col
+            input#search.form-control(name="search" type='search' placeholder='Search' aria-label='Search')
+        .col-auto.align-self-end.mr-auto
+            .btn-group(role='group' aria-label='Group of action buttons')#mainButtonRows
+                button#searchButton.btn.btn-outline-success.btn-lg.my-2.my-sm-0(type='submit') Search
+    hr
+    #main.container
+block styles
+    link(rel="stylesheet", href="/css/add.css")
+
+block scripts
+    script(src="/js/add.js")
+

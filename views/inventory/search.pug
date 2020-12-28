@@ -1,0 +1,52 @@
+extends ../layout
+block styles
+    link(rel="stylesheet", href="/css/search.css")
+block content
+    .container-fluid
+        .row
+            .col
+                .card
+                    .card-body
+                        .search-area.row.justify-content-between
+                            input#search.search-bar(type='search' placeholder='Search' aria-label='Search')
+                            .search-buttons(role='group' aria-label='Group of action buttons')#mainButtonRows
+                                button#searchButton.button.my-2.my-sm-0(type='submit') 
+                                    i.menu-icon.fas.fa-search
+                                    span Search
+                                button#scanOptionButton.button.my-2.my-sm-0 
+                                    span Exact Search
+                                    input#scanoption(type="checkbox" value="true" )
+                .card
+                    .card-body
+                        .active-member
+                            .table-responsive
+                                table#mainTable.table.table-xs.mb-0
+                                    thead
+                                        tr
+                                            th#scanOptionCol Link
+                                            th#1.sortable Remark
+                                                .sort-box
+                                            th#2.sortable Colour
+                                                .sort-box
+                                            th#3.sortable Qt
+                                                .sort-box
+                                            th#4.sortable N/U
+                                                .sort-box
+                                            th#imageCol Image
+                                    tbody#bodyOfTable
+block modals
+    #enlarge.modal(tabindex="-1")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#enlargedTitleLabel.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    img#enlargedImg(src='')
+                .modal-footer
+                    p.lead#enlargedFooter
+                    a#enlargedItemLink(target="_blank" href="#" role="button" class="btn btn-primary") item link
+block scripts
+    script(src="/js/helpers/sortTable.js")
+    script(src="/js/inventory/search.js")

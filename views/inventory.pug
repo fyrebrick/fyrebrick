@@ -13,7 +13,7 @@ block content
                                 button#searchButton.button.my-2.my-sm-0(type='submit') 
                                     i.menu-icon.fas.fa-search
                                     span Search
-                                button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') 
+                                //button#activateChangeRemarkButton.button.my-2.my-sm-0(type='submit') 
                                     span Change remark
                                 button#scanOptionButton.button.my-2.my-sm-0 
                                     span Exact Search
@@ -37,7 +37,21 @@ block content
                                             th#imageCol Image
                                     tbody#bodyOfTable
 block modals
-    #changeRemarkModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
+    #imgModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='imgModal' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header
+                    h5#imgModalTitle.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    h3#imgModalbody
+                    img#imgModalImg(src='#')
+                .modal-footer
+                    a#itemModalLink.btn.btn-primary(role='button' href='#' target='_blank') Item link
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+
+    //#changeRemarkModal.modal.fade.bd-example-modal-xl(tabindex='-1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true')
             .modal-dialog.modal-xl
                 .modal-content
                     .modal-header

@@ -1,3 +1,13 @@
-h1=status
-h3=error
-p=message
+extends layout
+block content
+    .container-fluid
+        .row
+            .col
+                .card
+                    .card-body
+                        .jumbotron
+                            h1.display-4=status
+                            p.lead=message
+                            if description
+                                hr.my-4
+                                p=description

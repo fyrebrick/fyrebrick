@@ -111,3 +111,5 @@ dist
 .env.develop
 /node_modules
 /vscode
+/.vscode
+fyrebrick.code-workspace

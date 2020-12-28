@@ -1,18 +1,13 @@
-const path = require('path');
-
-require('dotenv').config(path.resolve(process.cwd(), '.env'));
-const {load} = require('./src/loaders/index');
+require('dotenv').config();
+require("./src/helpers/constants/vars");
 const express = require('express');
-const rootRoutes = require('./src/routes');
+const database = require('./src/configuration/database');
+const framework = require('./src/configuration/framework');
 const app = express();
-const scheduler = require('./src/schedules');
+const {logger} = require("fyrebrick-helper").helpers;
+const route = require('./src/routes/routes');
+const requestLogging = require('./src/middleware/logging').requests;
 
-const start = async () => {
-  if (!process.env.PORT) throw new Error(".env file not found, or wrong path");
-  await load(app);
-  console .log("[INFO]: Server started"); 
-  app.use('/',rootRoutes);
-  scheduler.start();
-};
-
-start();
+database.start();
+framework.start(app);
+app.use('/',requestLogging,route);
