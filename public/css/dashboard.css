@@ -2,3 +2,13 @@
     display: flex;
     justify-content: space-around;
 }
+.rank-data{
+    font-size: 20px;
+}
+.rank-icon{
+    padding-right: 10px;
+    font-size: 20px;
+}
+.stat-data{
+    font-size:22px;
+}
