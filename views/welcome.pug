@@ -14,6 +14,10 @@ html
           #consumerSection.box
             .box-inner
               .form-group
+                label(for='userName') user name
+                input#userName.form-control(name="userName" type='text' aria-describedby='userNameHelp' placeholder='Enter user name', value=(user)?user.userName:"", required='')
+                small#userNameHelp.form-text.text-muted Your bricklink user name (not store name)
+              .form-group
                 label(for='consumerKey') Consumer key
                 input#consumerKey.form-control(name="consumerKey" type='text' aria-describedby='consumerKeyHelp' placeholder='Enter consumer key', value=(user)?user.CONSUMER_KEY:"", required='')
                 small#consumerKeyHelp.form-text.text-muted The consumer key publicly identifies your API account

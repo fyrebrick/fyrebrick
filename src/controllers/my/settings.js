@@ -1,12 +1,42 @@
 const {User} = require('fyrebrick-helper').models;
 const bricklinkPlus = require("bricklink-plus");
 const {logger} = require('fyrebrick-helper').helpers;
+const {vars} = require('../../helpers/constants/vars');
+const superagent = require('superagent');
 const settings = {
     index: async (req,res,next)=>{
         const user = await User.findById(req.session._id);
         res.render('settings',{
             user:user
         });
+    },
+    update:{
+        orders: async (req,res,next)=>{
+            await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/all`)
+                .send({_id:req.session._id})
+                .set('accept','json')
+                .end((err,result)=>{
+                    if(err){
+                        logger.error(`giving updater-api request to update all gave err: ${err}`);
+                        res.render({success:false});
+                    }
+                    logger.info(`request to updater-api for user ${req.session.user.email} successful`);
+                    res.send({success:true});
+                })
+        },
+        inventory: async(req,res,next)=>{
+            await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/inventory`)
+                .send({_id:req.session._id})
+                .set('accept','json')
+                .end((err,result)=>{
+                    if(err){
+                        logger.error(`giving updater-api request to update all gave err: ${err}`);
+                        res.render({success:false});
+                    }
+                    logger.info(`request to updater-api for user ${req.session.user.email} successful`);
+                    res.send({success:true});
+                })
+        }
     },
     inventoryInterval:{
         put: async (req,res,next)=>{
@@ -34,33 +64,39 @@ const settings = {
     },
     bricklinkApi: {
         put: async (req,res,next)=>{
-            if(req.body.CONSUMER_KEY && req.body.CONSUMER_SECRET && req.body.TOKEN_SECRET && req.body.TOKEN_VALUE){
+            if(req.body.CONSUMER_KEY && req.body.CONSUMER_SECRET && req.body.TOKEN_SECRET && req.body.TOKEN_VALUE && req.body.userName){
                 let userInfo = {
                     CONSUMER_KEY:req.body.CONSUMER_KEY.trim(),
                     CONSUMER_SECRET:req.body.CONSUMER_SECRET.trim(),
                     TOKEN_SECRET:req.body.TOKEN_SECRET.trim(),
-                    TOKEN_VALUE:req.body.TOKEN_VALUE.trim()
+                    TOKEN_VALUE:req.body.TOKEN_VALUE.trim(),
+                    userName:req.body.userName.trim()
                 };
-                const test = await bricklinkPlus.api.item.getItem("PART","3001",userInfo);
-                logger.info(`Test of bricklink API keys : status code ${test.meta.code}`);
-                if(test.meta.code==200){
-                    logger.info(`Test complete, user ${req.session.email} has provided with valid keys`);
-                    userInfo.setUpComplete=true;
-                    const user = await User.findOne({_id:req.session._id}); //find out if user is returning user
-                    if(!user){
-                        logger.warn(`Could not find user from its _id ${req.session._id}, logging out`);
-                        res.redirect('/logout');
-                    }else if(!user.setUpComplete){
-                        logger.info(`New user found, getting all information for user ${user.email}`);
-                        await User.updateOne({_id:req.session._id},userInfo); //new user, so update its bricklink tokens
+                //test user name if valid
+                await superagent.get(`https://store.bricklink.com/${userInfo.userName}?p=${userInfo.userName}`).
+                end(async(err,respond)=>{
+                    if(err){
+                        logger.error(err)
                     }
-                    req.session.user = await User.findOne({_id:req.session._id});
-                    req.session.logged_in = true;
-                    res.send({success:true})
-                }else{
-                    logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`);
-                    res.send({success:false,data:test.meta});
-                }
+                    if(respond.req.path.includes('notFound.asp')){
+                        logger.error(`User name filled in is not valid`);
+                        return res.send({success:false,isEmpty:{userName:true}});
+                    }
+                    const test = await bricklinkPlus.api.item.getItem("PART","3001",userInfo);
+                    logger.info(`Test of bricklink API keys : status code ${test.meta.code}`);
+                    if(test.meta.code==200){
+                        logger.info(`Test complete, user ${req.session.email} has provided with valid keys`);
+                        userInfo.setUpComplete=true;
+                        const user = await User.findOne({_id:req.session._id}); //find out if user is returning user
+                        await User.updateOne({_id:req.session._id},userInfo);
+                        req.session.user = await User.findOne({_id:req.session._id});
+                        req.session.logged_in = true;
+                        res.send({success:true})
+                    }else{
+                        logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`);
+                        res.send({success:false,data:test.meta});
+                    }
+                });
             }else{
                 let isEmpty = {};
                 if(!req.body.CONSUMER_KEY){

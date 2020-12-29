@@ -7,13 +7,17 @@ block content
                 .card
                     .card-body
                         .row.justify-content-center.extra-bottom
-                            .col-6
+                            .settings-card
                                 ul#list-settings.list-group
                                     li.list-group-item
                                         .banner
                                             img.data-status(src="/images/bricklink-logo.png", alt="BL logo")
                                             span.status-name Bricklink API keys
                                         .settings
+                                                .form-group
+                                                    label(for='userName') User name
+                                                    input#userName.form-control(name="userName" type='text' aria-describedby='userNameHelp' placeholder='Enter user name', value=(user)?user.userName:"", required='')
+                                                    small#userNameHelp.form-text.text-muted Your bricklink user name (not store name)
                                                 .form-group
                                                     label(for='consumerKey') Consumer key
                                                     input#consumerKey.api-input.form-control(name="consumerKey" type='text' aria-describedby='consumerKeyHelp' placeholder='Enter consumer key', value=(user)?user.CONSUMER_KEY:"", required='')
@@ -41,6 +45,16 @@ block content
                                                 label(for='inventoryInterval').pl-2 Update inventory interval
                                                 input#inventoryInterval.form-control-range(value=user.update_interval step="1", min="2", max="60", type='range' oninput="$('#rangeval').html('Every '+$(this).val()+' minutes')")
                                                 span#rangeval="Every "+user.update_interval+" minutes"
+                                            .form-group
+                                                button#update-orders.update-btn.orders.btn.btn-outline-warning(type='button')
+                                                    i.pl-1.fas.fa-sync-alt
+                                                    span.pl-1 Update all orders
+                                                small#tokenSecretHelp.form-text.text-muted This will update every single order from your bricklink account
+                                            .form-group
+                                                button#update-inventory.update-btn.inventory.btn.btn-outline-warning(type='button')
+                                                    i.pl-1.fas.fa-sync-alt
+                                                    span.pl-1 Update all inventory items
+                                                small#tokenSecretHelp.form-text.text-muted This will update your inventory from your bricklink account
                                     li.list-group-item
                                         .banner
                                             i.fas.fa-user.data-status
@@ -52,10 +66,10 @@ block content
                                                 ul.list-group.list-group-flush
                                                     li.list-group-item
                                                         span.pl-1 daily:
-                                                        span.pl-1=user.API_call_amount.daily+" times"
+                                                        span.pl-1=user.API_call_amount.daily.toLocaleString()+" times"
                                                     li.list-group-item
                                                         span.pl-1 total:
-                                                        span.pl-1=user.API_call_amount.total+" times"
+                                                        span.pl-1=user.API_call_amount.total.toLocaleString()+" times"
                                             .form-group
                                                 i.fas.fa-cogs
                                                 span.pl-2 Manage your account
