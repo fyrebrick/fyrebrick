@@ -1,4 +1,9 @@
 $(document).ready(function (){
+    //show modal warning update orders
+    $('#show-modal-update-orders').on('click', function(){
+        $("#warningOrderUpdate").modal('show');
+    });
+
     //opening banners 
     $('.banner').on('click',function(e){
         const target = e.target.parentNode.className;
