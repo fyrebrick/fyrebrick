@@ -46,7 +46,7 @@ block content
                                                 input#inventoryInterval.form-control-range(value=user.update_interval step="1", min="2", max="60", type='range' oninput="$('#rangeval').html('Every '+$(this).val()+' minutes')")
                                                 span#rangeval="Every "+user.update_interval+" minutes"
                                             .form-group
-                                                button#update-orders.update-btn.orders.btn.btn-outline-warning(type='button')
+                                                button#show-modal-update-orders.update-btn.orders.btn.btn-outline-warning(type='button')
                                                     i.pl-1.fas.fa-sync-alt
                                                     span.pl-1 Update all orders
                                                 small#tokenSecretHelp.form-text.text-muted This will update every single order from your bricklink account
@@ -67,9 +67,12 @@ block content
                                                     li.list-group-item
                                                         span.pl-1 daily:
                                                         span.pl-1=user.API_call_amount.daily.toLocaleString()+" times"
+                                                        mall.form-text.text-muted The limit is 5.000 calls a day
                                                     li.list-group-item
                                                         span.pl-1 total:
                                                         span.pl-1=user.API_call_amount.total.toLocaleString()+" times"
+                                                        mall.form-text.text-muted Total times called Bricklink API
+
                                             .form-group
                                                 i.fas.fa-cogs
                                                 span.pl-2 Manage your account
@@ -82,5 +85,22 @@ block content
                                                         span.pl-1 download your data
 
 block modals
+    #warningOrderUpdate.modal(tabindex='-1')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5.modal-title 
+                        i.fas.fa-exclamation-triangle
+                        span.pl-1 Warning: updating all orders
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    p.lead=" This will increasing your daily API calls to "+(user.API_call_amount.daily+total_orders).toLocaleString()+" times!"
+                    p This process can take up to 5 minutes (depending on the amount of orders to update)
+                .modal-footer
+                    button#update-orders.update-btn.orders.btn.btn-outline-warning(type='button')
+                        i.pl-1.fas.fa-sync-alt
+                        span.pl-1 Update all orders
+
 block scripts
     script(src="/js/settings.js")

@@ -1,4 +1,4 @@
-const {User} = require('fyrebrick-helper').models;
+const {User,Order} = require('fyrebrick-helper').models;
 const bricklinkPlus = require("bricklink-plus");
 const {logger} = require('fyrebrick-helper').helpers;
 const {vars} = require('../../helpers/constants/vars');
@@ -6,8 +6,15 @@ const superagent = require('superagent');
 const settings = {
     index: async (req,res,next)=>{
         const user = await User.findById(req.session._id);
+        const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
+        let total = 0;
+        orders.forEach(o=>{
+            if(o.status.toUpperCase()!=="PURGED"){
+                total++;
+            }
+        })
         res.render('settings',{
-            user:user
+            user:user,total_orders:total
         });
     },
     update:{
