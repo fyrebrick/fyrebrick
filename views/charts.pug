@@ -1,0 +1,74 @@
+extends layout
+block content
+  .row
+    .col-lg-12
+        .card
+            .card-body
+              .row
+                .col
+                  .input-group
+                    select#selectCountry.custom-select
+                      option(selected='global',value='global') global
+                      each store in allCountries
+                        option(value=store.countryID)=store.countryName
+                  hr.my-2
+              .active-member
+                  .row
+                    .col-12.btn-group(role='group' aria-label='Basic outlined example')
+                      button.btn.btn-outline-primary.ajax-button#lots(type='button',data-type='lots') Lots
+                      button.btn.btn-outline-primary.ajax-button#items(type='button',data-type='items') items
+                      button.btn.btn-outline-primary.ajax-button#views(type='button',data-type='views') views
+                  .table-responsive
+                      table#mainTable.table.table-xs.mb-0
+                          thead
+                              tr
+                                  th.rank
+                                  th.data-header  
+                                  th.store store
+                                  th.country country
+                          tbody#dynamicTable
+block styles
+  //link(rel='stylesheet' href='css/charts.css')
+block scripts
+  script.
+    $(document).ready(function(){
+      let type='';
+      let location = "global";
+      function setType(text){
+        $(`.ajax-button`).removeClass('active');
+        $(`#${text}`).addClass('active');
+        type = text;
+      }
+      $('.ajax-button').on('click', function(){
+        setType($(this).data('type'));
+        $.ajax({
+          url:`/charts/${location}/${type}`,
+          method:'GET',
+          dataType:'html',
+          beforeSend:function(){
+            startLoading();
+          }
+        }).done(function(stores){
+          $("#dynamicTable").empty().append(stores);
+          $(".data-header").text(type);
+          stopLoading();
+        })
+      });
+      $('#selectCountry').on('change',function(){
+        if(location!==$("#selectCountry").val()){
+          location = $("#selectCountry").val();
+          $.ajax({
+          url:`/charts/${location}/${type}`,
+          method:'GET',
+          dataType:'html',
+          beforeSend:function(){
+            startLoading();
+          }
+        }).done(function(stores){
+          $("#dynamicTable").empty().append(stores);
+          $(".data-header").text(type);
+          stopLoading();
+        })
+        }
+      });
+    })

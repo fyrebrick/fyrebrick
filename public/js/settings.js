@@ -1,8 +1,13 @@
 $(document).ready(function (){
     //show modal warning update orders
-    $('#show-modal-update-orders').on('click', function(){
-        $("#warningOrderUpdate").modal('show');
-    });
+    // $('#show-modal-update-orders').on('click', function(){
+    //     $("#warningOrderUpdate").modal('show');
+    // });
+
+    //on callback url click, select all text
+    $("#callbackUrl").on('click',function(){
+        $(this).select();
+    })
 
     //opening banners 
     $('.banner').on('click',function(e){
@@ -19,7 +24,7 @@ $(document).ready(function (){
         }
     })
     //update orders button
-    $("#update-orders").on('mouseup',function(){
+    $("#update-orders").on('click',function(){
         $.ajax({
             url:"/my/settings/update/orders",
             method:"GET",
@@ -32,7 +37,7 @@ $(document).ready(function (){
         });
     });
     //update inventory button
-    $("#update-inventory").on('mouseup',function(){
+    $("#update-inventory").on('click',function(){
         $.ajax({
             url:"/my/settings/update/inventory",
             method:"GET",
@@ -45,7 +50,8 @@ $(document).ready(function (){
         });
     });
 
-    //update inventory interval
+    //update inventory updater
+    let originalValueInventoryInterval = $("#inventoryInterval").val();
     $("#inventoryInterval").on('mouseup',function(){
         $.ajax({
             url:"/my/settings/inventoryInterval",
@@ -54,11 +60,32 @@ $(document).ready(function (){
                 interval:$("#inventoryInterval").val()
             }
         }).done(function(data){
-            console.log(data);
+            if(data.success===false){
+                document.getElementById("inventoryInterval").value = String(originalValueInventoryInterval);
+                $("#rangeval").text("Every "+originalValueInventoryInterval+" minutes ( "+(Math.round((24*60)/originalValueInventoryInterval))+" calls everyday )");
+            }else{
+                originalValueInventoryInterval = $("#inventoryInterval").val();
+            }
         });
     });
 
-    //bricklink api for
+    //updater orders updater
+    $("#callbackCheckbox").on('click',function(){
+        $.ajax({
+            url:"/my/settings/callback",
+            method:"PUT"
+        }).done(function(data){
+            if(data.success===true){
+                $("#callbackCheckbox").prop('checked', data.value);
+                if(data.value){
+                    $('#callBackUrl').removeClass('hideMe');
+                }else{
+                    $('#callBackUrl').addClass('hideMe');
+                }
+            }
+        });
+    });
+    //bricklink api form
     $('#apiButton').on('click',function(){
         $.ajax({
             url:"/my/settings/bricklinkApi",
@@ -71,10 +98,10 @@ $(document).ready(function (){
                 userName:$("#userName").val()
             }
         }).done(function(data){
-            $("input").removeClass("is-valid");
-            $("input").removeClass("is-invalid");
+            $("#bricklinkApi input").removeClass("is-valid");
+            $("#bricklinkApi input").removeClass("is-invalid");
             if(data.success){
-                $("input").addClass("is-valid");
+                $("#bricklinkApi input").addClass("is-valid");
             }else{
                 if(data.isEmpty){
                     if(data.isEmpty.consumerKey){

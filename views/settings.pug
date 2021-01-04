@@ -13,7 +13,7 @@ block content
                                         .banner
                                             img.data-status(src="/images/bricklink-logo.png", alt="BL logo")
                                             span.status-name Bricklink API keys
-                                        .settings
+                                        .settings#bricklinkApi
                                                 .form-group
                                                     label(for='userName') User name
                                                     input#userName.form-control(name="userName" type='text' aria-describedby='userNameHelp' placeholder='Enter user name', value=(user)?user.userName:"", required='')
@@ -37,24 +37,48 @@ block content
                                                 input#apiButton.btn.btn-primary.btn-lg(type='submit' role='button', value="Update")
                                     li.list-group-item
                                         .banner
-                                            i.fas.fa-stopwatch.data-status
-                                            span.status-name Inventory updater
+                                            i.fas.fa-warehouse.data-status
+                                            span.status-name Orders and inventory updater
                                         .settings
                                             .form-group
                                                 i.fas.fa-bullseye
-                                                label(for='inventoryInterval').pl-2 Update inventory interval
-                                                input#inventoryInterval.form-control-range(value=user.update_interval step="1", min="2", max="60", type='range' oninput="$('#rangeval').html('Every '+$(this).val()+' minutes')")
-                                                span#rangeval="Every "+user.update_interval+" minutes"
+                                                label(for='inventoryInterval').pl-2 Update intory interval
+                                                input#inventoryInterval.form-control-range(value=user.update_interval step="1", min="1", max="120", type='range' oninput="$('#rangeval').html('Every '+$(this).val()+' minutes ( '+(Math.round((24*60)/$(this).val()))+' calls everyday )')")
+                                                span#rangeval="Every "+user.update_interval+" minutes ( "+(Math.round((24*60)/user.update_interval))+" calls everyday )"
+                                                small#inventoryIntervalHelp.form-text.text-muted This will updater your orders and inventory items in the specified time interval
                                             .form-group
-                                                button#show-modal-update-orders.update-btn.orders.btn.btn-outline-warning(type='button')
+                                                button#update-inventory.update-btn.inventory.btn.btn-outline-info(type='button')
+                                                    i.pl-1.fas.fa-sync-alt
+                                                    span.pl-1 Update all inventory items
+                                                    
+                                            .form-group
+                                                button#update-orders.update-btn.orders.btn.btn-outline-info(type='button')
                                                     i.pl-1.fas.fa-sync-alt
                                                     span.pl-1 Update all orders
                                                 small#tokenSecretHelp.form-text.text-muted This will update every single order from your bricklink account
-                                            .form-group
-                                                button#update-inventory.update-btn.inventory.btn.btn-outline-warning(type='button')
-                                                    i.pl-1.fas.fa-sync-alt
-                                                    span.pl-1 Update all inventory items
-                                                small#tokenSecretHelp.form-text.text-muted This will update your inventory from your bricklink account
+                                    li.list-group-item#ordersUpdater
+                                        .banner
+                                            i.fas.fa-file-contract.data-status
+                                            span.status-name Notifications
+                                        .settings
+                                            if user.isBricklinkCallback
+                                                .form-check
+                                                    input#callbackCheckbox.form-check-input(type='checkbox' value='', checked='')
+                                                    label.form-check-label(for='callbackCheckbox')
+                                                        span Use push notifications (callback) (currently not working)
+                                                .form-group#callBackUrl
+                                                    label(for='callbackUrl') Callback URL
+                                                    input#callbackUrl.api-input.form-control(name="callbackUrl", type='text' aria-describedby='callbackUrlHelp' value='https://my.fyrebrick.be/callback/'+user.userName, readonly='')
+                                                    small#callbackUrlHelp.form-text.text-muted This callback URL should be added in your Bricklink register consumer page
+                                            else
+                                                .form-check
+                                                    input#callbackCheckbox.form-check-input(type='checkbox' value='')
+                                                    label.form-check-label(for='callbackCheckbox')
+                                                        span Use push notifications (callback)
+                                                .form-group#callBackUrl.hideMe
+                                                    label(for='callbackUrl') Callback URL
+                                                    input#callbackUrl.api-input.form-control(name="callbackUrl", type='text' aria-describedby='callbackUrlHelp' value='https://my.fyrebrick.be/callback/'+user.userName, readonly='')
+                                                    small#callbackUrlHelp.form-text.text-muted This callback URL should be added in your Bricklink register consumer page
                                     li.list-group-item
                                         .banner
                                             i.fas.fa-user.data-status
@@ -72,7 +96,6 @@ block content
                                                         span.pl-1 total:
                                                         span.pl-1=user.API_call_amount.total.toLocaleString()+" times"
                                                         mall.form-text.text-muted Total times called Bricklink API
-
                                             .form-group
                                                 i.fas.fa-cogs
                                                 span.pl-2 Manage your account
@@ -83,24 +106,7 @@ block content
                                                     li.link-banner.yellow.list-group-item
                                                         i.pl-1.fas.fa-file-download
                                                         span.pl-1 download your data
-
 block modals
-    #warningOrderUpdate.modal(tabindex='-1')
-        .modal-dialog
-            .modal-content
-                .modal-header
-                    h5.modal-title 
-                        i.fas.fa-exclamation-triangle
-                        span.pl-1 Warning: updating all orders
-                    button.close(type='button' data-dismiss='modal' aria-label='Close')
-                    span(aria-hidden='true') &times;
-                .modal-body
-                    p.lead=" This will increasing your daily API calls to "+(user.API_call_amount.daily+total_orders).toLocaleString()+" times!"
-                    p This process can take up to 5 minutes (depending on the amount of orders to update)
-                .modal-footer
-                    button#update-orders.update-btn.orders.btn.btn-outline-warning(type='button')
-                        i.pl-1.fas.fa-sync-alt
-                        span.pl-1 Update all orders
 
 block scripts
     script(src="/js/settings.js")

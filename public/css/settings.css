@@ -76,7 +76,9 @@
   animation-iteration-count: infinite;
   animation-timing-function: linear; 
 }
-
+.hideMe{
+    display: none;
+}
 @keyframes spin {
     from {
         transform:rotate(0deg);

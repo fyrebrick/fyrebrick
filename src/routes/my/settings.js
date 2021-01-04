@@ -6,4 +6,5 @@ router.put('/bricklinkApi',settings.bricklinkApi.put);
 router.put('/inventoryInterval',settings.inventoryInterval.put);
 router.get('/update/orders',settings.update.orders);
 router.get('/update/inventory',settings.update.inventory);
+router.put('/callback',settings.callbackCheckbox.put);
 module.exports = router;
