@@ -24,7 +24,7 @@ function searchButtonListener(){
     });
     document.getElementById('search')
         .addEventListener('keyup', function (e) {
-            if (e.code === 'Enter') {
+            if (e.key === 'Enter') {
                 document.getElementById("searchButton").click();
                 document.getElementById('search').focus();
                 document.getElementById('search').select();
@@ -38,7 +38,7 @@ function listenersWhenSearchIsComplete (){
     })
     document.querySelectorAll(".inputRemarks").forEach(function (item) {
         item.addEventListener('keyup', function (e) {
-            if (e.code === 'Enter') {
+            if (e.key === 'Enter') {
                 changeRemarks(e);
                 document.getElementById('search').focus();
                 document.getElementById('search').select();
@@ -51,7 +51,7 @@ function listenersWhenSearchIsComplete (){
     });
     document.querySelectorAll(".inputQuantity").forEach(function (item) {
         item.addEventListener('keyup', function (e) {
-            if (e.code === 'Enter') {
+            if (e.key === 'Enter') {
                 changeQuantity(e);
                 document.getElementById('search').focus();
                 document.getElementById('search').select();
@@ -71,7 +71,7 @@ function listenersWhenSearchIsComplete (){
     });
     document.querySelectorAll(".inputUsed").forEach(function (item) {
         item.addEventListener('keyup', function (e) {
-            if (e.code === 'Enter') {
+            if (e.key === 'Enter') {
                 changeUsed(e);
                 document.getElementById('search').focus();
                 document.getElementById('search').select();

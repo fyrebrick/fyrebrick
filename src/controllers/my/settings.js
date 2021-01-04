@@ -6,15 +6,8 @@ const superagent = require('superagent');
 const settings = {
     index: async (req,res,next)=>{
         const user = await User.findById(req.session._id);
-        const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
-        let total = 0;
-        orders.forEach(o=>{
-            if(o.status.toUpperCase()!=="PURGED"){
-                total++;
-            }
-        })
         res.render('settings',{
-            user:user,total_orders:total
+            user:user
         });
     },
     update:{
@@ -55,7 +48,7 @@ const settings = {
                     logger.warn("Not a valid number to update inventory interval");
                     res.send({success:false});
                 }
-                if(interval >=1 && interval <=60){
+                if(interval >=1 && interval <=120){
                     //correct input, updating to user
                     await User.updateOne({_id:req.session._id},{update_interval:interval});
                     res.send({success:true});
@@ -67,6 +60,13 @@ const settings = {
                 logger.warn("update inverval data empty");
                 res.send({success:false});
             }
+        }
+    },
+    callbackCheckbox:{
+        put:async(req,res,next)=>{
+            const isCallback = (await User.findById({_id:req.session._id})).isBricklinkCallback;
+            await User.updateOne({_id:req.session._id},{isBricklinkCallback:!isCallback});
+            res.send({success:true,value:!isCallback});
         }
     },
     bricklinkApi: {

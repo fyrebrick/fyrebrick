@@ -47,8 +47,74 @@ const inventory = {
         }
     },  
     investigate:{
-        get:(req,res,next)=>{
-            res.render('inventory/investigate');
+        get:async(req,res,next)=>{
+            const itemList = await Inventory.find({CONSUMER_KEY:req.session.user.CONSUMER_KEY});
+            let totalItemsToProcess = itemList.length*itemList.length*itemList.length;
+            let processedItems=0;
+            function showProgress(){
+                console.clear();
+                processedItems++;
+                console.log(`${totalItemsToProcess} items : processed ${processedItems}`);
+                console.log(`Progress: ${Math.round((processedItems/totalItemsToProcess)*100)}`);
+            }
+            let investData = [];
+            let currentIndexForInvestData = 0;
+            itemList.forEach(
+                (item) => {
+                    showProgress()
+                    if (item.item.type === "PART") {
+                        let addedToInvestDataThisCycle = false;
+                        let addedThisItemToInvestDataThisCycle = false;
+                        //current item, will check if any other item (excluding self) is same, add to investData if so
+                        itemList.forEach(
+                            (comparingItem) => {
+                                showProgress()
+                                if (item.inventory_id !== comparingItem.inventory_id) { //exclude self
+                                    if (
+                                        item.item.no === comparingItem.item.no &&
+                                        item.new_or_used === comparingItem.new_or_used &&
+                                        item.color_id === comparingItem.color_id &&
+                                        item.description === comparingItem.description
+                                    ) {
+                                        let itemNotYetUsedAsComparingItem = true;
+                                        //check if comparingItem already was an Item
+                                        investData.forEach((dataOfInvestData,__index,__array) => {
+                                            showProgress()
+                                            dataOfInvestData.forEach((checkItem) => {
+                                                if (
+                                                    item.item.no === checkItem.item.no &&
+                                                    item.new_or_used === checkItem.new_or_used &&
+                                                    item.color_id === checkItem.color_id &&
+                                                    item.description === checkItem.description
+                                                ) {
+                                                    itemNotYetUsedAsComparingItem = false;
+                                                }
+                                            });
+                                        });
+                                        if (itemNotYetUsedAsComparingItem) {
+                                            //if almost the same item, add this item to a new array in data array(investData)
+                                            addedToInvestDataThisCycle = true;
+                                            if (!addedThisItemToInvestDataThisCycle) {
+                                                investData.push([item]);
+                                                addedThisItemToInvestDataThisCycle = true;
+                                            }
+                                            investData[currentIndexForInvestData].push(comparingItem);
+                                        }
+                                    }
+                                }
+                            }
+                        );
+                        //next item in inventory list
+                        if (addedToInvestDataThisCycle) {
+                            //if something has been added to the investData, the currentIndex will be changed
+                            currentIndexForInvestData++;
+                        }
+                    }
+                }
+            );
+            res.render('inventory/investigate',{
+                investData:investData
+            });
         }
     },
     update:{
@@ -97,7 +163,12 @@ const inventory = {
                     if(err){
                         logger.error(`giving updater-api request to update inventory quantity gave err: ${err}`);
                     }
-                    res.send(result.text);
+                    if(result.text){
+                        res.send(result.text);
+                    }else{
+                        res.send();
+                    }
+                    
                 })
         },
     }
