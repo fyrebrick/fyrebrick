@@ -27,7 +27,7 @@ module.exports = charts = {
                         html += `<td><span>${index+1}</span> <i class='fas fa-minus' style='color:#15c74c;'></i></td>`;
                     }
                     html += `<td>${store['n4total'+req.params.type.substr(0,1).toUpperCase()+req.params.type.substr(1)].toLocaleString()}</td>`;
-                    html += `<td>${store.name.normalize()}</td>`;
+                    html += "<td>"+store.name+"</td>";
                     html += `<td><div class="flag"><img src="${allCountries[allCountryIDs.indexOf(store.countryID)].countryImg}"></div> <span>${allCountries[allCountryIDs.indexOf(store.countryID)].countryName}</span></td>`;
                 html += "</tr>";
             });
@@ -59,7 +59,19 @@ module.exports = charts = {
                         html += `<td><span>${index+1}</span> <i class='fas fa-minus' style='color:#15c74c;'></i></td>`;
                     }
                     html += `<td>${store['n4total'+req.params.type.substr(0,1).toUpperCase()+req.params.type.substr(1)].toLocaleString()}</td>`;
-                    html += `<td>${store.name.normalize()}</td>`;
+                    html += `
+                    <td id='${store._id}'>
+                        ${store.name}
+                        <script>
+                            $(document).ready(function(){
+                                try{
+                                    $('#${store._id}').html('${store.name}');
+                                }catch(e){
+                                    
+                                }
+                            })
+                        </script>
+                    </td>`
                     html += `<td><div class="flag"><img src="${allCountries[allCountryIDs.indexOf(store.countryID)].countryImg}"> </div><span>${allCountries[allCountryIDs.indexOf(store.countryID)].countryName}</span></td>`;
                 html += "</tr>";
             });

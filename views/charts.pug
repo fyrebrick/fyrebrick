@@ -15,7 +15,7 @@ block content
               .active-member
                   .row
                     .col-12.btn-group(role='group' aria-label='Basic outlined example')
-                      button.btn.btn-outline-primary.ajax-button#lots(type='button',data-type='lots') Lots
+                      button.btn.btn-outline-primary.ajax-button.active#lots(type='button',data-type='lots') Lots
                       button.btn.btn-outline-primary.ajax-button#items(type='button',data-type='items') items
                       button.btn.btn-outline-primary.ajax-button#views(type='button',data-type='views') views
                   .table-responsive
@@ -32,7 +32,7 @@ block styles
 block scripts
   script.
     $(document).ready(function(){
-      let type='';
+      let type='lots';
       let location = "global";
       function setType(text){
         $(`.ajax-button`).removeClass('active');
@@ -55,8 +55,7 @@ block scripts
         })
       });
       $('#selectCountry').on('change',function(){
-        if(location!==$("#selectCountry").val()){
-          location = $("#selectCountry").val();
+        location = $("#selectCountry").val();
           $.ajax({
           url:`/charts/${location}/${type}`,
           method:'GET',
@@ -69,6 +68,5 @@ block scripts
           $(".data-header").text(type);
           stopLoading();
         })
-        }
       });
     })
