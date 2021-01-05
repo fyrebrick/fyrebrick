@@ -27,7 +27,7 @@ const orders = {
             res.status(404).render('error',{
                 status:'404 Not found',
                 message:'we could not find this order id'
-            })
+            });
             return;
         }
         const stock = {};
@@ -40,7 +40,7 @@ const orders = {
             res.status(404).render('error',{
                 status:'404 Not found',
                 message:'This order has no items'
-            })
+            });
         }
         //logger.debug(`iterating ${totalItems} items in order ${order.order_id}`);
         order.items.forEach(batch=>{
@@ -54,7 +54,7 @@ const orders = {
                 stock[item.inventory_id] = qty
                 itemProcessed++;
                 if(itemProcessed===totalItems){
-                    render()
+                    render();
                 }
             })
         })
