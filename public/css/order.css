@@ -184,11 +184,11 @@ tr td:nth-child(2) {
         font-size: 5.0rem;
     }
     .checkbox-scale{
-        -ms-transform: scale(2); 
-        -moz-transform: scale(2); 
-        -webkit-transform: scale(2); 
-        -o-transform: scale(2);
-        transform: scale(2);
+        -ms-transform: scale(3); 
+        -moz-transform: scale(3); 
+        -webkit-transform: scale(3); 
+        -o-transform: scale(3);
+        transform: scale(3);
     }
     .img_err{
         margin-bottom: -9px;
