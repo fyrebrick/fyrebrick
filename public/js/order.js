@@ -63,6 +63,8 @@ function show_modal(e){
                 const encode_str = i.item.name.replaceAll('&#40;','(').replaceAll("&#41;",")");
                 $("#enlargedTitleLabel").text("Item no. "+i.item.no+" price: "+Number(i.unit_price_final).toFixed(2)+" "+i.currency_code);
                 $("#enlargedFooter").text(unescape(encode_str)); //does not want to unescape
+                const link = "https://www.bricklink.com/v2/inventory_detail.page?invID="+i.inventory_id;
+                $("#enlargedItemLink").attr('href',link);
                } 
         })
     })
