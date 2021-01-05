@@ -5,6 +5,8 @@ module.exports.getImageSrcFromItem = (data) => {
     //https://img.bricklink.com/ItemImage/SN/0/621-1.png
     switch (data.item.type) {
         case 'SET':
+        case 'BOX':
+        case 'ORIGINAL_BOX':
             src="https://img.bricklink.com/ItemImage/SN/" + data.color_id + "/" + data.item.no + ".png";
             break;
         case "MINIFIG":
@@ -26,7 +28,7 @@ module.exports.getImageSrcFromItem = (data) => {
             src = "https://img.bricklink.com/ItemImage/CN/" + data.color_id + "/" + data.item.no + ".png";
             break;
         default:
-            return null;
+            return "/images/image-not-found.png";
     }
     return src
 }
