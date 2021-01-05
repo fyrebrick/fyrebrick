@@ -216,7 +216,7 @@ body{
     flex-direction: column;
     overflow-y: scroll;
     display: flex;
-    padding-bottom: 50vh;
+    /* padding-bottom: 50vh; */
   }
   
   .table-responsive th{

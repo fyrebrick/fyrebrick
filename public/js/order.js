@@ -56,7 +56,10 @@ function makeCheckboxRequest (e) {
 }
 
 function show_modal(e){
-    const src = $("#"+e.target.id).attr('src');
+    let src;
+    try{
+     src = $("#"+e.target.id).attr('src');
+    }catch(e){};
     frontend.order.items.forEach(function(batch){
         batch.forEach(function(i){
             if(i.inventory_id==e.target.id.substr(3)){
