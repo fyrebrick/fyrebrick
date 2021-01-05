@@ -14,7 +14,7 @@ block content
                                     .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
                                         span=order.orders_checked+"/"+order.unique_count
                 .card
-                    .card-body
+                    #order_data.card-body
                             .table-responsive
                                 table#mainTable.table.table-xs.mb-0
                                     thead
@@ -34,9 +34,10 @@ block content
                                                         - const imageSrc = fn.getImageSrcFromItem(item)
                                                         if imageSrc
                                                             img.normal_img_shadow.bl_img.img-thumbnail(id='img'+item.inventory_id, src=imageSrc)
+                                                            .stock(id='S'+item.inventory_id)=stock[item.inventory_id]
                                                         else
-                                                            i.fas.fa-image
-                                                        .stock(id='S'+item.inventory_id)=stock[item.inventory_id]
+                                                            i.img_err.bl_img.fas.fa-image
+                                                            .stock.stock_img_err(id='S'+item.inventory_id)=stock[item.inventory_id]
                                                     if item.new_or_used
                                                         td(data-order=item.new_or_used.charCodeAt())
                                                             .side-info

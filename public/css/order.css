@@ -1,6 +1,15 @@
 .bl_img{
     width:150px;
     min-width: 80px;
+    font-size: 9.3rem;
+}
+
+.img_err{
+    margin-bottom: -18px;
+}
+.stock_img_err{
+    border-bottom-left-radius: 10rem;
+    border-bottom-right-radius: 10rem;
 }
 .checkbox_box{
 }
@@ -150,6 +159,9 @@ tr td:nth-child(2) {
     .bl_img, .stock{
         width:100px;
     }
+    .bl_img{
+        font-size: 6.3rem;
+    }
     .checkbox-scale{
         -ms-transform: scale(3); 
         -moz-transform: scale(3); 
@@ -157,10 +169,34 @@ tr td:nth-child(2) {
         -o-transform: scale(3);
         transform: scale(3);
     }
+    .remarks{
+        font-size:4vw;
+    }
+    .img_err{
+        margin-bottom: -18px;
+    }
 }
-@media (max-width:443px){
+@media (max-width:462px){
     .bl_img, .stock {
         width: 75px;
+    }
+    .bl_img{
+        font-size: 5.0rem;
+    }
+    .checkbox-scale{
+        -ms-transform: scale(2); 
+        -moz-transform: scale(2); 
+        -webkit-transform: scale(2); 
+        -o-transform: scale(2);
+        transform: scale(2);
+    }
+    .img_err{
+        margin-bottom: -9px;
+    }
+}
+@media (max-width:400px){
+    #order_data{
+        padding: 0 10px 0 10px !important;
     }
 }
 /**https://algoart.fr/articles/css-table-fixed-header**/
