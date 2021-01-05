@@ -1,4 +1,4 @@
-FROM node:15.4.0
+FROM node:15.5.1
 WORKDIR /usr/src/app
 COPY package*.json /usr/src/app/
 RUN npm install
