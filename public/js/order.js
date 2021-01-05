@@ -11,6 +11,9 @@ $(document).ready(function () {
     document.querySelectorAll(".bl_img").forEach(function (item){
         item.addEventListener("click",show_modal)
     })
+    if(detectBrowser()==="Firefox"){
+        $("#dynamicTable").append("<tr style='height:150px'></tr>");
+    }
 });
 
 function makeCheckboxRequest (e) {
