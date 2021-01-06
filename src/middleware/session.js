@@ -1,16 +1,16 @@
 const {logger} = require("fyrebrick-helper").helpers;
 
 const isSignedIn = (req,res,next) => {
-    //TODO check if successful signed in
     if(req.session){
         if(req.session.logged_in){
             next();
         }else if(!req.session.logged_in){
             logger.info(`Not logged in anymore, redirecting to homepage`);
-            res.redirect('/');
+            res.redirect(`/logon?returnUrl=${encodeURIComponent(req.originalUrl)}`);
         }
     }else{
-        res.redirect('/');
+        logger.info(`Not logged in anymore, redirecting to homepage`);
+        res.redirect(`/logon?returnUrl=${encodeURIComponent(req.originalUrl)}`);
     }
 };
 
