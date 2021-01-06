@@ -8,7 +8,8 @@ block content
                 .col
                   .input-group
                     select#selectCountry.custom-select
-                      option(selected='global',value='global') global
+                      option(selected='BE',value='BE') Belgium
+                      option(value='global') global
                       each store in allCountries
                         option(value=store.countryID)=store.countryName
                   hr.my-2
@@ -33,7 +34,7 @@ block scripts
   script.
     $(document).ready(function(){
       let type='lots';
-      let location = "global";
+      let location = "BE";
       function setType(text){
         $(`.ajax-button`).removeClass('active');
         $(`#${text}`).addClass('active');

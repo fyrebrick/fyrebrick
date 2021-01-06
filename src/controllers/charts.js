@@ -2,7 +2,7 @@ const {Store} = require('fyrebrick-helper').models;
 const _ = require('lodash');
 module.exports = charts = {
     index:async(req,res,next)=>{
-        res.render('charts',{allCountries});
+        res.render('charts',{allCountries},);
     },
     global:async(req,res,next)=>{
             const allStores = await Store.find();
@@ -46,13 +46,13 @@ module.exports = charts = {
                 store = JSON.parse(JSON.stringify(store));
                 html += "<tr>";
                     try{
-                        let update = index-store.rank.national[req.params.type][0].rank;
+                        let update = index+1-store.rank.national[req.params.type][0].rank;
                         if(update<0){
                             update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-sort-down' style='color:#f71d1d;'>${update}</i>`;
                         }else if(update>0){
                             update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-sort-up' style='color:#15c74c;'>${update}</i>`;
                         }else{
-                            update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-minus' style='color:#15c74c;'>${update}</i>`;
+                            update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-minus' style='color:#15c74c;'></i>`;
                         }
                         html += `<td>${update}</td>`;
                     }catch(e){
@@ -82,7 +82,7 @@ module.exports = charts = {
 }
 const allCountryIDs = ["AR","BR","CA","CL","CO","CR","SV","MX","PE","US","VE","AT","BY","BE","BG","HR","CZ","DK","EE","FO","FI","FR","DE","GI","GR","HU","IS","IE","IT","LV","LT","LU","MT","MD","MC","NL","NO","PL","PT","RO","RU","SM","RS","SK","SI","ES","SE","CH","UA","UK","UA","CN","HK","IN","ID","JP","KZ","MO","MY","NZ","PK","PH","SG","KR","TW","TH","VN","BH","CY","IL","LB","MA","OM","QA","ZA","IR","AE"];
 const allCountries = [{
-    countryName: "AR",
+    countryID: "AR",
     countryName: "Argentina",
     countryImg: "https://www.bricklink.com/images/flagsM/AR.gif"
 }, {
