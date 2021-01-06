@@ -147,7 +147,12 @@ const inventory = {
                     if(err){
                         logger.error(`giving updater-api request to update inventory remarks gave err: ${err}`);
                     }
-                    res.send(result.text);
+                    if(result){
+                        res.send(result.text);
+                    }else{
+                        res.send();
+                    }
+                    
                 })
         },
         quantity:async (req,res,next)=>{
