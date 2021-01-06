@@ -16,7 +16,12 @@ const redirect={
             };
         }
         await google.checkSignIn(req);
-        res.redirect('/');
+        if(req.query && req.query.returnUrl){
+            res.redirect(decodeURIComponent(req.query.returnUrl));
+        }else{
+            res.redirect('/');
+        }
+        
     }
 }
 
