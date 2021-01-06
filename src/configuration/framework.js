@@ -21,6 +21,7 @@ const start = function (app) {
     app.set("views", path.join(path.resolve(), "views"));
     app.set("view engine", "pug");
     app.use(cookieParser());
+    app.set('trust proxy', 1)
     app.use(express.static(path.join(path.resolve(), "public")));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
