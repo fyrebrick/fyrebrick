@@ -201,7 +201,7 @@ tr td:nth-child(2) {
 }
 /**https://algoart.fr/articles/css-table-fixed-header**/
 body{
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
     right: 0;
@@ -242,31 +242,36 @@ body{
 }
 @media (max-height:320px){
     .table-responsive{
-        height: 38vh;
+        /* height: 38vh; */
+        height:89vh;
     }
 }
 
 @media (min-height: 320px) and (max-height:417px){
     .table-responsive{
-        height: 46vh;
+        /* height: 46vh; */
+        height: 89vh;
     }
 }
 
 @media (min-height: 417px) and (max-height: 502px){
     .table-responsive{
-        height: 57vh;
+        /* height: 57vh; */
+        height:85vh;
     }
 }
 
 @media (min-height: 502px) and (max-height: 555px){
     .table-responsive{
-        height: 62vh;
+        /* height: 62vh; */
+        height:84vh;
     }
 }
 
 @media (min-height: 555px) and (max-height: 639px){
     .table-responsive{
-        height: 68vh;
+        /* height: 68vh; */
+        height:84vh;
     }
 }
 
@@ -278,7 +283,8 @@ body{
 
 @media (min-height: 752px) and (max-height: 923px){
     .table-responsive{
-        height: 78vh;
+        /* height: 78vh; */
+        height: 85vh;
     }
 }
 

@@ -6,9 +6,9 @@
     padding-left: 0px !important;
 }
 .contents{
-    height: 100%;
+    /* height: 100%; /*Because of smart-scroll/*   */
     width: 100%;
-    position: fixed;
+    /* position: fixed; /*Because of smart-scroll/*   */
     background-color: #e8e8e8;
     overflow-y: auto;
     overflow-x: hidden;
