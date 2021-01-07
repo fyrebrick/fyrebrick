@@ -11,14 +11,14 @@ const orders = {
         res.render('orderList',{
             orders:orders,
             fn:frontend
-        })  
+        });
     },
     all: async (req, res, next) => {
         const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
         res.render('orderList',{
             orders:orders,
             fn:frontend
-        })
+        });
     },
     order_id: async (req,res,next) => {
         const order = await Order.findOne({order_id:req.params.order_id});
@@ -35,7 +35,7 @@ const orders = {
         let itemProcessed = 0;
         order.items.forEach((batch)=>{
             totalItems+=batch.length;
-        })
+        });
         if(totalItems===0){
             res.status(404).render('error',{
                 status:'404 Not found',
