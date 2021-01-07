@@ -15,13 +15,16 @@ const redirect={
                 CONSUMER_SECRET: user.CONSUMER_SECRET
             };
         }
+        try{
         await google.checkSignIn(req);
+        }catch(err){
+            console.log(err);
+        }
         if(req.query && req.query.returnUrl){
             res.redirect(decodeURIComponent(req.query.returnUrl));
         }else{
             res.redirect('/');
         }
-        
     }
 }
 

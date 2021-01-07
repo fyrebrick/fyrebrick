@@ -14,7 +14,7 @@ const logon = (req,res,next) => {
             res.render("register",{
                 titleJumbo:"Welcome",
                 buttonTitle:"Create your profile"
-            });store
+            });
             return;
         }
     }
