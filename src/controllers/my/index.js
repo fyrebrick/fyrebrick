@@ -8,10 +8,8 @@ const dashboard = async (req,res,next) =>{
       n4totalItems: "N/A",
       n4totalViews: "N/A"
     }
-    if(!await bricklinkPlus.plus.maintanceCheck.monthly()){
-      info = await bricklinkPlus.plus.stores.getStoreStats(req.session.user.userName);
-    }
     const user = await User.findById(req.session._id);
+    info = await bricklinkPlus.plus.stores.getStoreStats(user.userName);
     res.render("dashboard",{active:"dashboard",info:info,user:user});
 };
 

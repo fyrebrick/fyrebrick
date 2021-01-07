@@ -24,7 +24,6 @@ block content
                                                         span.rank-data="National rank: "+user.rank.national.items[0].rank+"th"
                                                     else
                                                         span.rank-data="National rank: N/A"
-
                                                 //li.list-group-item
                                                     i.rank-icon.fas.fa-globe
                                                     if user && user.rank && user.rank.global.items.length >=1
@@ -78,5 +77,3 @@ block content
                         //This should have: store info ( items, lots, views and ranking), new orders ( amount, in progress)
 block styles
     link(rel="stylesheet", href="/css/dashboard.css")
-block scripts
-    script(src="/js/index.js")
