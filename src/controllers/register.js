@@ -46,13 +46,14 @@ const register = {
                             if(err){
                                 logger.error(`giving updater-api request to update all gave err: ${err}`);
                                 res.render('register');
+                            }else{
+                                logger.info(`request to updater-api successful`);
+                                res.redirect('/');
                             }
-                            logger.info(`request to updater-api for user ${req.session.user.email} successful`);
                         })
                     }
                     req.session.user = await User.findOne({_id:req.session._id});
                     req.session.logged_in = true;
-                    res.redirect('/');
                 }else{
                     logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`);
                     res.render('register',{user:userInfo});

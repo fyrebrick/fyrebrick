@@ -1,5 +1,4 @@
 const google = require('../helpers/auth/google');
-
 const logon = (req,res,next) => {
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
@@ -28,7 +27,7 @@ const logon = (req,res,next) => {
 }
 
 const index = (req,res,next) => {
-    if(req.session.logged_in !== undefined){
+    if(req.session && req.session.logged_in !== undefined){
         if(req.session.returnUrl){
             res.redirect(req.session.returnUrl);
             return;
@@ -40,7 +39,7 @@ const index = (req,res,next) => {
             res.render("register",{
                 titleJumbo:"Welcome",
                 buttonTitle:"Create your profile"
-            });
+            }); 
             return;
         }
     }else{

@@ -3,18 +3,13 @@ const {User} = require("fyrebrick-helper").models;
 const bricklinkPlus = require("bricklink-plus");
 
 const dashboard = async (req,res,next) =>{
-    let order = await Order.findOne({consumer_key:req.session.user.CONSUMER_KEY});
     let info = {
-      n4totalLots: "#",
-      n4totalItems: "#",
-      n4totalViews: "#"
-    }
-    if(order){
-      if(!await bricklinkPlus.plus.maintanceCheck.monthly()){
-        info = await bricklinkPlus.plus.stores.getStoreStats(order.seller_name);
-      }
+      n4totalLots: "N/A",
+      n4totalItems: "N/A",
+      n4totalViews: "N/A"
     }
     const user = await User.findById(req.session._id);
+    info = await bricklinkPlus.plus.stores.getStoreStats(user.userName);
     res.render("dashboard",{active:"dashboard",info:info,user:user});
 };
 
