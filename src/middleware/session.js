@@ -8,9 +8,11 @@ const isSignedIn = (req,res,next) => {
             logger.info(`Not logged in anymore, redirecting to homepage`);
             res.redirect(`/logon?returnUrl=${encodeURIComponent(req.originalUrl)}`);
         }
-    }else{
+    }else if(req.originalUrl){
         logger.info(`Not logged in anymore, redirecting to homepage`);
         res.redirect(`/logon?returnUrl=${encodeURIComponent(req.originalUrl)}`);
+    }else{
+        res.redirect(`/logon`);
     }
 };
 

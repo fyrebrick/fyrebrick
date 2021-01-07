@@ -11,3 +11,6 @@ const requestLogging = require('./src/middleware/logging').requests;
 database.start();
 framework.start(app);
 app.use('/',requestLogging,route);
+
+
+require('events').EventEmitter.defaultMaxListeners = Number.MAX_SAFE_INTEGER;
