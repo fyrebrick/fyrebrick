@@ -1,13 +1,14 @@
 {
   "name": "fyrebrick",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "",
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
     "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest",
     "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
-    "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable"
+    "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable",
+    "patch":"npm --no-git-tag-version version patch"
   },
   "author": "snakehead007",
   "license": "ISC",

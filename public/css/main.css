@@ -12,7 +12,6 @@
     background-color: #e8e8e8;
     overflow-y: auto;
     overflow-x: hidden;
-    position:fixed;
 }
 .sortable{
     cursor: pointer;

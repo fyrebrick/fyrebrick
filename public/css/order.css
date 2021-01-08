@@ -3,7 +3,12 @@
     min-width: 80px;
     font-size: 9.3rem;
 }
-
+#2{
+    min-width: 85px;
+}
+.contents{
+    position:fixed;
+}
 .img_err{
     margin-bottom: -18px;
 }
@@ -215,6 +220,7 @@ body{
     flex-direction: column;
     overflow-y: scroll;
     display: flex;
+    overflow-x: hidden;
     /* padding-bottom: 50vh; */
   }
   

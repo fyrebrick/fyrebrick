@@ -10,7 +10,7 @@ module.exports =
             host:(process.env.DEVELOP==="true")?process.env.DEVELOP_REDIS_HOST:process.env.PRODUCTION_REDIS_HOST
         },
         fyrebrick:{
-            version:process.env.VERSION,
+            version:require("../../../package.json").version,
             type:process.env.TYPE,
             develop:(process.env.DEVELOP==="true"),
             updater_api_port:process.env.FYREBRICK_UPDATER_API_PORT,

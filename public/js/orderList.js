@@ -11,6 +11,11 @@ $(document).ready(function () {
         console.log(err.message); // not authorized
         console.log(err.data); // { content: "Please retry later" }
     })
+
+    $(".order-row").click(function(e){
+        location.href = '/my/orders/'+$(this).attr('id');
+    });
+    
     socket.on('response.orders',async function(orders){
         orders = JSON.parse(orders);
         orders.forEach(function(order){
@@ -36,8 +41,6 @@ $(document).ready(function () {
             $(`#${order.order_id} .table-data .status-badge i`).removeClass().addClass(status.i.class);
             $(`#${order.order_id} .table-data .status-badge i`).css("color",status.i.color);
             $(`#${order.order_id} .table-data .status-name`).text(status.span.text);
-
-
             
         });
     })
@@ -47,3 +50,4 @@ $(document).ready(function () {
 
 
 });
+
