@@ -112,5 +112,5 @@ exports.checkSignIn = async function checkSignIn(req) {
     }
     req.session._id = user._id;
     req.session.logged_in = false;
-    return user._id;
+    return user;
 };

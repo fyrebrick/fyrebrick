@@ -1,5 +1,14 @@
 #fyrebrickLogo{
-    width: 500px;
+    width: 650px;
+}
+#version{
+    position: absolute;
+    z-index: 9999;
+    font-size: 110%;
+    color: #FFF;
+    bottom: 0;
+    right: 9px;
+    font-family: monospace;
 }
 #googleButton{
     font-family: unset;
@@ -29,7 +38,7 @@
 @media (min-width: 595px){
     #fyrebrick_box{
         height: 65px;
-        width: 271px;
+        width: 340px;
     }
 }
 @media (max-width: 595px) { 
@@ -66,10 +75,10 @@
 }
 @media (min-width: 298px) and (max-width: 448px) { 
     #fyrebrickLogo{
-        width: 200px;
+        width: 250px;
     }
     #fyrebrick_box {
-        height: 43px;
-        width: 114px;
+        height: 52px;
+        width: 136px;
     }
 }

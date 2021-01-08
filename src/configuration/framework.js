@@ -60,7 +60,6 @@ const start = function (app) {
         }
         res.locals.session = req.session;
         res.locals.version = vars.fyrebrick.version;
-        res.locals.mode = (vars.fyrebrick.develop)?"develop":"live";
         res.locals.type = vars.fyrebrick.type;
         //pug variables
         

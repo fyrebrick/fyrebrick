@@ -1,5 +1,5 @@
 const google = require('../helpers/auth/google');
-const {User,Whitelist} = require("fyrebrick-helper").models;
+const {User} = require("fyrebrick-helper").models;
 const {logger} = require('fyrebrick-helper').helpers;
 const redirect={
     get:async(req,res,next)=>{
@@ -7,17 +7,6 @@ const redirect={
         req.session.email = googleCode.email;
         req.session.googleId = googleCode.googleId;
         req.session.tokens = googleCode.tokens;
-
-        //check if user is in Whitelist
-        const isWhitelisted = await Whitelist.findOne({email:googleCode.email});
-        if(!isWhitelisted){
-            logger.warn(`User ${googleCode.email} tried logging in, but was not whiteListed`);
-            try{
-                req.session.destroy();
-            }catch(err){};
-            res.redirect('/');
-            return;
-        }
         let user = await User.findOne({googleId:googleCode.googleId});
         if(user){
             req.session.user = {
@@ -28,10 +17,24 @@ const redirect={
             };
         }
         try{
-        await google.checkSignIn(req);
+        user = await google.checkSignIn(req);
         }catch(err){
             console.log(err);
         }
+        if(!user){
+            logger.warn(`User not found after creating !`);
+            res.redirect('/');
+            return;
+        }else{
+            if(user.isBlocked){
+                logger.warn(`user ${req.session.email} was blocked entry`);
+                await req.session.destroy();
+                res.redirect('/');
+                return;
+            }
+        }
+
+
         if(req.query && req.query.returnUrl){
             res.redirect(decodeURIComponent(req.query.returnUrl));
         }else{

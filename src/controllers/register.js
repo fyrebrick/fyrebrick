@@ -38,22 +38,24 @@ const register = {
                         res.redirect('/logout');
                     }else if(!user.setUpComplete){
                         logger.info(`New user found, getting all information for user ${user.email}`);
-                        await User.updateOne({_id:req.session._id},userInfo); //new user, so update its bricklink tokens.               
+                        await User.updateOne({_id:req.session._id},userInfo); //new user, so update its bricklink tokens.
+                        console.log(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/all`);
                         superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/all`)
                         .send({_id:req.session._id})
                         .set('accept','json')
-                        .end((err,result)=>{
+                        .end(async(err,result)=>{
                             if(err){
                                 logger.error(`giving updater-api request to update all gave err: ${err}`);
                                 res.render('register');
                             }else{
                                 logger.info(`request to updater-api successful`);
-                                res.redirect('/');
+                                
+                                req.session.user = await User.findOne({_id:req.session._id});
+                                req.session.logged_in = true;
+                                res.render('waiting_page');
                             }
-                        })
+                        });
                     }
-                    req.session.user = await User.findOne({_id:req.session._id});
-                    req.session.logged_in = true;
                 }else{
                     logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`);
                     res.render('register',{user:userInfo});

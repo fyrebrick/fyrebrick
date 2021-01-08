@@ -1,18 +1,46 @@
 function orderifyRemarks(remarks){
-    let f;
-    const AMOUNT_OF_NUMBERS = 6;
-    let hasNum = /\d/.test(remarks);
-    let hasChar = /[a-z,A-Z]/.test(remarks);
-    if(hasNum && hasChar){
-        const p = remarks.match(/([A-Za-z]+)([0-9]+)/);        
-        const a = p[1].split('').map(x=>x.charCodeAt(0)).reduce((a,b)=>a+b);
-        f = a+"0".repeat(AMOUNT_OF_NUMBERS-p[2].length)+p[2];
-    }else if(hasNum && !hasChar){
-        f = "0".repeat(AMOUNT_OF_NUMBERS-remarks.length)+remarks;
-    }else if(!hasNum && hasChar){
-        f = remarks;
-    }
-    return f;
+    // try{
+    //     let f;
+    //     const AMOUNT_OF_NUMBERS = 6;
+    //     let hasNum = /\d/.test(remarks);
+    //     let hasChar = /[a-z,A-Z]/.test(remarks);
+    //     if(hasNum && hasChar){
+    //         const p = remarks.match(/([A-Za-z]+)([0-9]+)/);
+    //         const a = p[1].split('').map(x=>x.charCodeAt(0)).reduce((a,b)=>a+b);
+    //         f = a+"0".repeat(AMOUNT_OF_NUMBERS-p[2].length)+p[2];
+    //     }else if(hasNum && !hasChar){
+    //         f = "0".repeat(AMOUNT_OF_NUMBERS-remarks.length)+remarks;
+    //     }else if(!hasNum && hasChar){
+    //         throw "do Catch"
+    //     }
+    //     return f;
+    // }catch(e){
+    //     remarks = escape(remarks);
+    //     let newR = "";
+    //     remarks.split('').forEach(function(char){
+    //         try{
+    //             newR += char.toUpperCase().charCodeAt(0);
+    //         }catch{
+    //             newR += char.charCodeAt(0);
+    //         }
+    //     })
+    //     console.log(remarks);
+    //     console.log(newR.substr(0,7));
+    //     return newR.substr(0,7);
+    // }
+    remarks = escape(remarks);
+    let newR = "";
+    remarks.split('').forEach(function(char){
+        try{
+            newR += char.toUpperCase().charCodeAt(0);
+        }catch{
+            newR += char.charCodeAt(0);
+        }
+    })
+    console.log(remarks);
+    console.log(newR.substr(0,7));
+    return newR.substr(0,7);
+    
 }
 
 function render_date_ordered(date,length){
