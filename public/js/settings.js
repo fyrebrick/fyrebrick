@@ -9,6 +9,11 @@ $(document).ready(function (){
         $(this).select();
     })
 
+    //opening account removal modal
+    $("#removeAccount").on('click',function(){
+        $("#removeAccountModal").modal('show');
+    });
+
     //opening banners 
     $('.banner').on('click',function(e){
         const target = e.target.parentNode.className;

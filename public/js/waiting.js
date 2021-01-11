@@ -8,6 +8,7 @@ $(document).ready(function (){
     let redirecting = false;
     
     socket.on('response.registration',async function(){
+            $(".text").text("Done, redirecting to dashboard...");
             redirecting = true;
             location.href='/my/dashboard'
         });

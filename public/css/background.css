@@ -9,7 +9,7 @@ body {
   position: fixed;
 }
 body .vertical-centered-box {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   text-align: center;
@@ -28,7 +28,6 @@ body .vertical-centered-box .content {
   display: inline-block;
   vertical-align: middle;
   text-align: left;
-  font-size: 0;
 }
 * {
   -webkit-transition: all 0.3s;

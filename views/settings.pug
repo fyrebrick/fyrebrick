@@ -99,14 +99,32 @@ block content
                                             .form-group
                                                 i.fas.fa-cogs
                                                 span.pl-2 Manage your account
-                                                ul.list-group.list-group-flush
-                                                    li.link-banner.red.list-group-item
+                                                btn#removeAccount.btn-lg.btn.btn-outline-danger.btn-block
                                                         i.pl-1.fas.fa-trash-alt
                                                         span.pl-1 remove your account
-                                                    li.link-banner.yellow.list-group-item
-                                                        i.pl-1.fas.fa-file-download
-                                                        span.pl-1 download your data
+                                                a(role='button', href="/my/gdpr/download").btn-lg.btn.btn-outline-warning.btn-block 
+                                                    i.pl-1.fas.fa-file-download
+                                                    span.pl-1 download your data
 block modals
+    #removeAccountModal.modal(tabindex='-1')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5.modal-title 
+                        i.fas.fa-exclamation-triangle
+                        span=" Account removal."
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    p.lead Do you agree, with deleting all your data from our database?
+                    p All your data will be deleted from our database.
+                    p You will no longer have an account at Fyrebrick.
+                    p.small You will be logged out automatically.
+                    hr
+                    p.small If you have multiple accounts with us, please use the order and inventory update buttons in the settings to update your data after removing this account.
+                .modal-footer
+                    button.btn.btn-primary(type='button' data-dismiss='modal') No, take me back.
+                    a(href="/my/gdpr/remove", role='button').btn.btn-danger(type='button') Yes, remove my account
 
 block scripts
     script(src="/js/settings.js")

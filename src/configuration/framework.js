@@ -67,9 +67,6 @@ const start = function (app) {
         next();
     });
     startUp();
-    
-    
-    
     io.on('connection', function(socket) {
         websocket.connection(socket);
     });
@@ -77,6 +74,14 @@ const start = function (app) {
     server.listen(vars.express.port,()=>{
         logger.info(`express listening on port ${vars.express.port}`);
     });
+    app.use(function (err, req, res, next) {
+        res.status(500);
+        res.send('error',{
+            status:500,
+            message:"Something went wrong on our end",
+            extra:err.message
+        })
+      })
     
 };
 

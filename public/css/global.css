@@ -1,0 +1,20 @@
+#messages{
+    z-index: 10000;
+}
+.alert-message{
+    width: 60%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: rgb(195 36 36);
+    position: absolute;
+    left: 20%;
+    top: 15px;
+    text-align: center;
+    color: white;
+    padding-right: 10px;
+    z-index: 10000;
+}
+
+.side{
+
+}

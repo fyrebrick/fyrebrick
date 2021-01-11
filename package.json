@@ -8,11 +8,12 @@
     "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest",
     "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
     "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable",
-    "patch":"npm --no-git-tag-version version patch"
+    "patch": "npm --no-git-tag-version version patch"
   },
   "author": "snakehead007",
   "license": "ISC",
   "dependencies": {
+    "archiver": "^5.2.0",
     "body-parser": "^1.19.0",
     "bricklink-plus": "^1.0.10",
     "connect-redis": "^5.0.0",
@@ -32,6 +33,7 @@
     "path": "^0.12.7",
     "pug": "^3.0.0",
     "redis": "^3.0.2",
+    "rimraf": "^3.0.2",
     "socket.io": "^3.0.5",
     "superagent": "^6.1.0",
     "winston": "^3.3.3"
