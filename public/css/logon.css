@@ -1,6 +1,16 @@
 #fyrebrickLogo{
     width: 650px;
 }
+#privacyPolicy{
+    font-size: 19px;
+    font-family: auto;
+    padding-bottom: 10px;
+    margin-top: -30px;
+}
+#privacyPolicy a{
+    color:inherit;
+    text-decoration: underline;
+}
 #version{
     position: absolute;
     z-index: 9999;
