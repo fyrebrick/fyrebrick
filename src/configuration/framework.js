@@ -14,6 +14,7 @@ const {vars} = require("../helpers/constants/vars");
 const {logger} = require("fyrebrick-helper").helpers;
 const {startUp}= require('../helpers/auth/google');
 const websocket = require('./websocket');
+//const helmet = require('helmet')
 
 const start = function (app) {
     const server = require('http').createServer(app);  
@@ -25,11 +26,13 @@ const start = function (app) {
     //     console.log(socket);
     // });
 
-    app.locals.title = "fyrebrick";
+    app.locals.title = "Fyrebrick";
     app.engine("pug", pug.__express);
     app.set("views", path.join(path.resolve(), "views"));
     app.set("view engine", "pug");
-    app.use(cookieParser());
+    //app.use(helmet());
+    app.disable('x-powered-by');
+    app.use(cookieParser(vars.express.cookie_secret));
     app.set('trust proxy', 1)
     app.use(express.static(path.join(path.resolve(), "public")));
     app.use("/fn",express.static(path.join(path.resolve(), "src/frontend")));
@@ -45,7 +48,6 @@ const start = function (app) {
             secret: vars.express.session_secret,
             saveUninitialized: false,
             resave: false,
-            cookie :{},
             store: redisStore
         })
     );
@@ -55,7 +57,7 @@ const start = function (app) {
         //updates session
         if(req.session){
             req.session.lastUsed = Date.now();
-            // req.session.sessionID = req.sessionID;
+            req.session.sessionID = req.sessionID;
             req.session.cookieSessionId = encodeURIComponent(req.cookies.session);
         }
         res.locals.session = req.session;
@@ -64,6 +66,16 @@ const start = function (app) {
         //pug variables
         
         res.locals.frontend = {};
+
+
+        //clear all cookies except fyrebrick cookies and wpcc
+        const cookies = req.cookies;
+        for (const [key, value] of Object.entries(cookies)) {
+            if(!(key.includes('fyrebrick')||key==="wpcc")){
+                res.clearCookie(key);
+            }
+        }
+
         next();
     });
     startUp();
@@ -76,13 +88,13 @@ const start = function (app) {
     });
     app.use(function (err, req, res, next) {
         res.status(500);
-        res.send('error',{
+        res.render('error',{
             status:500,
-            message:"Something went wrong on our end",
-            extra:err.message
+            message:"Something went wrong on our end"
         })
-      })
-    
+        console.trace(err);
+
+      });
 };
 
 module.exports = 

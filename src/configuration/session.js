@@ -12,6 +12,7 @@ const redisStore = new store({
     client: client,
     prefix:'session',
     ttl: 1209600
+          
 });
 
 client.on('connect',()=>{

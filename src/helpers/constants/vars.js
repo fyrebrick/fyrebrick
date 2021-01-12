@@ -3,7 +3,8 @@ module.exports =
     vars:{
         express:{
             port:process.env.EXPRESS_PORT,
-            session_secret:process.env.SESSION_SECRET
+            session_secret:process.env.SESSION_SECRET,
+            cookie_secret:process.env.COOKIE_SECRET
         },
         redis:{
             port:process.env.REDIS_PORT,

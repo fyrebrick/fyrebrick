@@ -27,4 +27,5 @@ router.all('/socket.io',controllers.socket.io);
 router.get('/charts',controllers.charts.index);
 router.get('/charts/global/:type',controllers.charts.global);
 router.get('/charts/:countryID/:type',controllers.charts.national);
+router.post('/acceptCookies',controllers.login.acceptCookies);
 module.exports = router;

@@ -37,48 +37,47 @@ block content
                                                 input#apiButton.btn.btn-primary.btn-lg(type='submit' role='button', value="Update")
                                     li.list-group-item
                                         .banner
-                                            i.fas.fa-warehouse.data-status
-                                            span.status-name Orders and inventory updater
+                                            i.fas.fa-sync.data-status
+                                            span.status-name Bricklink data updater 
                                         .settings
                                             .form-group
                                                 i.fas.fa-bullseye
-                                                label(for='inventoryInterval').pl-2 Update intory interval
+                                                label(for='inventoryInterval').pl-2 Update interval
                                                 input#inventoryInterval.form-control-range(value=user.update_interval step="1", min="1", max="120", type='range' oninput="$('#rangeval').html('Every '+$(this).val()+' minutes ( '+(Math.round((24*60)/$(this).val()))+' calls everyday )')")
                                                 span#rangeval="Every "+user.update_interval+" minutes ( "+(Math.round((24*60)/user.update_interval))+" calls everyday )"
-                                                small#inventoryIntervalHelp.form-text.text-muted This will updater your orders and inventory items in the specified time interval
-                                            .form-group
-                                                button#update-inventory.update-btn.inventory.btn.btn-outline-info(type='button')
-                                                    i.pl-1.fas.fa-sync-alt
-                                                    span.pl-1 Update all inventory items
-                                                    
-                                            .form-group
-                                                button#update-orders.update-btn.orders.btn.btn-outline-info(type='button')
-                                                    i.pl-1.fas.fa-sync-alt
-                                                    span.pl-1 Update all orders
-                                                small#tokenSecretHelp.form-text.text-muted This will update every single order from your bricklink account
-                                    li.list-group-item#ordersUpdater
-                                        .banner
-                                            i.fas.fa-file-contract.data-status
-                                            span.status-name Notifications
-                                        .settings
+                                                small#inventoryIntervalHelp.form-text.text-muted Update your orders and inventory items in the specified time interval
                                             if user.isBricklinkCallback
-                                                .form-check
-                                                    input#callbackCheckbox.form-check-input(type='checkbox' value='', checked='')
-                                                    label.form-check-label(for='callbackCheckbox')
-                                                        span Use push notifications (callback) (currently not working)
+                                                .form-group
+                                                    .form-check
+                                                        input#callbackCheckbox.form-check-input(type='checkbox' value='', checked='')
+                                                        label.form-check-label(for='callbackCheckbox')
+                                                            span Update via notifications
+                                                    small.text-muted.form-text Update the orders and inventory items based on Bricklink's push notifications
                                                 .form-group#callBackUrl
                                                     label(for='callbackUrl') Callback URL
                                                     input#callbackUrl.api-input.form-control(name="callbackUrl", type='text' aria-describedby='callbackUrlHelp' value='https://my.fyrebrick.be/callback/'+user.userName, readonly='')
                                                     small#callbackUrlHelp.form-text.text-muted This callback URL should be added in your Bricklink register consumer page
                                             else
-                                                .form-check
-                                                    input#callbackCheckbox.form-check-input(type='checkbox' value='')
-                                                    label.form-check-label(for='callbackCheckbox')
-                                                        span Use push notifications (callback)
+                                                .form-group
+                                                    .form-check
+                                                        input#callbackCheckbox.form-check-input(type='checkbox' value='')
+                                                        label.form-check-label(for='callbackCheckbox')
+                                                            span Update via notifications
+                                                    small.text-muted.form-text Update the orders and inventory items based on Bricklink's push notifications
                                                 .form-group#callBackUrl.hideMe
                                                     label(for='callbackUrl') Callback URL
                                                     input#callbackUrl.api-input.form-control(name="callbackUrl", type='text' aria-describedby='callbackUrlHelp' value='https://my.fyrebrick.be/callback/'+user.userName, readonly='')
                                                     small#callbackUrlHelp.form-text.text-muted This callback URL should be added in your Bricklink register consumer page
+                                            .form-group
+                                                button#update-inventory.update-btn.inventory.btn.btn-outline-info(type='button')
+                                                    i.pl-1.fas.fa-sync-alt
+                                                    span.pl-1 Update all inventory items
+                                                small#update-inventoryHelp.form-text.text-muted Update every single inventory item from your bricklink account
+                                            .form-group
+                                                button#update-orders.update-btn.orders.btn.btn-outline-info(type='button')
+                                                    i.pl-1.fas.fa-sync-alt
+                                                    span.pl-1 Update all orders
+                                                small#update-ordersHelp.form-text.text-muted Update every single order from your bricklink account
                                     li.list-group-item
                                         .banner
                                             i.fas.fa-user.data-status
