@@ -1,7 +1,7 @@
 const google = require('../helpers/auth/google');
 const redis = require('../configuration/session');
 const {User} = require("fyrebrick-helper").models;
-const logon = (req,res,next) => {
+const logon = async (req,res,next) => {
     if(req.session.logged_in !== undefined){
         if(req.session.logged_in){
             if(req.query && req.query.returnUrl){
@@ -12,18 +12,27 @@ const logon = (req,res,next) => {
             }
             return;
         }else{
-            res.render("register",{
-                titleJumbo:"Welcome",
-                buttonTitle:"Create your profile"
-            });
+            if(req.session._id){
+                const user = await User.findById(req.session._id);
+                if(user.isBlocked==false){
+                    res.render("register",{
+                        titleJumbo:"Welcome",
+                        buttonTitle:"Create your profile"
+                    }); 
+                    return;
+                }
+            }
+            res.redirect(google.urlGoogle());
             return;
         }
     }
     if(req.query && req.query.returnUrl){
         req.session.returnUrl = req.query.returnUrl;
         res.redirect(google.urlGoogle());
+        return;
     }else{
         res.redirect(google.urlGoogle());
+        return;
     }
 }
 
@@ -46,6 +55,7 @@ const index = async (req,res,next) => {
                         if(session && session.user){
                             req.session.save();
                             Object.assign(req.session,session);
+                            console.log('1');
                             res.redirect('/my/dashboard');
                             found = true;
                             return;
@@ -77,7 +87,7 @@ const acceptCookies = async (req,res)=>{
     }
 }
 
-const checkLogin = (req,res) => {
+const checkLogin = async (req,res) => {
     if(req.session && req.session.logged_in !== undefined){
         if(req.session.returnUrl){
             res.redirect(req.session.returnUrl);
@@ -86,11 +96,20 @@ const checkLogin = (req,res) => {
         if(req.session.logged_in){
             res.redirect("/my/dashboard");
             return;
+        }else if(req.session._id){
+            const user = await User.findById(req.session._id);
+            if(user.isBlocked==false){
+                res.render("register",{
+                    titleJumbo:"Welcome",
+                    buttonTitle:"Create your profile"
+                }); 
+            }else{
+                res.render('logon');
+            }
+            return;
         }else{
-            res.render("register",{
-                titleJumbo:"Welcome",
-                buttonTitle:"Create your profile"
-            }); 
+            req.session.destroy();
+            res.render('logon');
             return;
         }
     }else{
@@ -104,4 +123,4 @@ module.exports =
     logon,
     index,
     acceptCookies
-};
+}

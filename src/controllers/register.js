@@ -55,7 +55,7 @@ const register = {
                                 })
                             }
                         }); //new user, so update its bricklink tokens.
-                        superagent.post(`localhost:3030/all`)
+                        superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/all`)
                         .send({_id:req.session._id})
                         .set('accept','json')
                         .end(async(err,result)=>{

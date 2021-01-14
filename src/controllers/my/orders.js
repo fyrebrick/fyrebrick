@@ -4,7 +4,7 @@ const {Inventory} = require("fyrebrick-helper").models;
 const frontend = require('../../frontend/orderList');
 const {getColorInlineStyle} = require('../../frontend/color');
 const {getImageSrcFromItem} = require('../../frontend/image');
-
+const {vars} = require('../../helpers/constants/vars');
 const orders = {
     index: async (req,res,next) => {
         const orders = await Order.find({$and: [{consumer_key:req.session.user.CONSUMER_KEY},{$or:[{status:"PENDING"},{status:"UPDATED"},{status:"PROCESSING"},{status:"READY"},{status:"PAID"},{status:"PACKED"}]}]});
@@ -117,6 +117,20 @@ const orders = {
                 }
             })
         })
+    },
+    removeDuplicates: async(req,res,next)=>{
+        await superagent
+            .post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/removeDuplicates`)
+            .send({CONSUMER_KEY:req.session.user.CONSUMER_KEY})
+            .set('accept','json')
+            .end(async(err,result)=>{
+                if(err){
+                    res.status(500);
+                    res.send({success:false});
+                }else{
+                    res.send({success:true});
+                }
+            });
     }
 }
 

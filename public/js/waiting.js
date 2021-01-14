@@ -17,4 +17,10 @@ $(document).ready(function (){
             socket.emit('request.registration');
         }
       }, 1000);
+      setTimeout(function(){
+        redirect=true;
+        $(".text").text("Done, redirecting to dashboard...");
+        redirecting = true;
+        location.href='/my/dashboard'
+    }, 30000);
 })

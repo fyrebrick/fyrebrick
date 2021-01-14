@@ -11,4 +11,6 @@ router.get('/:order_id',controllers.orders.order_id);
 
 router.put('/:order_id',controllers.orders.put);
 
+router.post('/removeDuplicates',controllers.orders.removeDuplicates);
+
 module.exports = router;

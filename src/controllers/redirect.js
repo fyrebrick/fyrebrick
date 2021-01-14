@@ -29,7 +29,7 @@ const redirect={
             if(user.isBlocked){
                 logger.warn(`user ${req.session.email} was blocked entry`);
                 req.flash("warning","You entry was denied, but we have put you in a queue");
-                //await req.session.destroy();
+                await req.session.destroy();
                 res.redirect('/');
                 return;
             }
