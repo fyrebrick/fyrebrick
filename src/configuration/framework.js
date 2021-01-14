@@ -93,7 +93,6 @@ const start = function (app) {
             message:"Something went wrong on our end"
         })
         console.trace(err);
-
       });
 };
 
