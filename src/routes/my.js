@@ -1,3 +1,6 @@
+/**
+ * All routes for /my path
+ */
 const router = require('express').Router();
 const routes = {
     orders:require('./my/orders'),
@@ -15,4 +18,5 @@ router.use('/orders',routes.orders);
 router.use('/inventory',routes.inventory);
 router.use('/settings',routes.settings);
 router.use('/gdpr',routes.gdpr);
+
 module.exports = router;

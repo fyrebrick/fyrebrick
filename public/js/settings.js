@@ -37,7 +37,6 @@ $(document).ready(function (){
                 $("#update-orders i").addClass("loading");
             }
         }).done(function(data){
-            console.log(data);
             $("#update-orders i").removeClass("loading");
         });
     });
@@ -50,7 +49,6 @@ $(document).ready(function (){
                 $("#update-inventory i").addClass("loading");
             }
         }).done(function(data){
-            console.log(data);
             $("#update-inventory i").removeClass("loading");
         });
     });

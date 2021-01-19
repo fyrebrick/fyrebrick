@@ -1,6 +1,11 @@
+/**
+ * routes for path (not used)
+ */
+
 const router = require("express").Router();
 const OAuth = require('oauth');
 
+//Controller inside route. 
 router.all('/*',(req,res)=>{
     res.setHeader('Content-Type', 'application/json');
     let uri = "https://api.bricklink.com/api/store/v1"+req.url;

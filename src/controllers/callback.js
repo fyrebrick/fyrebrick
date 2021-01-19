@@ -25,4 +25,4 @@ const callback = async (req,res,next)=>{
         // })
         res.send();
     };
-module.exports = callback;
+module.exports = {callback};

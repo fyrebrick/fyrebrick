@@ -22,5 +22,5 @@ $(document).ready(function (){
         $(".text").text("Done, redirecting to dashboard...");
         redirecting = true;
         location.href='/my/dashboard'
-    }, 30000);
+    }, 200000);
 })

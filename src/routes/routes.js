@@ -1,3 +1,7 @@
+/**
+ * All routes for / are defined here.
+ * 
+ */
 const router = require('express').Router();
 const routes = {
     my:require('./my'),
@@ -28,4 +32,5 @@ router.get('/charts',controllers.charts.index);
 router.get('/charts/global/:type',controllers.charts.global);
 router.get('/charts/:countryID/:type',controllers.charts.national);
 router.post('/acceptCookies',controllers.login.acceptCookies);
+
 module.exports = router;

@@ -84,7 +84,7 @@ exports.getGoogleAccountFromCode = async (code) => {
  * If it"s an old user it set the session parameters correct
  *
  **/
-exports.checkSignIn = async function checkSignIn(req) {
+exports.checkSignIn = async function    checkSignIn(req) {
     let googleId = req.session.googleId;
     let tokens = req.session.tokens;
     let email = req.session.email;
@@ -92,12 +92,12 @@ exports.checkSignIn = async function checkSignIn(req) {
         if(err) {
             logger.error(`thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: ${err.message}`);
             throw new Error(err);
-        }
+        }   
     });
     if (user && user.setUpComplete) {
         req.session._id = user._id;
         req.session.logged_in = true;
-        return user._id;
+        return user;
     }
     if(!user){
         user = new User({

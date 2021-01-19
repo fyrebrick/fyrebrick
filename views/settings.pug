@@ -101,7 +101,7 @@ block content
                                                 btn#removeAccount.btn-lg.btn.btn-outline-danger.btn-block
                                                         i.pl-1.fas.fa-trash-alt
                                                         span.pl-1 remove your account
-                                                a.disabled(role='button', href="/my/gdpr/download").btn-lg.btn.btn-outline-warning.btn-block 
+                                                a(role='button', href="/my/gdpr/download").btn-lg.btn.btn-outline-warning.btn-block 
                                                     i.pl-1.fas.fa-file-download
                                                     span.pl-1 download your data
 block modals
@@ -123,7 +123,7 @@ block modals
                     p.small If you have multiple accounts with us, please use the order and inventory update buttons in the settings to update your data after removing this account.
                 .modal-footer
                     button.btn.btn-primary(type='button' data-dismiss='modal') No, take me back.
-                    a(href="/my/gdpr/remove", role='button').btn.btn-danger(type='button') Yes, remove my account
+                    a(href="/my/gdpr/remove", role='button', type="button" ).btn.btn-danger Yes, remove my account
 
 block scripts
     script(src="/js/settings.js")

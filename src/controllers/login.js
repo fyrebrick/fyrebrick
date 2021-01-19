@@ -14,11 +14,14 @@ const logon = async (req,res,next) => {
         }else{
             if(req.session._id){
                 const user = await User.findById(req.session._id);
-                if(user.isBlocked==false){
+                if(user && user.isBlocked===false && user.setUpComplete ===false){
                     res.render("register",{
                         titleJumbo:"Welcome",
                         buttonTitle:"Create your profile"
                     }); 
+                    return;
+                }else if(user && user.isBlocked===false && user.setUpComplete === true){
+                    res.redirect("/my/dashboard");
                     return;
                 }
             }
@@ -55,7 +58,6 @@ const index = async (req,res,next) => {
                         if(session && session.user){
                             req.session.save();
                             Object.assign(req.session,session);
-                            console.log('1');
                             res.redirect('/my/dashboard');
                             found = true;
                             return;
@@ -92,18 +94,19 @@ const checkLogin = async (req,res) => {
         if(req.session.returnUrl){
             res.redirect(req.session.returnUrl);
             return;
-        }else
-        if(req.session.logged_in){
-            res.redirect("/my/dashboard");
-            return;
         }else if(req.session._id){
             const user = await User.findById(req.session._id);
-            if(user.isBlocked==false){
+            if(user && user.isBlocked===false && user.setUpComplete ===false){
                 res.render("register",{
                     titleJumbo:"Welcome",
                     buttonTitle:"Create your profile"
                 }); 
+                return;
+            }else if(user && user.isBlocked===false && user.setUpComplete === true){
+                res.redirect("/my/dashboard");
+                return;
             }else{
+                req.flash("warning","You are not permitted to login. We are currently in closed alpha. To sign up to the queue send an email at info@fyrebrick.be");
                 res.render('logon');
             }
             return;

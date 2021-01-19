@@ -18,6 +18,7 @@ const redirect={
         }
         try{
         user = await google.checkSignIn(req);
+        console.log(user);
         }catch(err){
             console.log(err);
         }
@@ -28,8 +29,8 @@ const redirect={
         }else{
             if(user.isBlocked){
                 logger.warn(`user ${req.session.email} was blocked entry`);
-                req.flash("warning","You entry was denied, but we have put you in a queue");
-                await req.session.destroy();
+                req.session.logged_in = false;
+                //req.flash("warning","You entry was denied, but we have put you in a queue");
                 res.redirect('/');
                 return;
             }
