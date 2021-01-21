@@ -33,11 +33,11 @@ html
             .box-inner
               .form-group
                 label(for='tokenKey') Token Value
-                input#tokenKey.form-control(name="tokenValue", type='text' aria-describedby='tokenKeyHelp' placeholder='Enter Token Value', value=(user)?user.TOKEN_VALUE:(session.user)?session.user.TOKEN_VALUE:"", required='')
+                input#tokenKey.form-control(name="tokenValue", type='text' aria-describedby='tokenKeyHelp' placeholder='Enter token Value', value=(user)?user.TOKEN_VALUE:(session.user)?session.user.TOKEN_VALUE:"", required='')
                 small#tokenKeyHelp.form-text.text-muted The token key value for our ip address.
               .form-group
                 label(for='tokenSecret') Token secret
-                input#tokenSecret.form-control(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret', value=(user )?user.TOKEN_SECRET:(session.user)?session.user.TOKEN_SECRET:"", required='' )
+                input#tokenSecret.form-control(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter token secret', value=(user )?user.TOKEN_SECRET:(session.user)?session.user.TOKEN_SECRET:"", required='' )
                 small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
               a#back.btn.btn-success.btn-lg.text-white( role='button') back
               input#create.btn.btn-primary.btn-lg(type='submit' role='button', value=buttonTitle)

@@ -22,5 +22,5 @@ $(document).ready(function (){
         $(".text").text("Done, redirecting to dashboard...");
         redirecting = true;
         location.href='/my/dashboard'
-    }, 200000);
+    }, 150000); //2.5min
 })

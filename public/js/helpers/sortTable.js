@@ -18,16 +18,23 @@ function sortTable(e){
     const row_number = e.target.id;
     let rows = $("#"+sortableTableId+" tbody tr");
     let type = "asc";
-    if($(e.target).data('type')==='asc'){
+    let target;
+    if(e.target.classList.contains("sortable")){
+        target = e.target;
+    }else if(e.target.classList.contains("sort-box")){
+        target = e.target.parentNode;
+    }else if(e.target.classList.contains("fas")){
+        target = e.target.parentNode.parentNode;
+    }
+    console.log(target);
+    if($(target).data('type')==='asc'){
         type = 'desc'
-        $(e.target).data("type",type);
-        $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-up sort-active sort-button\"></i>");
-    }else if($(e.target).data('type')==='desc'){
+        $(target).data("type",type);
+        $("#"+target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-up sort-active sort-button\"></i>");
+    }else if($(target).data('type')==='desc'){
         type = 'asc';
-        $(e.target).data("type",type);
-        $("#"+e.target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-down sort-button sort-active\"></i>");
-    }else{
-        console.log('found nothing');
+        $(target).data("type",type);
+        $("#"+target.id+" .sort-box").empty().append("<i class=\"fas fa-sort-down sort-button sort-active\"></i>");
     }
     rows.sort(function(a,b){
         if(type==='desc'){

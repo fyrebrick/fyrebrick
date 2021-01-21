@@ -28,7 +28,7 @@ const inventory = {
             let search = req.query.s;
             if(req.query.exact==="Y"){
                 logger.debug(`search with exact remarks`)
-                const inventory = await Inventory.find({remarks:search,CONSUMER_KEY:req.session.user.CONSUMER_KEY});
+                const inventory = await Inventory.find({remarks:search,CONSUMER_KEY:req.session.user.CONSUMER_KEY}).limit(500);
                 if(inventory.length===0){
                     logger.info(`nothing found for remarks ${search}`);
                 }else{
@@ -36,7 +36,7 @@ const inventory = {
                 }
                 res.send(inventory);
             }else{
-                const inventory = await Inventory.find({remarks:{ "$regex": search, "$options": "i" },CONSUMER_KEY:req.session.user.CONSUMER_KEY});
+                const inventory = await Inventory.find({remarks:{ "$regex": search, "$options": "i" },CONSUMER_KEY:req.session.user.CONSUMER_KEY}).limit(500);
                 if(inventory.length===0){
                     logger.info(`nothing found for remarks ${search}`);
                 }else{

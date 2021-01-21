@@ -25,3 +25,12 @@
 #message-close-button{
     right:-10px;
 }
+.icon-with-text{
+    padding-right:10px;
+}
+#filterBody input{
+    z-index: 1000;
+}
+.remove-padding{
+    padding:0px;
+}
