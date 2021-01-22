@@ -23,7 +23,7 @@ block content
                                     .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
                                         span=order.orders_checked+"/"+order.unique_count
                 .card
-                    .card-body
+                    #tag-control-card.card-body
                         #tag-control.tag-list
                 .card
                     #order_data.card-body
@@ -146,6 +146,7 @@ block modals
                             .row
                                 .col-10.remove-padding.pl-3
                                     input#filterRemarksInput.form-control(type='text' placeholder='Add a tag')
+                                    p.small Turn the tags on or off in the order list.
                                 .col-2.remove-padding
                                     button#filterRemarksBtn.button-with-middle-icon.btn.btn-block.btn-primary
                                         i.fas.fa-plus-circle

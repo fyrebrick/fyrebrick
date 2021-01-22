@@ -1,9 +1,11 @@
 let tagCount = 0;
 $(document).ready(function () {
-    window.tags = [];
     sortableTableId = "mainTable";
     addSortIcons();
-    //const tags = $('#my-tag-list').tags();
+    
+    $("#tag-control-card").css("display","none"); //start with empty tags
+    window.tags = [];
+
     document.querySelectorAll("#mainTable th.sortable").forEach(function (item){
         item.addEventListener("click",sortTable)
     })
@@ -59,12 +61,7 @@ $(document).ready(function () {
             }
         });
     });
-
-    // Tag debugging log
-    // setInterval(function() {
-    //     console.log(JSON.stringify(tags));
-    //   }, 3000);
-
+    
     // Filter: tag input handler
     $("#filterRemarksInput").on('keyup', function (e) {
             if (e.key === 'Enter') {
@@ -76,14 +73,14 @@ $(document).ready(function () {
     })
 
     // Filter: Remove tag handler
-    $(".tag-list").on('click',".remove-tag",function(e){
+    $("#tag-list").on('click',".remove-tag",function(e){
         //1. remove tag in the tags variable
+        const id = $($(this).parents()[0]).attr('id');
         tags.forEach(function(tag, index){
-            if($(this).hasClass("tagID-"+tag.id)){
+            if(id==='tagID-'+tag.id){
                 tags.splice(index,1);
             }
         });
-        //2. render all tags again
         renderAllTagsAgain();
     });
 
@@ -101,29 +98,40 @@ $(document).ready(function () {
             if($(_tag).hasClass('tagID-'+tag.id)){
                 tags[index].status = (tag.status==='off')?"on":"off";
             }
-        })
+        });
+        //3. Filter items' remarks by tags
+        filterListOnTags();
     });
 });
 
 function filterListOnTags (){
     // iterate all tags over all remarks
     //if there are no tags, show all
-    if(tags.length===0){
+    let totalOn = 0;
+    tags.forEach(function(tag){
+        if(tag.status==='on'){
+            totalOn++;
+        }
+    })
+    if(totalOn===0){
         $("#dynamicTable tr").removeClass("hide-filter-tag");
     }else{
+        let totalRan = 0;
         tags.forEach(function(tag,index){
-            console.log(`running tag ${tag}`);
-            $(".remarks").each(function(){
-                //1. check if is not already used by a filter
-                if(index===0 || $($(this).parents()[3]).hasClass("hide-filter-tag")){
-                    //2. check if this remarks should be hidden by this tag
-                    if(!$(this).html().includes(tag)){
-                        $($(this).parents()[3]).addClass("hide-filter-tag");
-                    }else{
-                        $($(this).parents()[3]).removeClass("hide-filter-tag");
+            if(tag.status==='on'){
+                $(".remarks").each(function(){
+                    //1. check if is not already used by a filter
+                    if((totalRan===0) || $($(this).parents()[3]).hasClass("hide-filter-tag")){
+                        //2. check if this remarks should be hidden by this tag
+                        if(!$(this).html().includes(tag.text)){
+                            $($(this).parents()[3]).addClass("hide-filter-tag");
+                        }else{
+                            $($(this).parents()[3]).removeClass("hide-filter-tag");
+                        }
                     }
-                }
-            });
+                });
+                totalRan++;
+            }
         });
     }
 }
@@ -134,12 +142,12 @@ function createNewTagFromInput(){
     //2. check for tag already existing
     let isDuplicate = false;
     tags.forEach(function(tag){
-        if(text===tag){
+        if(text===tag.text){
             isDuplicate = true;
         }
     });
     //3. check for xss
-    if(isDuplicate || text.includes('<script>')|| text.trim()===""){
+    if(isDuplicate===true || text.includes('<script>')|| text.trim()===""){
         $("#filterRemarksInput").addClass("is-invalid");
         return;
     }else{
@@ -153,31 +161,33 @@ function createNewTagFromInput(){
 }
 
 function renderAllTagsAgain(){
+    
     //clears all tags and starts rendering them again.
 
     //1. clear control area and list area
     $("#tag-list").empty();
     $("#tag-control").empty();
-
-    //2. iterate over all tags
-    tags.forEach(function(tag){
-        //3. Add the tag to list area
-        const taglistHTML = `<span class="tagID-${tag.id} tag badge badge-pill badge-info">
-                                ${tag.text}
-                                <a href="#" class="remove-tag">
-                                    <i class="far fa-times-circle"></i>
-                                </a>
-                            </span>`;
-        $("#tag-list").append(taglistHTML);
-        //4. Add the tag to the control area
-        const tagControlHTML = `<span class="tagID-${tag.id} control-tag tag badge badge-pill ${tag.status}">
+    if(tags.length===0){
+        $("#tag-control-card").css("display","none");
+    }else{
+        $("#tag-control-card").css("display","block");
+        //2. iterate over all tags
+        tags.forEach(function(tag){
+            //3. Add the tag to list area
+            const taglistHTML = `<span id="tagID-${tag.id}" class="tag badge badge-pill badge-info">
                                     ${tag.text}
-                                    <a href="#" class="remove-control-tag remove-tag">
+                                    <a href="#" class="remove-tag">
                                         <i class="far fa-times-circle"></i>
                                     </a>
                                 </span>`;
-        $("#tag-control").append(tagControlHTML);
-    })
+            $("#tag-list").append(taglistHTML);
+            //4. Add the tag to the control area
+            const tagControlHTML = `<span class="tagID-${tag.id} control-tag tag badge badge-pill ${tag.status}">
+                                        ${tag.text}
+                                    </span>`;
+            $("#tag-control").append(tagControlHTML);
+        });
+}
 }
 
 

@@ -12,6 +12,9 @@
     background-color:#fff;
     color:#727272;
 }
+#tag-control-card{
+    padding:5px !important;
+}
 .control-tag.off i {
     color:#727272;
 }
@@ -38,7 +41,8 @@
     font-size:20px !important;
     font-weight: 400 !important;
     cursor: pointer;
-    padding-left: 28px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
 }
 .tag{
     margin: 3px;
