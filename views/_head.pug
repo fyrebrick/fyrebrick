@@ -1,9 +1,12 @@
 head
+    meta( http-equiv="Content-Type" content="text/html; charset=utf-8")
     title=title
     link(rel='stylesheet' href='/dist/bootstrap@4.5.3/bootstrap.min.css')
     link(rel="stylesheet", href="/css/navbar.css")
     link(rel="stylesheet", href="/css/main.css")
-    meta(name="viewport" content="width=device-width, initial-scale=1,user-scalable=0'", charset="utf-8")
+    link(rel="manifest" href="/manifest.webmanifest")
+    
+    meta(name="viewport" content="width=device-width, initial-scale=1,user-scalable=0'")
     // JS, Popper.js, and jQuery
     script(src='/dist/popper.js@1.16.1/popper.min.js')
     script(src='/dist/jquery@3.5.1/jquery-3.5.1.slim.min.js')
@@ -16,4 +19,5 @@ head
     script(src="/fn/orderList.js")
     script(src="/js/navbar.js")
     script(src="/js/main.js")
+    script(src="/service-worker.js")
     link(rel="stylesheet", href="/css/global.css")

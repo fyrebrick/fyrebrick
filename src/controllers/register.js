@@ -24,8 +24,9 @@ const register = {
                     logger.error(err)
                 }
                 if(respond.req.path.includes('notFound.asp')){
-                    logger.error(`User name filled in is not valid`);
-                    return res.send({success:false,isEmpty:{userName:true}});
+                    logger.warn(`User name filled in is not valid`);
+                    req.flash('warning',"Your bricklink username is not valid");
+                    return res.render('register',{user:userInfo,userIsNotValid:true});
                 }
                 const test = await bricklinkPlus.api.item.getItem("PART","3002",userInfo);
                 logger.info(`Test of bricklink API keys : status code ${test.meta.code}`);
@@ -86,7 +87,8 @@ const register = {
                     }
                 }else{
                     logger.warn(`user trying to register but gave status code ${test.meta.code}, err: ${test.meta.message}`);
-                    res.render('register',{user:userInfo});
+                    req.flash('warning',"Your bricklink API keys are not valid, double check them again");
+                    return res.render('register',{user:userInfo,keyInvalid:true});
                 }
             });
         }else{
