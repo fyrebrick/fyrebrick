@@ -5,7 +5,7 @@ $(document).ready(function () {
         item.addEventListener("click",sortTable)
     })
     $("#0").click();
-    const socket = io("https://nas.karel.be:40365");
+    const socket = io("https://my.fyrebrick.be");
     socket.on("connect_error", err => {
         console.log(err instanceof Error); // true
         console.log(err.message); // not authorized

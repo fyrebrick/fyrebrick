@@ -75,7 +75,7 @@ const start = function (app) {
                 res.clearCookie(key);
             }
         }
-
+        res.setHeader("Access-Control-Allow-Origin","https://my.fyrebrick.be");
         next();
     });
     startUp();

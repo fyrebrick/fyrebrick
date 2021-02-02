@@ -153,7 +153,7 @@ function createNewTagFromInput(){
     }else{
         $("#filterRemarksInput").removeClass("is-invalid");
     }
-    tags.push({text:text,id:tagCount,status:'off'});
+    tags.push({text:text,id:tagCount,status:'on'});
     tagCount++;
     renderAllTagsAgain(); //will render all tags that are in the tags variable
     //5. remove input value
@@ -244,7 +244,8 @@ function show_modal(e){
     frontend.order.items.forEach(function(batch){
         batch.forEach(function(i){
             if(i.inventory_id==e.target.id.substr(3)){
-                const encode_str = i.item.name.replaceAll('&#40;','(').replaceAll("&#41;",")");
+                let encode_str = i.item.name;
+                try{encode_str = i.item.name.replaceAll('&#40;','(').replaceAll("&#41;",")");}catch(e){};
                 $("#enlargedTitleLabel").text("Item no. "+i.item.no+" price: "+Number(i.unit_price_final).toFixed(2)+" "+i.currency_code);
                 $("#enlargedFooter").text(unescape(encode_str)); //does not want to unescape
                 const link = "https://www.bricklink.com/v2/inventory_detail.page?invID="+i.inventory_id;

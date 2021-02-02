@@ -4,6 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "redis": "docker run -p 6379:6379 --name redis -d redis",
+    "mongo": "docker run -p 27017:27017 --name mongo -d mongo",
     "start": "node ./app.js",
     "docker": "docker build -t snakehead007/bricklink-webservice:latest . && docker push snakehead007/bricklink-webservice:latest",
     "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
