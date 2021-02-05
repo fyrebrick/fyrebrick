@@ -10,7 +10,18 @@ block content
             .col-lg-12
                 .card
                     .card-body
-                        .row
+                        #bigScreenUpperRow.row
+                            .col-3
+                                a(role='button', href="/my/orders").btn.btn-block.btn-outline-info
+                                        i.icon-with-text.fas.fa-chevron-left
+                                        span All orders
+                            .col-6
+                                h3="Order "+order.order_id
+                            .col-3
+                                button#filterBtn.btn.btn-block.btn-outline-info
+                                    i.icon-with-text.fas.fa-filter
+                                    span#filterBtnText Filter
+                        #smallScreenUpperRow.row
                             .col-9
                                 h3="Order "+order.order_id
                             .col-3

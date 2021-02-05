@@ -24,7 +24,7 @@ block content
                                                     small#consumerKeyHelp.form-text.text-muted The consumer key publicly identifies your API account
                                                 .form-group
                                                     label(for='consumerSecret') Consumer secret
-                                                    input#consumerSecret.api-input.form-control(name="consumerSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:"", required='')
+                                                    input#consumerSecret.api-input.form-control.addPasswordEye(name="consumerSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:"", required='')
                                                     small#consumerSecretHelp.form-text.text-muted The consumer secret is your confidential API password
                                                 .form-group
                                                     label(for='tokenValue') Token Value
@@ -32,7 +32,7 @@ block content
                                                     small#tokenValueHelp.form-text.text-muted The token key value for our ip address.
                                                 .form-group
                                                     label(for='tokenSecret') Token secret
-                                                    input#tokenSecret.api-input.form-control(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret', value=(user )?user.TOKEN_SECRET:"", required='' )
+                                                    input#tokenSecret.api-input.form-control.addPasswordEye(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret', value=(user )?user.TOKEN_SECRET:"", required='' )
                                                     small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
                                                 input#apiButton.btn.btn-primary.btn-lg(type='submit' role='button', value="Update")
                                     li.list-group-item
@@ -78,6 +78,11 @@ block content
                                                     i.pl-1.fas.fa-sync-alt
                                                     span.pl-1 Update all orders
                                                 small#update-ordersHelp.form-text.text-muted Update every single order from your bricklink account
+                                            .form-group
+                                                button#fix-orders.update-btn.orders.btn.btn-outline-warning(type='button')
+                                                    i.pl-1.fas.fa-hammer
+                                                    span.pl-1 Fix dulplicate orders
+                                                small#update-ordersHelp.form-text.text-muted Removes all duplicates orders if any.
                                     li.list-group-item
                                         .banner
                                             i.fas.fa-user.data-status

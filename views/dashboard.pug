@@ -15,20 +15,22 @@ block content
                                             ul.list-group.list-group-flush
                                                 li.list-group-item
                                                     span.stat-data="Items: "+info.n4totalItems.toLocaleString()
-                                        .rank
-                                            ul.list-group.list-group-flush
-                                                li.list-group-item
-                                                    i.rank-icon.far.fa-flag
-                                                    if user && user.rank && user.rank.national.items.length >=1
-                                                        span.rank-data="National rank: "+user.rank.national.items[0].rank+"th"
-                                                    else
-                                                        span.rank-data="National rank: N/A"
-                                                //li.list-group-item
-                                                    i.rank-icon.fas.fa-globe
-                                                    if user && user.rank && user.rank.global.items.length >=1
-                                                        span.rank-data="Global rank: "+user.rank.global.items[0].rank+"th"
-                                                    else
-                                                        span.rank-data="Global rank: N/A"
+                                        
+                                        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
+                                            .rank
+                                                ul.list-group.list-group-flush
+                                                    li.list-group-item
+                                                        i.rank-icon.far.fa-flag
+                                                        if user && user.rank && user.rank.national.items.length >=1
+                                                            span.rank-data="National rank: "+user.rank.national.items[0].rank+"th"
+                                                        else
+                                                            span.rank-data="National rank: N/A"
+                                                    //li.list-group-item
+                                                        i.rank-icon.fas.fa-globe
+                                                        if user && user.rank && user.rank.global.items.length >=1
+                                                            span.rank-data="Global rank: "+user.rank.global.items[0].rank+"th"
+                                                        else
+                                                            span.rank-data="Global rank: N/A"
 
                                 li.list-group-item 
                                     .statbox
@@ -36,40 +38,43 @@ block content
                                             ul.list-group.list-group-flush
                                                 li.list-group-item
                                                     span.stat-data="Lots: "+info.n4totalLots.toLocaleString()
-                                        .rank
-                                            ul.list-group.list-group-flush
-                                                li.list-group-item
-                                                    i.rank-icon.far.fa-flag
-                                                    if user && user.rank && user.rank.national.lots.length >=1
-                                                        span.rank-data="National rank: "+user.rank.national.lots[0].rank+"th"
-                                                    else
-                                                        span.rank-data="National rank: N/A"
-                                                //li.list-group-item
-                                                    i.rank-icon.fas.fa-globe
-                                                    if user && user.rank && user.rank.global.lots.length >=1
-                                                        span.rank-data="Global rank: "+user.rank.global.lots[0].rank+"th"
-                                                    else
-                                                        span.rank-data="Global rank: N/A"
+                                        
+                                        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
+                                            .rank
+                                                ul.list-group.list-group-flush
+                                                    li.list-group-item
+                                                        i.rank-icon.far.fa-flag
+                                                        if user && user.rank && user.rank.national.lots.length >=1
+                                                            span.rank-data="National rank: "+user.rank.national.lots[0].rank+"th"
+                                                        else
+                                                            span.rank-data="National rank: N/A"
+                                                    //li.list-group-item
+                                                        i.rank-icon.fas.fa-globe
+                                                        if user && user.rank && user.rank.global.lots.length >=1
+                                                            span.rank-data="Global rank: "+user.rank.global.lots[0].rank+"th"
+                                                        else
+                                                            span.rank-data="Global rank: N/A"
                                 li.list-group-item
                                     .statbox 
                                         .stat
                                             ul.list-group.list-group-flush
                                                 li.list-group-item
                                                     span.stat-data="Views: "+info.n4totalViews.toLocaleString()
-                                        .rank
-                                            ul.list-group.list-group-flush
-                                                li.list-group-item
-                                                    i.rank-icon.far.fa-flag 
-                                                    if user && user.rank && user.rank.national.views.length >=1
-                                                        span.rank-data="National rank: "+user.rank.national.views[0].rank+"th"
-                                                    else
-                                                        span.rank-data="National rank: N/A"
-                                                //li.list-group-item
-                                                    i.rank-icon.fas.fa-globe
-                                                    if user && user.rank && user.rank.global.views.length >=1
-                                                        span.rank-data="Global rank: "+user.rank.global.views[0].rank+"th"
-                                                    else
-                                                        span.rank-data="Global rank: N/A"
+                                        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
+                                            .rank
+                                                ul.list-group.list-group-flush
+                                                    li.list-group-item
+                                                        i.rank-icon.far.fa-flag 
+                                                        if user && user.rank && user.rank.national.views.length >=1
+                                                            span.rank-data="National rank: "+user.rank.national.views[0].rank+"th"
+                                                        else
+                                                            span.rank-data="National rank: N/A"
+                                                    //li.list-group-item
+                                                        i.rank-icon.fas.fa-globe
+                                                        if user && user.rank && user.rank.global.views.length >=1
+                                                            span.rank-data="Global rank: "+user.rank.global.views[0].rank+"th"
+                                                        else
+                                                            span.rank-data="Global rank: N/A"
 
                         //This should have: store info ( items, lots, views and ranking), new orders ( amount, in progress)
 block styles

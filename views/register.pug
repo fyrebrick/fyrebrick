@@ -33,7 +33,7 @@ html
                     small#consumerKeyHelp.form-text.text-muted The consumer key publicly identifies your API account
                   .form-group
                     label(for='consumerSecret') Consumer secret
-                    input#consumerSecret.is-invalid.form-control(name="consumerSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:(session.user)?session.user.CONSUMER_SECRET:"", required='')
+                    input#consumerSecret.is-invalid.form-control.addPasswordEye(name="consumerSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:(session.user)?session.user.CONSUMER_SECRET:"", required='')
                     small#consumerSecretHelp.form-text.text-muted The consumer secret is your confidential API password
                 else
                   .form-group
@@ -42,7 +42,7 @@ html
                     small#consumerKeyHelp.form-text.text-muted The consumer key publicly identifies your API account
                   .form-group
                     label(for='consumerSecret') Consumer secret
-                    input#consumerSecret.form-control(name="consumerSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:(session.user)?session.user.CONSUMER_SECRET:"", required='')
+                    input#consumerSecret.form-control.addPasswordEye(name="consumerSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter consumer secret',value=(user)?user.CONSUMER_SECRET:(session.user)?session.user.CONSUMER_SECRET:"", required='')
                     small#consumerSecretHelp.form-text.text-muted The consumer secret is your confidential API password
               a#next.btn.btn-success.btn-lg.text-white( role='button') next
           #tokenSection(style="display:none;")
@@ -54,7 +54,7 @@ html
                   small#tokenKeyHelp.form-text.text-muted The token key value for our ip address.
                 .form-group
                   label(for='tokenSecret') Token secret
-                  input#tokenSecret.is-invalid.form-control(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter token secret', value=(user )?user.TOKEN_SECRET:(session.user)?session.user.TOKEN_SECRET:"", required='' )
+                  input#tokenSecret.is-invalid.form-control.addPasswordEye(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter token secret', value=(user )?user.TOKEN_SECRET:(session.user)?session.user.TOKEN_SECRET:"", required='' )
                   small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
               else
                 .form-group
@@ -63,7 +63,7 @@ html
                   small#tokenKeyHelp.form-text.text-muted The token key value for our ip address.
                 .form-group
                   label(for='tokenSecret') Token secret
-                  input#tokenSecret.form-control(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter token secret', value=(user )?user.TOKEN_SECRET:(session.user)?session.user.TOKEN_SECRET:"", required='' )
+                  input#tokenSecret.form-control.addPasswordEye(name="tokenSecret", type='password' aria-describedby='consumerSecretHelp' placeholder='Enter token secret', value=(user )?user.TOKEN_SECRET:(session.user)?session.user.TOKEN_SECRET:"", required='' )
                   small#tokenSecretHelp.form-text.text-muted The token key secret for our ip address.
               a#back.btn.btn-success.btn-lg.text-white( role='button') back
               input#create.btn.btn-primary.btn-lg(type='submit' role='button', value=buttonTitle)
@@ -100,7 +100,6 @@ html
                 img.register-img.rounded.mx-auto.d-block(src="/images/register/Token_added.JPG")
           .modal-footer
             button.btn.btn-secondary(type='button' data-dismiss='modal') Close
-
 
 
     script(src="/js/welcome.js")

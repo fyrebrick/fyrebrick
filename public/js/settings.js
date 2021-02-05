@@ -53,6 +53,19 @@ $(document).ready(function (){
         });
     });
 
+    //fix orders button
+    $("#fix-orders").on('click',function(){
+        $.ajax({
+            url:"/my/settings/fix/duplicates",
+            method:"GET",
+            beforeSend:function(){
+                $("#fix-orders i").addClass("loading");
+            }
+        }).done(function(data){
+            $("#fix-orders i").removeClass("loading");
+        });
+    });
+
     //update inventory updater
     let originalValueInventoryInterval = $("#inventoryInterval").val();
     $("#inventoryInterval").on('mouseup',function(){

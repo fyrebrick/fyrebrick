@@ -32,3 +32,12 @@
 .button{
     
 }
+.passwordEye{
+    position: relative;
+    margin: -27px 10px;
+    float: right;
+    color: #bbb;
+}
+.passwordEye:hover{
+    color:#3e3d3d;
+}
