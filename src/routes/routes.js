@@ -1,3 +1,7 @@
+/**
+ * All routes for / are defined here.
+ * 
+ */
 const router = require('express').Router();
 const routes = {
     my:require('./my'),
@@ -11,7 +15,8 @@ const controllers = {
     register:require('../controllers/register'),
     redirect:require('../controllers/redirect'),
     logout:require('../controllers/logout'),
-    charts:require('../controllers/charts')
+    charts:require('../controllers/charts'),
+    socket:require('../controllers/websocket')
 }
 
 router.use('/my',middleware.isSignedIn,routes.my);
@@ -22,9 +27,10 @@ router.get('/redirect',controllers.redirect.get);
 router.get('/register',controllers.register.get);
 router.post('/register',controllers.register.post);
 router.get('/logout',controllers.logout.get);
-
+router.all('/socket.io',controllers.socket.io);
 router.get('/charts',controllers.charts.index);
 router.get('/charts/global/:type',controllers.charts.global);
 router.get('/charts/:countryID/:type',controllers.charts.national);
+router.post('/acceptCookies',controllers.login.acceptCookies);
 
 module.exports = router;

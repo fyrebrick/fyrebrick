@@ -7,7 +7,86 @@ block content
                     .card-body
                         .jumbotron
                             h2.display-4=info.name
-                            hr.my-4
+                            if Object.keys(orders).length != 0
+                                hr.my-4
+                                table.table
+                                    thead
+                                        tr
+                                            if orders.ready > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-ready
+                                                        i.fas.fa-check.data-status(aria-hidden="true")
+                                                        span.status-name Ready
+                                            if orders.paid > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-paid
+                                                            i.fas.fa-dollar-sign.data-status(aria-hidden="true")
+                                                            span.status-name Paid
+                                            if orders.updated > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-updated
+                                                            i.fas.fa-clipboard-list.data-status(aria-hidden="true")
+                                                            span.status-name Updated    
+                                            if orders.processing > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-processing
+                                                            i.fas.fa-sync.data-status(aria-hidden="true")
+                                                            span.status-name Processing
+                                            if orders.packed > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-packed
+                                                            i.fas.fa-box.data-status(aria-hidden="true")
+                                                            span.status-name Packed
+                                            if orders.pending > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-pending
+                                                            i.fas.fa-hourglass.data-status(aria-hidden="true")
+                                                            span.status-name Pending
+                                        tbody
+                                            tr  
+                                                if orders.ready > 0
+                                                    td
+                                                        span=orders.ready+" "
+                                                        if orders.ready == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.paid > 0
+                                                    td
+                                                        span=orders.paid+" "
+                                                        if orders.paid == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.updated > 0
+                                                    td
+                                                        span=orders.updated+" "
+                                                        if orders.updated == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.processing > 0
+                                                    td
+                                                        span=orders.processing+" "
+                                                        if orders.processing == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.packed > 0
+                                                    td
+                                                        span=orders.packed+" "
+                                                        if orders.packed == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.pending > 0
+                                                    td
+                                                        span=orders.pending+" "
+                                                        if orders.pending == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                            
                             ul.list-group.list-group-flush
                                 li.list-group-item 
                                     .statbox
@@ -15,22 +94,22 @@ block content
                                             ul.list-group.list-group-flush
                                                 li.list-group-item
                                                     span.stat-data="Items: "+info.n4totalItems.toLocaleString()
-                                                li.list-group-item
-                                        .rank
-                                            ul.list-group.list-group-flush
-                                                li.list-group-item
-                                                    i.rank-icon.far.fa-flag
-                                                    if user && user.rank && user.rank.national.items.length >=1
-                                                        span.rank-data="National rank: "+user.rank.national.items[0].rank+"th"
-                                                    else
-                                                        span.rank-data="National rank: N/A"
-
-                                                //li.list-group-item
-                                                    i.rank-icon.fas.fa-globe
-                                                    if user && user.rank && user.rank.global.items.length >=1
-                                                        span.rank-data="Global rank: "+user.rank.global.items[0].rank+"th"
-                                                    else
-                                                        span.rank-data="Global rank: N/A"
+                                        
+                                        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
+                                            .rank
+                                                ul.list-group.list-group-flush
+                                                    li.list-group-item
+                                                        i.rank-icon.far.fa-flag
+                                                        if user && user.rank && user.rank.national.items.length >=1
+                                                            span.rank-data="National rank: "+user.rank.national.items[0].rank+"th"
+                                                        else
+                                                            span.rank-data="National rank: N/A"
+                                                    //li.list-group-item
+                                                        i.rank-icon.fas.fa-globe
+                                                        if user && user.rank && user.rank.global.items.length >=1
+                                                            span.rank-data="Global rank: "+user.rank.global.items[0].rank+"th"
+                                                        else
+                                                            span.rank-data="Global rank: N/A"
 
                                 li.list-group-item 
                                     .statbox
@@ -38,45 +117,44 @@ block content
                                             ul.list-group.list-group-flush
                                                 li.list-group-item
                                                     span.stat-data="Lots: "+info.n4totalLots.toLocaleString()
-                                                li.list-group-item
-                                        .rank
-                                            ul.list-group.list-group-flush
-                                                li.list-group-item
-                                                    i.rank-icon.far.fa-flag
-                                                    if user && user.rank && user.rank.national.lots.length >=1
-                                                        span.rank-data="National rank: "+user.rank.national.lots[0].rank+"th"
-                                                    else
-                                                        span.rank-data="National rank: N/A"
-                                                //li.list-group-item
-                                                    i.rank-icon.fas.fa-globe
-                                                    if user && user.rank && user.rank.global.lots.length >=1
-                                                        span.rank-data="Global rank: "+user.rank.global.lots[0].rank+"th"
-                                                    else
-                                                        span.rank-data="Global rank: N/A"
+                                        
+                                        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
+                                            .rank
+                                                ul.list-group.list-group-flush
+                                                    li.list-group-item
+                                                        i.rank-icon.far.fa-flag
+                                                        if user && user.rank && user.rank.national.lots.length >=1
+                                                            span.rank-data="National rank: "+user.rank.national.lots[0].rank+"th"
+                                                        else
+                                                            span.rank-data="National rank: N/A"
+                                                    //li.list-group-item
+                                                        i.rank-icon.fas.fa-globe
+                                                        if user && user.rank && user.rank.global.lots.length >=1
+                                                            span.rank-data="Global rank: "+user.rank.global.lots[0].rank+"th"
+                                                        else
+                                                            span.rank-data="Global rank: N/A"
                                 li.list-group-item
                                     .statbox 
                                         .stat
                                             ul.list-group.list-group-flush
                                                 li.list-group-item
                                                     span.stat-data="Views: "+info.n4totalViews.toLocaleString()
-                                                li.list-group-item
-                                        .rank
-                                            ul.list-group.list-group-flush
-                                                li.list-group-item
-                                                    i.rank-icon.far.fa-flag 
-                                                    if user && user.rank && user.rank.national.views.length >=1
-                                                        span.rank-data="National rank: "+user.rank.national.views[0].rank+"th"
-                                                    else
-                                                        span.rank-data="National rank: N/A"
-                                                //li.list-group-item
-                                                    i.rank-icon.fas.fa-globe
-                                                    if user && user.rank && user.rank.global.views.length >=1
-                                                        span.rank-data="Global rank: "+user.rank.global.views[0].rank+"th"
-                                                    else
-                                                        span.rank-data="Global rank: N/A"
+                                        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
+                                            .rank
+                                                ul.list-group.list-group-flush
+                                                    li.list-group-item
+                                                        i.rank-icon.far.fa-flag 
+                                                        if user && user.rank && user.rank.national.views.length >=1
+                                                            span.rank-data="National rank: "+user.rank.national.views[0].rank+"th"
+                                                        else
+                                                            span.rank-data="National rank: N/A"
+                                                    //li.list-group-item
+                                                        i.rank-icon.fas.fa-globe
+                                                        if user && user.rank && user.rank.global.views.length >=1
+                                                            span.rank-data="Global rank: "+user.rank.global.views[0].rank+"th"
+                                                        else
+                                                            span.rank-data="Global rank: N/A"
 
                         //This should have: store info ( items, lots, views and ranking), new orders ( amount, in progress)
 block styles
     link(rel="stylesheet", href="/css/dashboard.css")
-block scripts
-    script(src="/js/index.js")

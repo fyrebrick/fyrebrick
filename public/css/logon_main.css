@@ -35,32 +35,11 @@ body,html{
     height:100%;
     font-family:Poppins-Regular,sans-serif
 }
-a{
-    font-family:Poppins-Regular;
-    font-size:14px;
-    line-height:1.7;
-    color:#666;
-    margin:0;
-    transition:all .4s;
-    -webkit-transition:all .4s;
-    -o-transition:all .4s;
-    -moz-transition:all .4s
-}
+
 a:focus{
     outline:none!important
 }
-a:hover{
-    text-decoration:none;
-    color:#d33f8d
-}
 h1,h2,h3,h4,h5,h6{
-    margin:0
-}
-p{
-    font-family:Poppins-Regular;
-    font-size:14px;
-    line-height:1.7;
-    color:#666;
     margin:0
 }
 ul,li{
@@ -270,10 +249,6 @@ iframe{
     padding-left:23px;
     padding-bottom:5px;
     pointer-events:none;
-    -webkit-transition:all .4s;
-    -o-transition:all .4s;
-    -moz-transition:all .4s;
-    transition:all .4s
 }
 .input100:focus+.focus-input100+.symbol-input100{
     color:#d33f8d;
@@ -349,10 +324,6 @@ iframe{
     justify-content:center;
     align-items:center;
     padding:0 25px;
-    -webkit-transition:all .4s;
-    -o-transition:all .4s;
-    -moz-transition:all .4s;
-    transition:all .4s
 }
 .login100-form-btn:hover{
     background:#333
@@ -373,10 +344,6 @@ iframe{
     border-radius:3px;
     border:1px solid #e6e6e6;
     background-color:#fff;
-    -webkit-transition:all .4s;
-    -o-transition:all .4s;
-    -moz-transition:all .4s;
-    transition:all .4s
 }
 .btn-face{
     color:#3b5998

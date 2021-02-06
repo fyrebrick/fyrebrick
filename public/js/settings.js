@@ -9,6 +9,11 @@ $(document).ready(function (){
         $(this).select();
     })
 
+    //opening account removal modal
+    $("#removeAccount").on('click',function(){
+        $("#removeAccountModal").modal('show');
+    });
+
     //opening banners 
     $('.banner').on('click',function(e){
         const target = e.target.parentNode.className;
@@ -32,7 +37,6 @@ $(document).ready(function (){
                 $("#update-orders i").addClass("loading");
             }
         }).done(function(data){
-            console.log(data);
             $("#update-orders i").removeClass("loading");
         });
     });
@@ -45,8 +49,20 @@ $(document).ready(function (){
                 $("#update-inventory i").addClass("loading");
             }
         }).done(function(data){
-            console.log(data);
             $("#update-inventory i").removeClass("loading");
+        });
+    });
+
+    //fix orders button
+    $("#fix-orders").on('click',function(){
+        $.ajax({
+            url:"/my/settings/fix/duplicates",
+            method:"GET",
+            beforeSend:function(){
+                $("#fix-orders i").addClass("loading");
+            }
+        }).done(function(data){
+            $("#fix-orders i").removeClass("loading");
         });
     });
 

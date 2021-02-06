@@ -4,21 +4,21 @@ const {Inventory} = require("fyrebrick-helper").models;
 const frontend = require('../../frontend/orderList');
 const {getColorInlineStyle} = require('../../frontend/color');
 const {getImageSrcFromItem} = require('../../frontend/image');
-
+const {vars} = require('../../helpers/constants/vars');
 const orders = {
     index: async (req,res,next) => {
         const orders = await Order.find({$and: [{consumer_key:req.session.user.CONSUMER_KEY},{$or:[{status:"PENDING"},{status:"UPDATED"},{status:"PROCESSING"},{status:"READY"},{status:"PAID"},{status:"PACKED"}]}]});
         res.render('orderList',{
             orders:orders,
             fn:frontend
-        })  
+        });
     },
     all: async (req, res, next) => {
         const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
         res.render('orderList',{
             orders:orders,
             fn:frontend
-        })
+        });
     },
     order_id: async (req,res,next) => {
         const order = await Order.findOne({order_id:req.params.order_id});
@@ -35,7 +35,7 @@ const orders = {
         let itemProcessed = 0;
         order.items.forEach((batch)=>{
             totalItems+=batch.length;
-        })
+        });
         if(totalItems===0){
             res.status(404).render('error',{
                 status:'404 Not found',
@@ -117,6 +117,88 @@ const orders = {
                 }
             })
         })
+    },
+    removeDuplicates: async(req,res,next)=>{
+        await superagent
+            .post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/removeDuplicates`)
+            .send({CONSUMER_KEY:req.session.user.CONSUMER_KEY})
+            .set('accept','json')
+            .end(async(err,result)=>{
+                if(err){
+                    res.status(500);
+                    res.send({success:false});
+                }else{
+                    res.send({success:true});
+                }
+            });
+    },
+    tag:{
+        deleteTag: async (req,res,next)=>{
+            if(req.query.order_id && req.query.CONSUMER_KEY && req.query.id){
+                try{
+                    const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
+                    for(tag,index of order.tags){
+                        if(tag.id===req.query.id){
+                            order.tags.splice(index,1);
+                            await Order.updateOne({_id:order._id},order,(err,data)=>{
+                                if(err){
+                                    res.status(500).send({success:false,body:data,err:err});
+                                }else{
+                                    res.send({success:true,body:order});
+                                }
+                            });
+                            return;
+                        }
+                        if(order.tags.length === index+1){
+                            res.status(404).send({success:true,body:undefined,err:"id cannot be found in order, this should be the id of the tag"});
+                        }
+                    }
+                }catch(err){
+                    res.status(500).send({success:false,body:undefined,err:err});
+                }
+            }else{
+                const err = "query parameters invalid: "+((req.query.order_id)?"":"order_id, ")+((req.query.CONSUMER_KEY)?"":"CONSUMER_KEY, ")+((req.query.id)?"":"id ")+"not given";
+                res.status(404).send({success:false,body:undefined,err:err});
+            }
+        },
+        createTag: async (req, res, next)=>{
+            if(req.query.order_id && req.query.CONSUMER_KEY && req.query.tag){
+                try{
+                    const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
+                    if(order.tags.length===0){
+                        order.tagCount = 0;
+                    }
+                    order.tags.push(JSON.parse(req.query.tag));
+                    order.tagCount++;
+                    await Order.updateOne({_id:order._id},order,(err,data)=>{
+                        if(err){
+                            res.status(500).send({success:false,body:data,err:err});
+                            return;
+                        }else{
+                            res.send({success:true,body:order});
+                            return;
+                        }
+                    });
+                }catch(err){
+                    res.status(500).send({success:false,body:undefined,err:err});
+                }
+            }else{
+                const err = "query parameters invalid: "+((req.query.order_id)?"":"order_id, ")+((req.query.CONSUMER_KEY)?"":"CONSUMER_KEY, ")+((req.query.tag)?"":"tag ")+"not given";
+                res.status(404).send({success:false,body:undefined,err:err});
+            }
+        },
+        getTags: async (req,res,next)=>{
+            if(req.query.order_id && req.query.CONSUMER_KEY){
+                const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
+                res.send({success:true,body:{
+                    tags:order.tags,
+                    tagCount:order.tagCount
+                }});
+            }else{
+                const err = "query parameters invalid: "+((req.query.order_id)?"":"order_id, ")+((req.query.CONSUMER_KEY)?"":"CONSUMER_KEY ")+"not given";
+                res.status(404).send({success:false,body:undefined,err:err});
+            }
+        }
     }
 }
 

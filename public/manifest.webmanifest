@@ -1,0 +1,15 @@
+{
+    "name": "Fyrebrick",
+    "short_name": "Fyrebrick",
+    "start_url": "/my/dashboard",
+    "display": "standalone",
+    "background_color": "#2e2e2ed6",
+    "description": "Bricklink order picker web app.",
+    "orientation": "portrait",
+    "theme_color": "#2e2e2ed6",
+    "icons": [{
+      "src": "/images/logo-small-144px.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }]
+  }

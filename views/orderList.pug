@@ -19,7 +19,7 @@ block content
                                                 .sort-box
                                     tbody#dynamicTable
                                         each order in orders
-                                            tr(id=order.order_id)
+                                            tr.order-row(id=order.order_id)
                                                 //orderID
                                                 td.table-data.order_number.d-flex.justify-content-center( data-order=order.order_id) 
                                                     a.order_id.badge.badge-primary(href='/my/orders/'+order.order_id id='o'+order.order_id)

@@ -1,0 +1,10 @@
+.loader-circle img{
+    width:100%;
+}
+.text{
+    color: white;
+    width: 300%;
+    text-align: center;
+    transform: translate(-31%, 21px);
+    font-size: 20px;
+}

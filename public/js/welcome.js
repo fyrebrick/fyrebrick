@@ -1,4 +1,9 @@
 $(document).ready(function(){
+
+  $("#helpButton").on('click',function(){
+    $("#registerHelp").modal('show');
+  });
+
     $("#next").click(function(){
       $("#consumerSection").
       animate({

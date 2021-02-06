@@ -1,0 +1,36 @@
+#messages{
+    z-index: 10000;
+}
+.alert-message{
+    width: 60%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: absolute;
+    left: 20%;
+    top: 15px;
+    text-align: center;
+    padding-right: 10px;
+    z-index: 10000;
+    padding-right: 30px;
+}
+
+.side{
+
+}
+
+.text-line{
+    padding-left:10px;
+    padding-right:10px;
+}
+#message-close-button{
+    right:-10px;
+}
+.icon-with-text{
+    padding-right:10px;
+}
+#filterBody input{
+    z-index: 1000;
+}
+.remove-padding{
+    padding:0px;
+}

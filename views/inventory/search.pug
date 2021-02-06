@@ -23,16 +23,28 @@ block content
                                 table#mainTable.table.table-xs.mb-0
                                     thead
                                         tr
-                                            th#scanOptionCol Link
-                                            th#1.sortable Remark
+                                            th#scanOptionCol
+                                                i.small-screens.fas.fa-link
+                                                span.big-screens Inventory link 
+                                            th#1.sortable
+                                                i.small-screens.fas.fa-sticky-note
+                                                span.big-screens Remarks
                                                 .sort-box
-                                            th#2.sortable Colour
+                                            th#2.sortable
+                                                i.small-screens.fas.fa-palette
+                                                span.big-screens Colour
                                                 .sort-box
-                                            th#3.sortable Qt
+                                            th#3.sortable
+                                                span.small-screens Qt
+                                                span.big-screens Quantity
                                                 .sort-box
-                                            th#4.sortable N/U
+                                            th#4.sortable
+                                                span.small-screens N/U
+                                                span.big-screens New / Used
                                                 .sort-box
-                                            th#imageCol Image
+                                            th#imageCol
+                                                i.small-screens.fas.fa-image
+                                                span.big-screens Image
                                     tbody#bodyOfTable
 block modals
     #enlarge.modal(tabindex="-1")

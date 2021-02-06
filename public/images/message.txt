@@ -1,0 +1,31 @@
+TypeError: /usr/src/app/views/order.pug:54
+    52|                                                                     i.fas.fa-exclamation-circle
+
+    53|                                                     if item.remarks
+
+  > 54|                                                         td(data-order=fn.orderifyRemarks(item.remarks))
+
+    55|                                                             .all-info
+
+    56|                                                                 .main-info
+
+    57|                                                                     .info.info-text.remarks=item.remarks
+
+
+Cannot read property '1' of null
+    at Object.orderifyRemarks (/usr/src/app/src/frontend/orderList.js:8:20)
+    at eval (eval at wrap (/usr/src/app/node_modules/pug-runtime/wrap.js:6:10), <anonymous>:287:63)
+    at eval (eval at wrap (/usr/src/app/node_modules/pug-runtime/wrap.js:6:10), <anonymous>:571:4)
+    at eval (eval at wrap (/usr/src/app/node_modules/pug-runtime/wrap.js:6:10), <anonymous>:930:4)
+    at template (eval at wrap (/usr/src/app/node_modules/pug-runtime/wrap.js:6:10), <anonymous>:933:7)
+    at Object.exports.renderFile (/usr/src/app/node_modules/pug/lib/index.js:452:38)
+    at Object.exports.renderFile (/usr/src/app/node_modules/pug/lib/index.js:442:21)
+    at View.exports.__express [as engine] (/usr/src/app/node_modules/pug/lib/index.js:491:11)
+    at View.render (/usr/src/app/node_modules/express/lib/view.js:135:8)
+    at tryRender (/usr/src/app/node_modules/express/lib/application.js:640:10)
+    at Function.render (/usr/src/app/node_modules/express/lib/application.js:592:3)
+    at ServerResponse.render (/usr/src/app/node_modules/express/lib/response.js:1012:7)
+    at ServerResponse.res.render (/usr/src/app/node_modules/express-flash/lib/express-flash.js:29:16)
+    at render (/usr/src/app/src/controllers/my/orders.js:62:17)
+    at /usr/src/app/src/controllers/my/orders.js:57:21
+    at processTicksAndRejections (node:internal/process/task_queues:93:5)

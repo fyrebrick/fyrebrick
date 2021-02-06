@@ -1,5 +1,6 @@
 const google = require('../helpers/auth/google');
 const {User} = require("fyrebrick-helper").models;
+const {logger} = require('fyrebrick-helper').helpers;
 const redirect={
     get:async(req,res,next)=>{
         let googleCode = await google.getGoogleAccountFromCode(req.query.code);
@@ -15,13 +16,32 @@ const redirect={
                 CONSUMER_SECRET: user.CONSUMER_SECRET
             };
         }
-        await google.checkSignIn(req);
+        try{
+        user = await google.checkSignIn(req);
+        console.log(user);
+        }catch(err){
+            console.log(err);
+        }
+        if(!user){
+            logger.warn(`User not found after creating !`);
+            res.redirect('/');
+            return;
+        }else{
+            if(user.isBlocked){
+                logger.warn(`user ${req.session.email} was blocked entry`);
+                req.session.logged_in = false;
+                //req.flash("warning","You entry was denied, but we have put you in a queue");
+                res.redirect('/');
+                return;
+            }
+        }
+
+
         if(req.query && req.query.returnUrl){
             res.redirect(decodeURIComponent(req.query.returnUrl));
         }else{
             res.redirect('/');
         }
-        
     }
 }
 

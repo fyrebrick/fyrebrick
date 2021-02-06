@@ -12,3 +12,19 @@
   #create{
     margin-left:50px;
   }
+  body{
+    overflow: hidden;
+  }
+  .register-img{
+    width: 100%;
+  }
+  #helpButton{
+    font-size: 21px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  #helpButton:hover{
+    transition:ease-in-out 0.3s;
+    color:rgb(64, 52, 224);
+  }

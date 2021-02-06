@@ -1,18 +1,44 @@
 function orderifyRemarks(remarks){
-    let f;
-    const AMOUNT_OF_NUMBERS = 6;
-    let hasNum = /\d/.test(remarks);
-    let hasChar = /[a-z,A-Z]/.test(remarks);
-    if(hasNum && hasChar){
-        const p = remarks.match(/([A-Za-z]+)([0-9]+)/);        
-        const a = p[1].split('').map(x=>x.charCodeAt(0)).reduce((a,b)=>a+b);
-        f = a+"0".repeat(AMOUNT_OF_NUMBERS-p[2].length)+p[2];
-    }else if(hasNum && !hasChar){
-        f = "0".repeat(AMOUNT_OF_NUMBERS-remarks.length)+remarks;
-    }else if(!hasNum && hasChar){
-        f = remarks;
+    try{
+        let f;
+        const AMOUNT_OF_NUMBERS = 6;
+        let hasNum = /\d/.test(remarks);
+        let hasChar = /[a-z,A-Z]/.test(remarks);
+        if(hasNum && hasChar){
+            const p = remarks.match(/([A-Za-z]+)([0-9]+)/);
+            const a = p[1].split('').map(x=>x.charCodeAt(0)).reduce((a,b)=>a+b);
+            f = a+"0".repeat(AMOUNT_OF_NUMBERS-p[2].length)+p[2];
+        }else if(hasNum && !hasChar){
+            f = "0".repeat(AMOUNT_OF_NUMBERS-remarks.length)+remarks;
+        }else if(!hasNum && hasChar){
+            throw "do Catch"
+        }
+        return f;
+    }catch(e){
+        remarks = escape(remarks);
+        let newR = "";
+        remarks.split('').forEach(function(char){
+            try{
+                newR += char.toUpperCase().charCodeAt(0);
+            }catch{
+                newR += char.charCodeAt(0);
+            }
+        })
+        console.log(remarks);
+        console.log(newR.substr(0,7));
+        return newR.substr(0,7);
     }
-    return f;
+    // remarks = escape(remarks);
+    // let newR = "";
+    // remarks.split('').forEach(function(char){
+    //     try{
+    //         newR += char.toUpperCase().charCodeAt(0);
+    //     }catch{
+    //         newR += char.charCodeAt(0);
+    //     }
+    // })
+    // return newR.substr(0,7);
+    
 }
 
 function render_date_ordered(date,length){
@@ -148,10 +174,10 @@ function render_status(status){
 }
 
 function render_progress (data) {
-    let not_started = "#dc3545;"
-    let done = "#28a745;";
-    let in_progress = "#ffc107;";
-    let on_error = "#6c757d;"
+    let not_started = "#dc3545"
+    let done = "#28a745";
+    let in_progress = "#ffc107";
+    let on_error = "#6c757d"
     let status = "";
     let backgroundColor = ""
     const STYLEBGC = "background-color:";
@@ -179,18 +205,21 @@ function render_progress (data) {
             backgroundColor,
             width,
         },progressNumbers:{
-            style:((backgroundColor===done||backgroundColor===not_started)?'color:#FFF':'color:#000')
+            style:((backgroundColor===done||backgroundColor===not_started)?'color:#FFF':'color:#000'),
+            color:((backgroundColor===done||backgroundColor===not_started)?'#FFF':'#000')
         },
         span:{
-            style:((backgroundColor===done||backgroundColor===not_started)?'color:#FFF':'color:#000')
+            style:((backgroundColor===done||backgroundColor===not_started)?'color:#FFF':'color:#000'),
+            color:((backgroundColor===done||backgroundColor===not_started)?'#FFF':'#000')
         },
         total
     };
 }
-
-module.exports = {
-    render_status,
-    render_date_ordered,
-    render_progress,
-    orderifyRemarks
-}
+try{
+    module.exports = {
+        render_status,
+        render_date_ordered,
+        render_progress,
+        orderifyRemarks
+    }
+}catch(e){};

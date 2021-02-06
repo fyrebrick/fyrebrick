@@ -3,14 +3,15 @@ module.exports =
     vars:{
         express:{
             port:process.env.EXPRESS_PORT,
-            session_secret:process.env.SESSION_SECRET
+            session_secret:process.env.SESSION_SECRET,
+            cookie_secret:process.env.COOKIE_SECRET
         },
         redis:{
             port:process.env.REDIS_PORT,
             host:(process.env.DEVELOP==="true")?process.env.DEVELOP_REDIS_HOST:process.env.PRODUCTION_REDIS_HOST
         },
         fyrebrick:{
-            version:process.env.VERSION,
+            version:require("../../../package.json").version,
             type:process.env.TYPE,
             develop:(process.env.DEVELOP==="true"),
             updater_api_port:process.env.FYREBRICK_UPDATER_API_PORT,

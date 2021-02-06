@@ -10,6 +10,21 @@ const settings = {
             user:user
         });
     },
+    fix:{
+        duplicates: async (req,res,next) =>{
+            await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/removeDuplicates`)
+            .send({CONSUMER_KEY:req.session.user.CONSUMER_KEY})
+            .set('accept','json')
+            .end((err,result)=>{
+                if(err){
+                    logger.error(`giving updater-api request to fix duplicates gave err: ${err}`);
+                    res.render({success:false});
+                }
+                logger.info(`request to updater-api for user ${req.session.user.email} successful`);
+                res.send({success:true});
+            });
+        }
+    },
     update:{
         orders: async (req,res,next)=>{
             await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/all`)

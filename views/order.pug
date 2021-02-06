@@ -1,18 +1,41 @@
 extends layout
 block styles
     link(rel="stylesheet", href="/css/order.css")
+    //- script(src='/dist/bootstrap-tags/bootstrap-tags.js')
+    //- link(rel='stylesheet' type='text/css' href='/dist/bootstrap-tags/bootstrap-tags.css')
+
 block content
     .container-fluid
         .row
             .col-lg-12
                 .card
                     .card-body
-                        h3="Order "+order.order_id
+                        #bigScreenUpperRow.row
+                            .col-3
+                                a(role='button', href="/my/orders").btn.btn-block.btn-outline-info
+                                        i.icon-with-text.fas.fa-chevron-left
+                                        span All orders
+                            .col-6
+                                h3="Order "+order.order_id
+                            .col-3
+                                button#filterBtn.btn.btn-block.btn-outline-info
+                                    i.icon-with-text.fas.fa-filter
+                                    span#filterBtnText Filter
+                        #smallScreenUpperRow.row
+                            .col-9
+                                h3="Order "+order.order_id
+                            .col-3
+                                button#filterBtn.btn.btn-block.btn-outline-info
+                                    i.icon-with-text.fas.fa-filter
+                                    span#filterBtnText Filter
                         div(id="P"+order.order_id)
-                            .progress(height='20px')
-                                .progress-bar(role='progressbar', style=fn.render_progress(order).progressBar.status+'width:'+fn.render_progress(order).progressBar.width+'%;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
-                                    .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
-                                        span=order.orders_checked+"/"+order.unique_count
+                                .progress(height='20px')
+                                    .progress-bar(role='progressbar', style=fn.render_progress(order).progressBar.status+';width:'+fn.render_progress(order).progressBar.width+'%;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
+                                        .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
+                                            span=order.orders_checked+"/"+order.unique_count
+                .card
+                    #tag-control-card.card-body
+                        #tag-control.tag-list
                 .card
                     #order_data.card-body
                             .table-responsive#scroll_area
@@ -22,7 +45,7 @@ block content
                                             th#0(data-type='asc') images
                                             th#1.sortable.used-new-head(data-type='asc') U/N
                                                 .sort-box
-                                            th#2.sortable(data-type='asc') Info
+                                            th#2.sortable(data-type='asc') Remarks
                                                 .sort-box
                                             th#3.sortable(data-type='asc') Picked
                                                 .sort-box
@@ -107,6 +130,56 @@ block modals
                 .modal-footer
                     p.lead#enlargedFooter
                     a#enlargedItemLink(target="_blank" href="#" role="button" class="btn btn-primary") Item link
+    #filterModal.modal(tabindex="-1")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#filterTitleLabel.modal-title Filter this order
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                #filterBody.modal-body.card 
+                    .card-body
+                        p.lead Picked
+                        .custom-control.custom-switch
+                            input#filterCheckboxes.custom-control-input(type='checkbox')
+                            label.custom-control-label(for='filterCheckboxes') Show only unchecked items
+                        .attach-to-above-filter.custom-control.custom-checkbox
+                            input#filterCheckboxesAutoHide.custom-control-input(type='checkbox' disabled='')
+                            label.custom-control-label(for='filterCheckboxesAutoHide') Auto hide checked items
+                        hr
+                        p.lead Remarks
+                        p Only show items with remarks that contain:
+                        
+                        #tag-list.tag-list
+
+                        .form-group
+                            label(for='filterRemarksInput') Add tags to filter remarks
+                            .row
+                                .col-10.remove-padding.pl-3
+                                    input#filterRemarksInput.form-control(type='text' placeholder='Add a tag')
+                                    p.small Turn the tags on or off in the order list.
+                                .col-2.remove-padding
+                                    button#filterRemarksBtn.button-with-middle-icon.btn.btn-block.btn-primary
+                                        i.fas.fa-plus-circle
+                            .custom-control.custom-checkbox
+                                input#filterRemarksCaseSensitive.custom-control-input(type='checkbox')
+                                label.custom-control-label(for='filterRemarksCaseSensitive') Make tags case sensitive
+                        hr
+                        p.lead New / Used
+                        .form-group#filterNuRadios
+                            .custom-control.custom-radio
+                                input#filterNUall.custom-control-input(type='radio' name='new_used' value="All" checked='')
+                                label.custom-control-label(for='filterNUall') All
+                            .custom-control.custom-radio
+                                input#filterNUused.custom-control-input(type='radio' name='new_used' value="Used")
+                                label.custom-control-label(for='filterNUused') Used
+                            .custom-control.custom-radio
+                                input#filterNUnew.custom-control-input(type='radio' name='new_used' value="New")
+                                label.custom-control-label(for='filterNUnew') New
+
+                        hr
+                        span More filter coming soon...
+                        
 block scripts
     script(src="/js/order.js")
     script(src='/js/helpers/sortTable.js')
