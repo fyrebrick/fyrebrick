@@ -12,3 +12,52 @@
 .stat-data{
     font-size:22px;
 }
+.status-ready, .status-paid, .status-paid, .status-updated, .status-pending, .status-processing, .status-packed, .status-badge{
+    color:#000000; 
+}
+.status-ready i, .status-paid i, .status-updated i, .status-pending i, .status-processing i, .status-packed i, .status-badge {
+    color: #000000;
+}
+.status-ready{
+    background-color:#a4ff1c;
+}
+.status-paid{
+    background-color:#1cff6b;
+}
+.status-updated{
+    background-color: #1cbbff;
+}
+.status-pending{
+    background-color: #ffa81c;
+}
+.status-processing{
+    background-color: #1cdaff;
+}
+.status-packed{
+    background-color: #fff81c;
+}
+.status-badge {
+    padding: 7px;
+    min-width: 100px;
+}
+.status-badge i{
+    font-weight: 900;
+}
+.data-status{
+    font-size: 14px;
+    padding-left: 3px;
+}
+.status-name {
+    font-size: 14px;
+    padding: 0 3px 0 10px;
+}
+.table{
+    background-color: #fff;
+}
+.table td, .table th{
+    text-align: center;
+    border-right: 1px solid #dee2e6;
+}
+.table td:last-child, .table th:last-child{
+    border-right: 0px;
+}

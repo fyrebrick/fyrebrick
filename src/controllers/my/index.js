@@ -13,7 +13,24 @@ const dashboard = async (req,res,next) =>{
       if(user && user.userName){
         info = await bricklinkPlus.plus.stores.getStoreStats(user.userName);
       }
-      res.render("dashboard",{active:"dashboard",info:info,user:user});
+      const orders = {
+        ready: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'READY'})).length,
+        paid: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'PAID'})).length,
+        updated: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'UPDATED'})).length,
+        processing: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'PROCESSING'})).length,
+        packed: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'PACKED'})).length,
+        pending: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'PENDING'})).length,
+      };
+      if(orders.ready===0 && orders.paid===0 && orders.updated === 0 && orders.processing === 0 && orders.packed === 0 && orders.pending === 0){
+        orders = {};
+      }
+      console.log(orders);
+      res.render("dashboard",{
+        active:"dashboard",
+        info:info,
+        user:user,
+        orders:orders
+      });
     }catch(er){
       console.trace(err);
       res.status(500);

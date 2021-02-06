@@ -7,7 +7,86 @@ block content
                     .card-body
                         .jumbotron
                             h2.display-4=info.name
-                            hr.my-4
+                            if Object.keys(orders).length != 0
+                                hr.my-4
+                                table.table
+                                    thead
+                                        tr
+                                            if orders.ready > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-ready
+                                                        i.fas.fa-check.data-status(aria-hidden="true")
+                                                        span.status-name Ready
+                                            if orders.paid > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-paid
+                                                            i.fas.fa-dollar-sign.data-status(aria-hidden="true")
+                                                            span.status-name Paid
+                                            if orders.updated > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-updated
+                                                            i.fas.fa-clipboard-list.data-status(aria-hidden="true")
+                                                            span.status-name Updated    
+                                            if orders.processing > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-processing
+                                                            i.fas.fa-sync.data-status(aria-hidden="true")
+                                                            span.status-name Processing
+                                            if orders.packed > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-packed
+                                                            i.fas.fa-box.data-status(aria-hidden="true")
+                                                            span.status-name Packed
+                                            if orders.pending > 0
+                                                th(scope='col')
+                                                    .span.status-badge.badge.badge-pill.status-pending
+                                                            i.fas.fa-hourglass.data-status(aria-hidden="true")
+                                                            span.status-name Pending
+                                        tbody
+                                            tr  
+                                                if orders.ready > 0
+                                                    td
+                                                        span=orders.ready+" "
+                                                        if orders.ready == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.paid > 0
+                                                    td
+                                                        span=orders.paid+" "
+                                                        if orders.paid == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.updated > 0
+                                                    td
+                                                        span=orders.updated+" "
+                                                        if orders.updated == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.processing > 0
+                                                    td
+                                                        span=orders.processing+" "
+                                                        if orders.processing == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.packed > 0
+                                                    td
+                                                        span=orders.packed+" "
+                                                        if orders.packed == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                                                if orders.pending > 0
+                                                    td
+                                                        span=orders.pending+" "
+                                                        if orders.pending == 1
+                                                            span order
+                                                        else
+                                                            span orders
+                            
                             ul.list-group.list-group-flush
                                 li.list-group-item 
                                     .statbox

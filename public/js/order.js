@@ -1,4 +1,5 @@
 let tagCount = 0;
+let tagsCaseSensitive = false;
 $(document).ready(function () {
     sortableTableId = "mainTable";
     addSortIcons();
@@ -23,8 +24,8 @@ $(document).ready(function () {
     //show filter modal 
     $("#filterBtn").on('click',function(e){
         $("#filterModal").modal("show");
-    })
-    
+    });
+        
     //filter: checked items
     $("#filterCheckboxes").on("click",function(e){
         const isChecked = $("#filterCheckboxes").prop("checked");
@@ -62,6 +63,17 @@ $(document).ready(function () {
         });
     });
     
+    // Filter: make tag case sensitive
+    $("#filterRemarksCaseSensitive").on('change',function(){
+        if($("#filterRemarksCaseSensitive:checked").val()){
+            tagsCaseSensitive = true;
+        }else{
+            tagsCaseSensitive = false;
+        }
+        // filter again
+        filterListOnTags();
+    })
+
     // Filter: tag input handler
     $("#filterRemarksInput").on('keyup', function (e) {
             if (e.key === 'Enter') {
@@ -123,11 +135,22 @@ function filterListOnTags (){
                     //1. check if is not already used by a filter
                     if((totalRan===0) || $($(this).parents()[3]).hasClass("hide-filter-tag")){
                         //2. check if this remarks should be hidden by this tag
-                        if(!$(this).html().includes(tag.text)){
-                            $($(this).parents()[3]).addClass("hide-filter-tag");
+                        if(tagsCaseSensitive){
+                            // check tag with case sensitivity
+                            if(!$(this).html().includes(tag.text)){
+                                $($(this).parents()[3]).addClass("hide-filter-tag");
+                            }else{
+                                $($(this).parents()[3]).removeClass("hide-filter-tag");
+                            }
                         }else{
-                            $($(this).parents()[3]).removeClass("hide-filter-tag");
+                            // check tag without case sensitivity
+                            if(!$(this).html().toLowerCase().includes(tag.text.toLowerCase())){
+                                $($(this).parents()[3]).addClass("hide-filter-tag");
+                            }else{
+                                $($(this).parents()[3]).removeClass("hide-filter-tag");
+                            }
                         }
+                        
                     }
                 });
                 totalRan++;
@@ -158,6 +181,8 @@ function createNewTagFromInput(){
     renderAllTagsAgain(); //will render all tags that are in the tags variable
     //5. remove input value
     $("#filterRemarksInput").val("");
+    //6. filter again
+    filterListOnTags();
 }
 
 function renderAllTagsAgain(){
@@ -187,7 +212,7 @@ function renderAllTagsAgain(){
                                     </span>`;
             $("#tag-control").append(tagControlHTML);
         });
-}
+    }
 }
 
 

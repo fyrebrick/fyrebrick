@@ -29,10 +29,10 @@ block content
                                     i.icon-with-text.fas.fa-filter
                                     span#filterBtnText Filter
                         div(id="P"+order.order_id)
-                            .progress(height='20px')
-                                .progress-bar(role='progressbar', style=fn.render_progress(order).progressBar.status+';width:'+fn.render_progress(order).progressBar.width+'%;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
-                                    .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
-                                        span=order.orders_checked+"/"+order.unique_count
+                                .progress(height='20px')
+                                    .progress-bar(role='progressbar', style=fn.render_progress(order).progressBar.status+';width:'+fn.render_progress(order).progressBar.width+'%;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
+                                        .progress-numbers(style=fn.render_progress(order).progressNumbers.style)
+                                            span=order.orders_checked+"/"+order.unique_count
                 .card
                     #tag-control-card.card-body
                         #tag-control.tag-list
@@ -161,7 +161,7 @@ block modals
                                 .col-2.remove-padding
                                     button#filterRemarksBtn.button-with-middle-icon.btn.btn-block.btn-primary
                                         i.fas.fa-plus-circle
-                            //.custom-control.custom-checkbox
+                            .custom-control.custom-checkbox
                                 input#filterRemarksCaseSensitive.custom-control-input(type='checkbox')
                                 label.custom-control-label(for='filterRemarksCaseSensitive') Make tags case sensitive
                         hr

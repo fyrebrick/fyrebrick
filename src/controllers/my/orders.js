@@ -131,6 +131,74 @@ const orders = {
                     res.send({success:true});
                 }
             });
+    },
+    tag:{
+        deleteTag: async (req,res,next)=>{
+            if(req.query.order_id && req.query.CONSUMER_KEY && req.query.id){
+                try{
+                    const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
+                    for(tag,index of order.tags){
+                        if(tag.id===req.query.id){
+                            order.tags.splice(index,1);
+                            await Order.updateOne({_id:order._id},order,(err,data)=>{
+                                if(err){
+                                    res.status(500).send({success:false,body:data,err:err});
+                                }else{
+                                    res.send({success:true,body:order});
+                                }
+                            });
+                            return;
+                        }
+                        if(order.tags.length === index+1){
+                            res.status(404).send({success:true,body:undefined,err:"id cannot be found in order, this should be the id of the tag"});
+                        }
+                    }
+                }catch(err){
+                    res.status(500).send({success:false,body:undefined,err:err});
+                }
+            }else{
+                const err = "query parameters invalid: "+((req.query.order_id)?"":"order_id, ")+((req.query.CONSUMER_KEY)?"":"CONSUMER_KEY, ")+((req.query.id)?"":"id ")+"not given";
+                res.status(404).send({success:false,body:undefined,err:err});
+            }
+        },
+        createTag: async (req, res, next)=>{
+            if(req.query.order_id && req.query.CONSUMER_KEY && req.query.tag){
+                try{
+                    const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
+                    if(order.tags.length===0){
+                        order.tagCount = 0;
+                    }
+                    order.tags.push(JSON.parse(req.query.tag));
+                    order.tagCount++;
+                    await Order.updateOne({_id:order._id},order,(err,data)=>{
+                        if(err){
+                            res.status(500).send({success:false,body:data,err:err});
+                            return;
+                        }else{
+                            res.send({success:true,body:order});
+                            return;
+                        }
+                    });
+                }catch(err){
+                    res.status(500).send({success:false,body:undefined,err:err});
+                }
+            }else{
+                const err = "query parameters invalid: "+((req.query.order_id)?"":"order_id, ")+((req.query.CONSUMER_KEY)?"":"CONSUMER_KEY, ")+((req.query.tag)?"":"tag ")+"not given";
+                res.status(404).send({success:false,body:undefined,err:err});
+            }
+        },
+        getTags: async (req,res,next)=>{
+            if(req.query.order_id && req.query.CONSUMER_KEY){
+                const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
+                res.send({success:true,body:{
+                    tags:order.tags,
+                    tagCount:order.tagCount
+                }});
+            }else{
+                const err = "query parameters invalid: "+((req.query.order_id)?"":"order_id, ")+((req.query.CONSUMER_KEY)?"":"CONSUMER_KEY ")+"not given";
+                res.status(404).send({success:false,body:undefined,err:err});
+            }
+        }
     }
 }
 
