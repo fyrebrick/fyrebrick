@@ -21,8 +21,21 @@ $(document).ready(function () {
         $("#dynamicTable").append("<tr style='height:150px'></tr>");
     }
 
+    //info button handler
+    $(".infoButton").on('click',function(e){
+        $("#info").modal("show");
+    })
+
+    //info button menu handler
+    $(".info-button").on('click',function(e){
+        $(".info-button").removeClass("active");
+        $(".info-section").addClass("hide");
+        $("#"+$(this).data("btn")).removeClass("hide");
+        $(this).addClass("active");
+    });
+
     //show filter modal 
-    $("#filterBtn").on('click',function(e){
+    $(".filterBtn").on('click',function(e){
         $("#filterModal").modal("show");
     });
         

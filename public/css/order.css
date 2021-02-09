@@ -1,6 +1,69 @@
+.infoButton{
+    width: 45px;
+    font-size: 19px;
+    height: 38px;
+    z-index:1000;
+    right: 23%;
+    position: fixed;
+}
+.row-in-center{
+    width:100%;
+    align-items: center;
+}
+.info-section{
+    text-align: center;
+}
+#bigScreenUpperRow .package-info{
+    font-size: 20px;
+    position: fixed;
+    right: 30%;
+}
+#bigScreenUpperRow .order_nr{
+    width: 46%;
+}
+.filterBtn{
+    right: 20px;
+    position: fixed;
+    width: 19%;
+}
+.shipmentBtn{
+    padding-left: 22px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+#bigScreenUpperRow .order_nr{
+    text-align: center;
+}
+.hide{
+    display:none;
+}
+.menu-info-buttons{
+    display: flex;
+    text-align: center;
+}
+.info-button{
+    border: 1px solid #bbb8b8;
+    display: inline;
+    padding: 10px;
+    width: 50%;
+    cursor: pointer;
+    font-size: 21px;
+}
+.info-button .fas{
+    padding-left: 20px;
+    font-weight: 900;
+    font-size: 25px;
+    top: 3px;
+    position: relative;
+}
+.info-button.active{
+    color:#f1f1f1;
+    background-color:#bbb8b8;
+}
 .bl_img{
-    width:200px;
+    width:60%;
     min-width: 80px;
+    max-width:200px;
     font-size: 9.3rem;
 }
 .button-with-middle-icon{
@@ -99,7 +162,8 @@
     transform: translate(0px, -22px);
     font-size: 16px;
     background-color: white;
-    width: 200px;
+    max-width: 200px;
+    width:60%;
     min-width: 80px;
     color: white;
     text-align: center;
@@ -238,12 +302,27 @@ tr td:nth-child(2) {
         margin-bottom: -18px;
     }
 }
-@media (max-width:480px){
+@media (max-width:610px){
+    .infoButton{
+        right: 80px;
+        position: fixed;
+    }
+    .filterBtn{
+        width: 45px;
+    }
     #filterBtnText{
         display: none;
     }
     .icon-with-text{
         padding:0;
+    }
+}
+@media(max-width:434px){
+    .shipmentBtn{
+        font-size: 20px;
+    }
+    #smallScreenUpperRow .order_nr h3{
+        font-size: 23px;
     }
 }
 @media (max-width:462px){

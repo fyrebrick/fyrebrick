@@ -5,6 +5,10 @@ const frontend = require('../../frontend/orderList');
 const {getColorInlineStyle} = require('../../frontend/color');
 const {getImageSrcFromItem} = require('../../frontend/image');
 const {vars} = require('../../helpers/constants/vars');
+const { jsPDF } = require('jspdf');
+const fs = require('fs');
+const http = require('http');
+
 const orders = {
     index: async (req,res,next) => {
         const orders = await Order.find({$and: [{consumer_key:req.session.user.CONSUMER_KEY},{$or:[{status:"PENDING"},{status:"UPDATED"},{status:"PROCESSING"},{status:"READY"},{status:"PAID"},{status:"PACKED"}]}]});
@@ -12,6 +16,20 @@ const orders = {
             orders:orders,
             fn:frontend
         });
+    },
+    print:{
+        barcode:async (req,res,next)=>{
+            // image (176×87) to printer 192.168.1.64:9100
+            const doc = new jsPDF();
+            const file = fs.createWriteStream("..jpg");
+            http.get("http://www.keepautomation.com/online_barcode_generator/linear.aspx?TYPE=7&DATA="+req.query.order_id+"&PROCESS-TILDE=false&UOM=0&X=2&Y=60&ROTATE=0&RESOLUTION=72&FORMAT=gif&LEFT-MARGIN=0&RIGHT-MARGIN=0&SHOW-TEXT=true&TEXT-FONT=Arial%7C15%7CRegular", function(response) {
+                response.pipe(file);
+            });
+            const imageAsBase64 = fs.readFileSync('./your-image.png', 'base64');
+
+            doc.addImage()
+            res.send("");
+        }
     },
     all: async (req, res, next) => {
         const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
@@ -58,6 +76,18 @@ const orders = {
                 }
             })
         })
+        let package_icon = "";
+        //TODO: HARD CODED - This should be as a settings option in the future !!
+        switch(order?.shipping?.method){
+            case "Bpost letter":
+                package_icon = "fa-envelope"
+                break;
+            case "Bpost box":
+            case "Parcel with tracking":
+                package_icon = "fa-box"
+            default:
+                package_icon = "";
+        }
         const render = ()=>{
             res.render('order',{
                 order:order,
@@ -71,7 +101,8 @@ const orders = {
                 frontend:{
                     render_progress:frontend.render_progress,
                     order:order
-                }
+                },
+                package_icon:package_icon
             });
         }
     },
@@ -137,7 +168,8 @@ const orders = {
             if(req.query.order_id && req.query.CONSUMER_KEY && req.query.id){
                 try{
                     const order = await Order.findOne({order_id:req.query.order_id,consumer_key:req.query.CONSUMER_KEY});
-                    for(tag,index of order.tags){
+                    let index = 0;
+                    for(tag of order.tags){
                         if(tag.id===req.query.id){
                             order.tags.splice(index,1);
                             await Order.updateOne({_id:order._id},order,(err,data)=>{
@@ -152,6 +184,7 @@ const orders = {
                         if(order.tags.length === index+1){
                             res.status(404).send({success:true,body:undefined,err:"id cannot be found in order, this should be the id of the tag"});
                         }
+                        index++;
                     }
                 }catch(err){
                     res.status(500).send({success:false,body:undefined,err:err});

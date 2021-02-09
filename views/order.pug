@@ -11,21 +11,29 @@ block content
                 .card
                     .card-body
                         #bigScreenUpperRow.row
-                            .col-3
+                            .col-1
                                 a(role='button', href="/my/orders").btn.btn-block.btn-outline-info
-                                        i.icon-with-text.fas.fa-chevron-left
-                                        span All orders
-                            .col-6
+                                    i.icon-with-text.fas.fa-chevron-left
+                            .order_nr
                                 h3="Order "+order.order_id
-                            .col-3
-                                button#filterBtn.btn.btn-block.btn-outline-info
+                            div.package-info
+                                i.shipmentBtn.fas(class=package_icon)
+                            div
+                                button.infoButton.btn.btn-block.btn-outline-info
+                                    i.fas.fa-info-circle
+                            div
+                                button.filterBtn.btn.btn-block.btn-outline-info
                                     i.icon-with-text.fas.fa-filter
-                                    span#filterBtnText Filter
+                                    span Filter
                         #smallScreenUpperRow.row
-                            .col-9
+                            .col-8.order_nr
                                 h3="Order "+order.order_id
-                            .col-3
-                                button#filterBtn.btn.btn-block.btn-outline-info
+                                    i.shipmentBtn.fas(class=package_icon)
+                            div
+                                button.infoButton.btn.btn-block.btn-outline-info
+                                    i.fas.fa-info-circle
+                            div
+                                button.filterBtn.btn.btn-block.btn-outline-info
                                     i.icon-with-text.fas.fa-filter
                                     span#filterBtnText Filter
                         div(id="P"+order.order_id)
@@ -118,6 +126,33 @@ block content
                                                             else
                                                                 input.checkbox-scale.form-check-input(type='checkbox', id='C'+item.inventory_id)
 block modals
+    #info.modal(tabindex="-1")
+        .modal-dialog.modal-dialog-centered.modal-xl
+            .modal-content
+                .modal-header
+                    h5.modal-title Order information
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    .menu-info-buttons
+                        .info-button(data-btn="barcode")
+                            span Barcode
+                            i.fas.fa-barcode
+                        .info-button(data-btn="pdf")
+                            span PDF label
+                            i.fas.fa-tag
+                    hr
+                    #barcode.hide.info-section
+                        .row
+                            .col.mr-auto
+                                img.img-fluid.img-thumbnail(alt='Barcode of order id', src="http://www.keepautomation.com/online_barcode_generator/linear.aspx?TYPE=7&DATA="+order.order_id+"&PROCESS-TILDE=false&UOM=0&X=2&Y=60&ROTATE=0&RESOLUTION=72&FORMAT=gif&LEFT-MARGIN=0&RIGHT-MARGIN=0&SHOW-TEXT=true&TEXT-FONT=Arial%7C15%7CRegular")
+                        .row
+                            .col.mr-auto
+                                button.btn.btn-lg.btn-outline-info.btn-block(type="button")
+                                    i.icon-with-text.fas.fa-print
+                                    span Print barcode
+                    #pdf.hide.info-section
+                        span.badge.badge-warning in development
     #enlarge.modal(tabindex="-1")
         .modal-dialog.modal-dialog-centered
             .modal-content
