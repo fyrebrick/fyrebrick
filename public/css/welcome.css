@@ -28,3 +28,9 @@
     transition:ease-in-out 0.3s;
     color:rgb(64, 52, 224);
   }
+.passwordEye{
+  cursor:pointer;
+}
+input.addPasswordEye.is-invalid{
+  background-image: none;
+}

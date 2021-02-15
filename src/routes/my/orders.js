@@ -19,4 +19,8 @@ router.post("/tag",controllers.orders.tag.createTag);
 
 router.delete("/tag",controllers.orders.tag.createTag)
 
+router.get('/print/barcode',controllers.orders.print.barcode);
+
+router.post('/print/label',controllers.orders.print.label);
+
 module.exports = router;

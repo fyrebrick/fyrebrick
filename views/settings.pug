@@ -69,12 +69,12 @@ block content
                                                     input#callbackUrl.api-input.form-control(name="callbackUrl", type='text' aria-describedby='callbackUrlHelp' value='https://my.fyrebrick.be/callback/'+user.userName, readonly='')
                                                     small#callbackUrlHelp.form-text.text-muted This callback URL should be added in your Bricklink register consumer page
                                             .form-group
-                                                button#update-inventory.update-btn.inventory.btn.btn-outline-info(type='button')
+                                                button#update-inventory.update-btn.inventory.btn.btn-outline-info(type='button', disabled)
                                                     i.pl-1.fas.fa-sync-alt
                                                     span.pl-1 Update all inventory items
                                                 small#update-inventoryHelp.form-text.text-muted Update every single inventory item from your bricklink account
                                             .form-group
-                                                button#update-orders.update-btn.orders.btn.btn-outline-info(type='button')
+                                                button#update-orders.update-btn.orders.btn.btn-outline-info(type='button', disabled)
                                                     i.pl-1.fas.fa-sync-alt
                                                     span.pl-1 Update all orders
                                                 small#update-ordersHelp.form-text.text-muted Update every single order from your bricklink account

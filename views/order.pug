@@ -16,11 +16,13 @@ block content
                                     i.icon-with-text.fas.fa-chevron-left
                             .order_nr
                                 h3="Order "+order.order_id
-                            div.package-info
-                                i.shipmentBtn.fas(class=package_icon)
-                            div
-                                button.infoButton.btn.btn-block.btn-outline-info
-                                    i.fas.fa-info-circle
+                            if session._id
+                                if session.user.CONSUMER_KEY == "527C3A3EFC4143919CABE84D5ACCA153"
+                                    div.package-info
+                                        i.shipmentBtn.fas(class=package_icon)
+                                    div
+                                        button.infoButton.btn.btn-block.btn-outline-info
+                                            i.fas.fa-info-circle
                             div
                                 button.filterBtn.btn.btn-block.btn-outline-info
                                     i.icon-with-text.fas.fa-filter
@@ -28,10 +30,15 @@ block content
                         #smallScreenUpperRow.row
                             .col-8.order_nr
                                 h3="Order "+order.order_id
-                                    i.shipmentBtn.fas(class=package_icon)
-                            div
-                                button.infoButton.btn.btn-block.btn-outline-info
-                                    i.fas.fa-info-circle
+                                    if session._id
+                                        if session.user.CONSUMER_KEY == "527C3A3EFC4143919CABE84D5ACCA153"
+                                            i.shipmentBtn.fas(class=package_icon)
+                            
+                            if session._id
+                                if session.user.CONSUMER_KEY == "527C3A3EFC4143919CABE84D5ACCA153"
+                                    div
+                                        button.infoButton.btn.btn-block.btn-outline-info
+                                            i.fas.fa-info-circle
                             div
                                 button.filterBtn.btn.btn-block.btn-outline-info
                                     i.icon-with-text.fas.fa-filter
@@ -135,24 +142,46 @@ block modals
                         span(aria-hidden='true') &times;
                 .modal-body
                     .menu-info-buttons
-                        .info-button(data-btn="barcode")
+                        .info-button.active(data-btn="barcode")
                             span Barcode
                             i.fas.fa-barcode
                         .info-button(data-btn="pdf")
                             span PDF label
                             i.fas.fa-tag
                     hr
-                    #barcode.hide.info-section
-                        .row
+                    #barcode.info-section
+                        //.row
                             .col.mr-auto
                                 img.img-fluid.img-thumbnail(alt='Barcode of order id', src="http://www.keepautomation.com/online_barcode_generator/linear.aspx?TYPE=7&DATA="+order.order_id+"&PROCESS-TILDE=false&UOM=0&X=2&Y=60&ROTATE=0&RESOLUTION=72&FORMAT=gif&LEFT-MARGIN=0&RIGHT-MARGIN=0&SHOW-TEXT=true&TEXT-FONT=Arial%7C15%7CRegular")
                         .row
                             .col.mr-auto
-                                button.btn.btn-lg.btn-outline-info.btn-block(type="button")
+                                a.btn.btn-lg.btn-outline-info.btn-block(role="button",href='/my/orders/print/barcode?order_id='+order.order_id)
                                     i.icon-with-text.fas.fa-print
                                     span Print barcode
                     #pdf.hide.info-section
-                        span.badge.badge-warning in development
+                        if order.shipping.address.full
+                            form(action='/my/orders/print/label?order_id='+order.order_id,method="post")
+                                table.pdf-grid
+                                    each row in [1,3,5,7]
+                                        tr
+                                            each col in [0,1]
+                                                td
+                                                    .form-check
+                                                        input.pdf-grid-radio.form-check-input(id="pdfgrid"+(row+col) type='radio' name='pdfgrid' value=(row+col) checked='')
+                                .row
+                                    .col.mr-auto
+                                        button.btn.btn-lg.btn-outline-info.btn-block(type="submit")
+                                            i.icon-with-text.fas.fa-print
+                                            span Print PDF label
+                        else
+                            .row
+                                .col.mr-auto
+                                    p Please update all your orders
+                            .row
+                                .col.mr-auto
+                                    a.btn.btn-outline-info(href="/my/settings#update-orders",role="button")
+                                        i.icon-with-text.fas.fa-link
+                                        span Settings                            
     #enlarge.modal(tabindex="-1")
         .modal-dialog.modal-dialog-centered
             .modal-content

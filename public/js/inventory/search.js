@@ -238,17 +238,15 @@ function search(e) {
         const count = data.length;
         const message = 
         `
-        <div class="alert-message alert alert-success alert-dismissible fade show" role="alert">
-            <span>Found ${count} items</span>
+        <div class="alert-message alert alert-${(count===0)?"warning":"success"} alert-dismissible fade show" role="alert">
+            <span>Found ${count} items${(count===0)?". The inventory could be updating this very moment, please retry again.":""}</span>
             <button class="close" id="message-close-button" type="button" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         `;
         $("#messages").append(message);
-        setTimeout(function(){
-            $('.alert-success').delay(1500).fadeOut('slow');
-        },2000);
+        $('.alert-success').delay(2000).fadeOut('slow');
         data.forEach(function (item) {
             let tr = "<tr id=" + item.inventory_id + ">"; //start row
             tr+="<td >";

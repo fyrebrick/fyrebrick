@@ -8,8 +8,7 @@
     "mongo": "docker run -p 27017:27017 --name mongo -d mongo",
     "start": "node ./app.js",
     "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
-    "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable",
-    "patch": "npm --no-git-tag-version version patch"
+    "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable"
   },
   "author": "snakehead007",
   "license": "ISC",
@@ -19,19 +18,22 @@
     "bricklink-plus": "^1.0.10",
     "connect-redis": "^5.0.0",
     "cookie-parser": "^1.4.5",
+    "country-telephone-data": "^0.6.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-flash": "^0.0.2",
     "express-session": "^1.17.1",
     "express-useragent": "^1.0.15",
-    "fyrebrick-helper": "^1.0.64",
+    "fyrebrick-helper": "1.1.1",
     "googleapis": "^65.0.0",
     "helmet": "^4.3.1",
     "hpp": "^0.2.3",
     "jspdf": "^2.3.0",
     "lesshat": "^4.1.0",
     "mongoose": "^5.11.1",
+    "node-fetch": "^2.6.1",
     "node-schedule": "^2.0.0",
+    "nodemon": "^2.0.7",
     "npm": "^7.0.0",
     "path": "^0.12.7",
     "pdf-to-printer": "^1.5.4",
@@ -40,6 +42,8 @@
     "rimraf": "^3.0.2",
     "socket.io": "^3.0.5",
     "superagent": "^6.1.0",
-    "winston": "^3.3.3"
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
+    "yarn": "^1.22.10"
   }
 }

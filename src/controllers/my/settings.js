@@ -18,7 +18,7 @@ const settings = {
             .end((err,result)=>{
                 if(err){
                     logger.error(`giving updater-api request to fix duplicates gave err: ${err}`);
-                    res.render({success:false});
+                    res.send({success:false});
                 }
                 logger.info(`request to updater-api for user ${req.session.user.email} successful`);
                 res.send({success:true});
@@ -33,7 +33,7 @@ const settings = {
                 .end((err,result)=>{
                     if(err){
                         logger.error(`giving updater-api request to update all gave err: ${err}`);
-                        res.render({success:false});
+                        res.send({success:false});
                     }
                     logger.info(`request to updater-api for user ${req.session.user.email} successful`);
                     res.send({success:true});
@@ -46,7 +46,7 @@ const settings = {
                 .end((err,result)=>{
                     if(err){
                         logger.error(`giving updater-api request to update all gave err: ${err}`);
-                        res.render({success:false});
+                        res.send({success:false});
                     }
                     logger.info(`request to updater-api for user ${req.session.user.email} successful`);
                     res.send({success:true});

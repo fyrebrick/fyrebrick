@@ -8,6 +8,10 @@ const {vars} = require('../../helpers/constants/vars');
 const { jsPDF } = require('jspdf');
 const fs = require('fs');
 const http = require('http');
+const {v4:uuidv4} = require("uuid");
+const fetch = require('node-fetch');
+const printer = require("pdf-to-printer");
+const countryTelData = require('country-telephone-data')
 
 const orders = {
     index: async (req,res,next) => {
@@ -20,17 +24,70 @@ const orders = {
     print:{
         barcode:async (req,res,next)=>{
             // image (176×87) to printer 192.168.1.64:9100
-            const doc = new jsPDF();
-            const file = fs.createWriteStream("..jpg");
-            http.get("http://www.keepautomation.com/online_barcode_generator/linear.aspx?TYPE=7&DATA="+req.query.order_id+"&PROCESS-TILDE=false&UOM=0&X=2&Y=60&ROTATE=0&RESOLUTION=72&FORMAT=gif&LEFT-MARGIN=0&RIGHT-MARGIN=0&SHOW-TEXT=true&TEXT-FONT=Arial%7C15%7CRegular", function(response) {
-                response.pipe(file);
+            const doc = new jsPDF({
+                orientation: "landscape",
+                unit:"px",
+                format:[49*2.275862069,49.0]
             });
-            const imageAsBase64 = fs.readFileSync('./your-image.png', 'base64');
+            const path = `./public/temp/${uuidv4()}.gif`;
+            const url = "http://www.keepautomation.com/online_barcode_generator/linear.aspx?TYPE=7&DATA="+req.query.order_id+"&PROCESS-TILDE=false&UOM=0&X=2&Y=60&ROTATE=0&RESOLUTION=72&FORMAT=gif&LEFT-MARGIN=0&RIGHT-MARGIN=0&SHOW-TEXT=true&TEXT-FONT=Arial%7C15%7CRegular";
+            const response = await fetch(url);
+            const buffer = await response.buffer();
+            await fs.writeFile(path, buffer, () => {
+                console.log('finished downloading!');
+                const imageAsBase64 = fs.readFileSync(path, 'base64');
+                doc.addImage(imageAsBase64,0,0);
+                const pdf = `./public/temp/${uuidv4()}.pdf`
+                doc.save(pdf);
+                res.contentType("application/pdf");
+                printer
+                    .print(pdf,{
+                        printer: "test05"
+                      })
+                    .then(console.log)
+                    .catch(console.error);
+                res.send(fs.readFileSync(pdf));
+            });
+        },
+        label: async(req,res,next) => {
+            const doc = new jsPDF({
+                format:"a4"
+            });
+            const pdf = `./public/temp/${uuidv4()}.pdf`
 
-            doc.addImage()
-            res.send("");
-        }
-    },
+            const pdfgrid = Number(req.body.pdfgrid);
+            const order_id = req.query.order_id;
+            const isOnFirstCol = pdfgrid%2===1;
+            const row = Math.round(pdfgrid/2);
+            const order = await Order.findOne({order_id:order_id});
+            doc.setFontSize(25);
+            var rowpl = 0;
+            switch(row){
+                case 1:
+                    rowpl = 15;
+                    break;
+                case 2:
+                    rowpl = 90;
+                    break;
+                case 3:
+                    rowpl = 160;
+                    break;
+                case 4:
+                    rowpl = 240;
+                    break;
+            }
+            var colpl = (isOnFirstCol)?10:110;
+            doc.text(order.shipping.address.name.full,colpl,rowpl);
+            doc.text(order.shipping.address.full, colpl,rowpl+10);
+            const lines = (order.shipping.address.full.split(/\r\n|\r|\n/).length*10)+10;
+            doc.text(countryTelData.allCountries[countryTelData.iso2Lookup[order.shipping.address.country_code.toLowerCase()]].name, colpl,rowpl+lines);
+            doc.setFontSize(10);
+            doc.text(order.order_id,isOnFirstCol?5:207,rowpl+25,null,90);
+            doc.save(pdf);
+            res.contentType("application/pdf");
+            res.send(fs.readFileSync(pdf));
+        },
+},
     all: async (req, res, next) => {
         const orders = await Order.find({consumer_key:req.session.user.CONSUMER_KEY});
         res.render('orderList',{
