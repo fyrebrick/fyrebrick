@@ -9,12 +9,7 @@ const redirect={
         req.session.tokens = googleCode.tokens;
         let user = await User.findOne({googleId:googleCode.googleId});
         if(user){
-            req.session.user = {
-                TOKEN_VALUE: user.TOKEN_VALUE,
-                TOKEN_SECRET: user.TOKEN_SECRET,
-                CONSUMER_KEY: user.CONSUMER_KEY,
-                CONSUMER_SECRET: user.CONSUMER_SECRET
-            };
+            req.session.user = await User.findOne({email:googleCode.email});
         }
         try{
         user = await google.checkSignIn(req);

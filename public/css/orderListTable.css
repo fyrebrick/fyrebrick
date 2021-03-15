@@ -1,7 +1,36 @@
 .mt-100 {
     margin-top: 70px
 }
-
+.options-bar{
+    height: 0;
+    z-index: 1000;
+    width: 100px;
+    position: absolute;
+    right: 41px;
+}
+.pdfCheckbox{
+    -ms-transform: scale(2.2);
+    -moz-transform: scale(2.2);
+    -webkit-transform: scale(2.2);
+    -o-transform: scale(2.2);
+    transform: scale(2.2);
+    z-index: 1000;
+}
+.label-checked:hover{
+    background:  #d61f1f7a !important;
+    background-color: #d61f1f7a !important;
+}
+.label-checked{
+    
+    background:  #d61f1f7a !important;
+    background-color: #d61f1f7a !important;
+}
+.options-bar button{
+    height: 57px;
+}
+.hide{
+    display: none;
+}
 .card {
     margin-bottom: 30px;
     border: 0px;
@@ -128,6 +157,11 @@ tbody tr:hover{
     .table td, .table th{
         padding-left: 0 !important;
         padding-right: 0 !important;
+    }
+}
+@media(max-width:1000px){
+    .options-bar{
+        display:none;
     }
 }
 @media (max-width:472px){

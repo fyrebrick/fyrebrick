@@ -5,6 +5,10 @@ module.exports = charts = {
         res.render('charts',{allCountries},);
     },
     global:async(req,res,next)=>{
+        
+        return res.status(404).send('error',{
+            status:404
+        });
             const allStores = await Store.find();
             const items = (dataset) => _.orderBy(dataset, ['n4total'+req.params.type.substr(0,1).toUpperCase()+req.params.type.substr(1)],['desc']);
             let topGlobal = items(allStores);
@@ -28,7 +32,7 @@ module.exports = charts = {
                     }
                     html += `<td>${store['n4total'+req.params.type.substr(0,1).toUpperCase()+req.params.type.substr(1)].toLocaleString()}</td>`;
                     html += "<td>"+store.name+"</td>";
-                    html += `<td><div class="flag"><img src="${allCountries[allCountryIDs.indexOf(store.countryID)].countryImg}"></div> <span>${allCountries[allCountryIDs.indexOf(store.countryID)].countryName}</span></td>`;
+                    //html += `<td><div class="flag"><img src="${allCountries[allCountryIDs.indexOf(store.countryID)].countryImg}"></div> <span>${allCountries[allCountryIDs.indexOf(store.countryID)].countryName}</span></td>`;
                 html += "</tr>";
             });
             res.setHeader('Content-Type', 'text/html');
@@ -44,35 +48,37 @@ module.exports = charts = {
             let html = "";
             topNational.forEach((store,index)=>{
                 store = JSON.parse(JSON.stringify(store));
-                html += "<tr>";
+                html += "<tr "+((store.username===req.session.user.userName)?"id='myStore'":"")+">";
                     try{
-                        let update = index+1-store.rank.national[req.params.type][0].rank;
-                        if(update<0){
-                            update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-sort-down' style='color:#f71d1d;'>${update}</i>`;
-                        }else if(update>0){
-                            update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-sort-up' style='color:#15c74c;'>${update}</i>`;
+                        let change = index+1-store.rank.national[req.params.type][0].rank;
+                        change = -change;
+                        let tdRank = "";
+                        if(change<0){
+                            tdRank = `<span>${store.rank.national[req.params.type][0].rank-change}</span><i class='fas fa-sort-down' style='color:#f71d1d;'>${change}</i>`;
+                        }else if(change>0){
+                            tdRank = `<span>${store.rank.national[req.params.type][0].rank-change}</span><i class='fas fa-sort-up' style='color:#15c74c;'>${change}</i>`;
                         }else{
-                            update = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-minus' style='color:#15c74c;'></i>`;
+                            tdRank = `<span>${store.rank.national[req.params.type][0].rank}</span><i class='fas fa-minus' style='color:#15c74c;'></i>`;
                         }
-                        html += `<td>${update}</td>`;
+                        html += `<td>${tdRank}</td>`;
                     }catch(e){
                         html += `<td><span>${index+1}</span> <i class='fas fa-minus' style='color:#15c74c;'></i></td>`;
                     }
                     html += `<td>${store['n4total'+req.params.type.substr(0,1).toUpperCase()+req.params.type.substr(1)].toLocaleString()}</td>`;
                     html += `
                     <td id='${store._id}'>
-                        ${store.name}
+                        <a href="https://store.bricklink.com/${store.username}">${store.name}</a>
                         <script>
                             $(document).ready(function(){
                                 try{
-                                    $('#${store._id}').html('${store.name}');
+                                    $(\`#${store._id}\`).html(\`<a href="https://store.bricklink.com/${store.username}">${store.name}</a>\`);
                                 }catch(e){
                                     
                                 }
                             })
                         </script>
                     </td>`
-                    html += `<td><div class="flag"><img src="${allCountries[allCountryIDs.indexOf(store.countryID)].countryImg}"> </div><span>${allCountries[allCountryIDs.indexOf(store.countryID)].countryName}</span></td>`;
+                    //html += `<td><div class="flag"><img src="${allCountries[allCountryIDs.indexOf(store.countryID)].countryImg}"> </div><span>${allCountries[allCountryIDs.indexOf(store.countryID)].countryName}</span></td>`;
                 html += "</tr>";
             });
             res.setHeader('Content-Type', 'text/html');

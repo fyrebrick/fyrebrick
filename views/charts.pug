@@ -5,7 +5,7 @@ block content
         .card
             .card-body
               .row
-                .col
+                //.col
                   .input-group
                     select#selectCountry.custom-select
                       option(selected='BE',value='BE') Belgium
@@ -26,15 +26,30 @@ block content
                                   th.rank
                                   th.data-header  
                                   th.store store
-                                  th.country country
+                                  //th.country country
                           tbody#dynamicTable
 block styles
-  //link(rel='stylesheet' href='css/charts.css')
+  link(rel='stylesheet' href='css/charts.css')
 block scripts
   script.
     $(document).ready(function(){
       let type='lots';
       let location = "BE";
+
+      //default
+      $.ajax({
+          url:`/charts/${location}/${type}`,
+          method:'GET',
+          dataType:'html',
+          beforeSend:function(){
+            startLoading();
+          }
+        }).done(function(stores){
+          $("#dynamicTable").empty().append(`${stores}`);
+          $(".data-header").text(type);
+          stopLoading();
+        });
+
       function setType(text){
         $(`.ajax-button`).removeClass('active');
         $(`#${text}`).addClass('active');
@@ -50,7 +65,7 @@ block scripts
             startLoading();
           }
         }).done(function(stores){
-          $("#dynamicTable").empty().append(stores);
+          $("#dynamicTable").empty().append(`${stores}`);
           $(".data-header").text(type);
           stopLoading();
         })

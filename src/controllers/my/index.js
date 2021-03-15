@@ -13,7 +13,7 @@ const dashboard = async (req,res,next) =>{
       if(user && user.userName){
         info = await bricklinkPlus.plus.stores.getStoreStats(user.userName);
       }
-      const orders = {
+      let orders = {
         ready: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'READY'})).length,
         paid: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'PAID'})).length,
         updated: (await Order.find({consumer_key:req.session.user.CONSUMER_KEY,status:'UPDATED'})).length,
@@ -31,7 +31,7 @@ const dashboard = async (req,res,next) =>{
         user:user,
         orders:orders
       });
-    }catch(er){
+    }catch(err){
       console.trace(err);
       res.status(500);
       res.render('error',{

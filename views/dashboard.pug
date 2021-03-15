@@ -154,7 +154,15 @@ block content
                                                             span.rank-data="Global rank: "+user.rank.global.views[0].rank+"th"
                                                         else
                                                             span.rank-data="Global rank: N/A"
+                    //.card-body 
+                        div(style='width:100%;')
+                          canvas#canvas
 
-                        //This should have: store info ( items, lots, views and ranking), new orders ( amount, in progress)
+                        
 block styles
     link(rel="stylesheet", href="/css/dashboard.css")
+    //link(rel="stylesheet", href="/dist/chartjs@2.9.4/Chart.min.css")
+
+block scripts 
+    //script(src="/js/chart.js")
+    //script(src="/dist/chartjs@2.9.4/Chart.bundle.min.js")

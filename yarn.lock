@@ -2399,6 +2399,11 @@ libnpmversion@^1.0.8:
     semver "^7.3.4"
     stringify-package "^1.0.1"
 
+lodash.deburr@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.deburr/-/lodash.deburr-4.1.0.tgz#ddb1bbb3ef07458c0177ba07de14422cb033ff9b"
+  integrity sha1-3bG7s+8HRYwBd7oH3hRCLLAz/5s=
+
 lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
@@ -3843,6 +3848,13 @@ stackblur-canvas@^2.0.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+string-pixel-width@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/string-pixel-width/-/string-pixel-width-1.10.0.tgz#aff215aaa7a65627f937d70fcc88d83ae1bc5657"
+  integrity sha512-cOMpkH+CpxWAnrPsWUvPWhZxh25CzUukweT+6WF+Kwx6+G2ksg8flvELZusLyWiZzfFCjj1+QRRGwcPWZlwVYA==
+  dependencies:
+    lodash.deburr "^4.1.0"
 
 string-width@^1.0.1:
   version "1.0.2"

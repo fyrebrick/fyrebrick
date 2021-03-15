@@ -4,11 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "redis": "docker run -p 6379:6379 --name redis -d redis",
-    "mongo": "docker run -p 27017:27017 --name mongo -d mongo",
+    "redis": "sudo docker run -p 6379:6379 --name redis -d redis",
+    "mongo": "sudo docker run -p 27017:27017 --name mongo -d mongo",
     "start": "node ./app.js",
-    "fyrebrick": "docker build -t snakehead007/fyrebrick:latest . && docker push snakehead007/fyrebrick:latest",
-    "dev": "docker build -t snakehead007/fyrebrick:unstable . && docker push snakehead007/fyrebrick:unstable"
+    "fyrebrick": "sudo docker build -t snakehead007/fyrebrick:latest . && sudo docker push snakehead007/fyrebrick:latest",
+    "local": "sudo docker build -t snakehead007/fyrebrick:local . && sudo docker push snakehead007/fyrebrick:local",
+    "compose": "sudo docker build -t snakehead007/fyrebrick:compose . && sudo docker push snakehead007/fyrebrick:compose"
   },
   "author": "snakehead007",
   "license": "ISC",
@@ -41,6 +42,7 @@
     "redis": "^3.0.2",
     "rimraf": "^3.0.2",
     "socket.io": "^3.0.5",
+    "string-pixel-width": "^1.10.0",
     "superagent": "^6.1.0",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",

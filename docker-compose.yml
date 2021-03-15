@@ -1,0 +1,59 @@
+version: "3.8"
+services:
+  fyrebrick:
+    image: snakehead007/fyrebrick:compose
+    ports:
+      - "3000:3000"
+    deploy:
+      replicas: 1
+    depends_on: 
+      - fyrebrick-updater-api
+      - fyrebrick-updater
+      - mongo
+      - redis
+    networks:
+      - fyrebrick-net
+  fyrebrick-updater-api:
+    image: snakehead007/fyrebrick-updater-api
+    deploy:
+      replicas: 1
+    depends_on:
+      - mongo
+      - redis
+    networks: 
+      - fyrebrick-net
+  fyrebrick-updater:
+    image: snakehead007/fyrebrick-updater
+    deploy:
+      replicas: 1
+    depends_on:
+      - mongo
+      - redis
+    networks: 
+      - fyrebrick-net
+  mongo:
+    image: mongo
+    deploy:
+      replicas: 1
+    networks:
+      - fyrebrick-net
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    deploy:
+      replicas: 1
+    networks:
+      - fyrebrick-net
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    deploy:
+      replicas: 1
+    networks:
+      - fyrebrick-net
+    depends_on:
+      - mongo
+networks:
+  fyrebrick-net:

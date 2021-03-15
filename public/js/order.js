@@ -192,9 +192,9 @@ function createNewTagFromInput(){
     tags.push({text:text,id:tagCount,status:'on'});
     tagCount++;
     renderAllTagsAgain(); //will render all tags that are in the tags variable
-    //5. remove input value
+    //4. remove input value
     $("#filterRemarksInput").val("");
-    //6. filter again
+    //5. filter again
     filterListOnTags();
 }
 

@@ -4,6 +4,17 @@ block content
             .col-lg-12
                 .card
                     .card-body
+                        if session._id
+                            if session.user.CONSUMER_KEY == "527C3A3EFC4143919CABE84D5ACCA153"
+                                .options-bar.row
+                                        button#labelBtn.btn.btn-block.btn-outline-info
+                                            i.fas.fa-tags
+                                        #nextLabelBtn.hide.btn-toolbar(role='toolbar' aria-label='Toolbar with button groups')
+                                            .btn-group.mr-2(role='group' aria-label='First group')
+                                                button#labelCancelBtn.btn.btn-outline-danger(type='button')
+                                                    i.fas.fa-ban
+                                                button#labelPdfBtn.btn.btn-outline-success(type='button')
+                                                    i.fas.fa-file-pdf
                         .active-member
                             .table-responsive
                                 table#mainTable.table.table-xs.mb-0
@@ -43,7 +54,18 @@ block content
                                                         span=fn.render_date_ordered(order.date_ordered,'long')
                                                     .short_date
                                                         span=fn.render_date_ordered(order.date_ordered,'short')
-
+block modals 
+    #pdfLabel.modal(tabindex="-1")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5 PDF label generated
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    a(href="")#downloadPdf.btn.btn-block.btn-outline-info
+                        i.icon-with-text.fas.fa-file-pdf
+                        span Download PDF
 block styles
     link(rel="stylesheet", href="/css/orderListTable.css")
 block scripts

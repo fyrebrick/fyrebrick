@@ -10,3 +10,10 @@ td {
 [type="search"] {
     font-size: 41px;
 }
+.options-bar{
+    height: 0;
+    z-index: 1000;
+}
+.labelBtn{
+    height: 100px;
+}

@@ -13,7 +13,9 @@ $(document).ready(function () {
     })
 
     $(".order-row").click(function(e){
-        location.href = '/my/orders/'+$(this).attr('id');
+        if(!(e.target.classList.contains("pdfCheckboxData")||e.target.classList.contains("pdfCheckbox"))){
+            location.href = '/my/orders/'+$(this).attr('id');
+        }
     });
     
     socket.on('response.orders',async function(orders){
@@ -48,6 +50,59 @@ $(document).ready(function () {
         socket.emit('request.orders');
       }, 1000);
 
+    //Label button handler, inital press
+    $("#labelBtn").on('click',function(){
+        $(this).addClass("hide");
+        $("#nextLabelBtn").removeClass("hide");
 
+        //add checkbox to all rows
+        const checkboxRow = `<td class="pdfCheckboxData" ><input class="pdfCheckbox" type="checkbox" /></td>`
+        $("#dynamicTable tr").append(checkboxRow);
+    });
+
+    //label cancel button handler
+    $("#labelCancelBtn").on('click',function(){
+        $("#nextLabelBtn").addClass("hide");
+        $("#labelBtn").removeClass("hide");
+        $(".pdfCheckboxData").remove();
+        $("tr").removeClass("label-checked");
+    });
+
+    //checkbox handler
+    $("#dynamicTable").on("change",".pdfCheckbox",function(){
+        const row = $(this).parents()[1];
+        //1. find state of current checbox
+        const state = $(this).is(":checked");
+        if(state){
+            //2. if state is true => glow this row red
+            $(row).addClass("label-checked");
+        }else{
+            //2. if statis is false => remove glow
+            $(row).removeClass("label-checked");
+        }
+    });
+
+    $("#labelPdfBtn").on("click",function(){
+        const list = [];
+        $(".label-checked").each(function(e){
+            list.push($(this).attr('id'));
+        });
+        console.log(list);
+        $.ajax({
+            method: "POST",
+            url: '/my/orders/print/labels',
+            data: {
+                list : JSON.stringify(list)
+            },
+            beforeSend: function () {
+                startLoading();
+            }
+        }).done(function (data) {
+            stopLoading();
+            $("#pdfLabel").modal('show');
+            $("#downloadPdf").attr('href',data);
+            console.log(data);
+        });
+    })
 });
 
