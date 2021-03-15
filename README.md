@@ -21,7 +21,7 @@
  - install `docker-compose`
  - run the docker-compose.yml file via command: `docker-compose up`
  
- Fyrebrick located at [localhost:3000](localhost:3000)
+ Fyrebrick located at [localhost:3000](http://localhost:3000)
 
- Mongo express is located at [localhost:8081](localhost:8081)
+ Mongo express is located at [localhost:8081](http://localhost:8081)
   - you will need to unblock yourself manually after logging in for the first time.
