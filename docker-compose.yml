@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   fyrebrick:
-    image: snakehead007/fyrebrick:compose
+    image: ghcr.io/fyrebrick/fyrebrick:latest
     ports:
       - "3000:3000"
     deploy:
@@ -14,7 +14,7 @@ services:
     networks:
       - fyrebrick-net
   fyrebrick-updater-api:
-    image: snakehead007/fyrebrick-updater-api
+    image: ghcr.io/fyrebrick/fyrebrick-updater-api:latest
     deploy:
       replicas: 1
     depends_on:
@@ -23,7 +23,7 @@ services:
     networks: 
       - fyrebrick-net
   fyrebrick-updater:
-    image: snakehead007/fyrebrick-updater
+    image: ghcr.io/fyrebrick/fyrebrick-updater-api:latest
     deploy:
       replicas: 1
     depends_on:
@@ -32,13 +32,13 @@ services:
     networks: 
       - fyrebrick-net
   mongo:
-    image: mongo
+    image: registry.hub.docker.com/library/mongo
     deploy:
       replicas: 1
     networks:
       - fyrebrick-net
   redis:
-    image: redis
+    image: registry.hub.docker.com/library/redis
     ports:
       - "6379:6379"
     deploy:

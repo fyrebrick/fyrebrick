@@ -25,13 +25,13 @@ You can create issues for fixes/bugs or features. I will try my best to create/f
 
 ## Fyrebrick system includes:
 
- - [Fyrebrick](https://github.com/fyrebrick/fyrebrick) ([Docker](https://hub.docker.com/r/snakehead007/fyrebrick))
+ - [Fyrebrick](https://github.com/fyrebrick/fyrebrick)
   The main frontend and backend.
- - [Fyrebrick-updater](https://github.com/fyrebrick/fyrebrick-updater) ([Docker](https://hub.docker.com/r/snakehead007/fyrebrick-updater))
+ - [Fyrebrick-updater](https://github.com/fyrebrick/fyrebrick-updater)
   Process to automatically update all information from Bricklink
- - [Fyrebrick-updater-api](https://github.com/fyrebrick/fyrebrick-updater-api) ([Docker](https://hub.docker.com/r/snakehead007/fyrebrick-updater-api))
+ - [Fyrebrick-updater-api](https://github.com/fyrebrick/fyrebrick-updater-api)
    The process to automatically update all information but has an external api.
- - [bricklink-plus api (package for bricklink)](https://github.com/fyrebrick/bricklink-plus) ([npm](https://www.npmjs.com/package/bricklink-plus))
+ - [bricklink-plus](https://github.com/fyrebrick/bricklink-plus) via [npm](https://www.npmjs.com/package/bricklink-plus)
   Package to easily handle Bricklink requests.
  - [fyrebrick-classification-scraper](https://github.com/fyrebrick/fyrebrick-classification-scraper)
   Scraper for lego images over the the most popular Lego sites.
@@ -62,4 +62,3 @@ Pull and run a `mongo` container or have one running.
 Also pull and run a `redis` container or have one running.
 
 Start each repository with `npm start` or `yarn start`
-
