@@ -5,7 +5,6 @@ button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar'
 #navbar.collapse.navbar-collapse
     ul.navbar-nav.mr-auto.mt-lg-0.mt-2
         if session._id
-            if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
                 li
                     a.narrow#inventory.not-active.nav-item.nav-link(href='/my/inventory' role='button' aria-haspopup='true' aria-expanded='false' )
                         |   Inventory
@@ -15,7 +14,6 @@ button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar'
             li
                 a.narrow#account.nav-item.nav-link(href='/my/settings' role='button' aria-haspopup='true' aria-expanded='false')
                     |   Account
-        if session.user.CONSUMER_KEY=="527C3A3EFC4143919CABE84D5ACCA153"
             li
                 a.narrow#account.nav-item.nav-link(href='/charts' role='button' aria-haspopup='true' aria-expanded='false')
                     |   Charts
