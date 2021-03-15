@@ -29,7 +29,7 @@
     "googleapis": "^65.0.0",
     "helmet": "^4.3.1",
     "hpp": "^0.2.3",
-    "jspdf": "^2.3.0",
+    "jspdf": "^2.3.1",
     "lesshat": "^4.1.0",
     "mongoose": "^5.11.1",
     "node-fetch": "^2.6.1",
