@@ -7,9 +7,8 @@
     "redis": "sudo docker run -p 6379:6379 --name redis -d redis",
     "mongo": "sudo docker run -p 27017:27017 --name mongo -d mongo",
     "start": "node ./app.js",
-    "fyrebrick": "sudo docker build -t snakehead007/fyrebrick:latest . && sudo docker push snakehead007/fyrebrick:latest",
-    "local": "sudo docker build -t snakehead007/fyrebrick:local . && sudo docker push snakehead007/fyrebrick:local",
-    "compose": "sudo docker build -t snakehead007/fyrebrick:compose . && sudo docker push snakehead007/fyrebrick:compose"
+    "docker": "sudo docker build -t registry.hub.docker.com/snakehead007/fyrebrick:latest . && sudo docker push registry.hub.docker.com/snakehead007/fyrebrick:latest",
+    "github": "sudo docker build -t ghcr.io/fyrebrick/fyrebrick . && sudo docker push ghcr.io/fyrebrick/fyrebrick"
   },
   "author": "snakehead007",
   "license": "ISC",
