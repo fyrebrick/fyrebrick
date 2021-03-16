@@ -1,7 +1,7 @@
 FROM node:15.11.0
 WORKDIR /usr/src/app
 COPY package*.json /usr/src/app/
-RUN npm install
+RUN yarn install
 COPY . /usr/src/app
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]

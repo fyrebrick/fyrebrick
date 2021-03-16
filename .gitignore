@@ -115,3 +115,4 @@ dist
 fyrebrick.code-workspace
 temp/
 package-lock.json
+yarn.lock
