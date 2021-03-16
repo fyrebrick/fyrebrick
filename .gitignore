@@ -114,3 +114,4 @@ dist
 /.vscode
 fyrebrick.code-workspace
 temp/
+package-lock.json
