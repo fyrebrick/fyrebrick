@@ -7,8 +7,8 @@
     "redis": "sudo docker run -p 6379:6379 --name redis -d redis",
     "mongo": "sudo docker run -p 27017:27017 --name mongo -d mongo",
     "start": "node ./app.js",
-    "docker": "sudo docker build -t registry.hub.docker.com/snakehead007/fyrebrick:latest . && sudo docker push registry.hub.docker.com/snakehead007/fyrebrick:latest",
-    "github": "sudo docker build -t ghcr.io/fyrebrick/fyrebrick . && sudo docker push ghcr.io/fyrebrick/fyrebrick"
+    "private": "sudo docker build --network=host -t ghcr.io/fyrebrick/p-fyrebrick . && sudo docker push ghcr.io/fyrebrick/p-fyrebrick",
+    "public": "sudo docker build --network=host -t ghcr.io/fyrebrick/fyrebrick . && sudo docker push ghcr.io/fyrebrick/fyrebrick"
   },
   "author": "snakehead007",
   "license": "ISC",
@@ -34,7 +34,7 @@
     "node-fetch": "^2.6.1",
     "node-schedule": "^2.0.0",
     "nodemon": "^2.0.7",
-    "npm": "^7.0.0",
+    "npm": "^7.6.3",
     "path": "^0.12.7",
     "pdf-to-printer": "^1.5.4",
     "pug": "^3.0.1",
