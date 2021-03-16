@@ -13,6 +13,7 @@ services:
       - redis
     networks:
       - fyrebrick-net
+    restart: unless-stopped
   fyrebrick-updater-api:
     image: ghcr.io/fyrebrick/fyrebrick-updater-api:latest
     deploy:
@@ -22,8 +23,9 @@ services:
       - redis
     networks: 
       - fyrebrick-net
+    restart: unless-stopped
   fyrebrick-updater:
-    image: ghcr.io/fyrebrick/fyrebrick-updater-api:latest
+    image: ghcr.io/fyrebrick/fyrebrick-updater:latest
     deploy:
       replicas: 1
     depends_on:
@@ -31,8 +33,11 @@ services:
       - redis
     networks: 
       - fyrebrick-net
+    restart: unless-stopped
   mongo:
     image: registry.hub.docker.com/library/mongo
+    ports:
+      - "27017:27017"
     deploy:
       replicas: 1
     networks:
@@ -45,6 +50,7 @@ services:
       replicas: 1
     networks:
       - fyrebrick-net
+    restart: unless-stopped
   mongo-express:
     image: mongo-express
     ports:
@@ -55,5 +61,6 @@ services:
       - fyrebrick-net
     depends_on:
       - mongo
+    restart: unless-stopped
 networks:
   fyrebrick-net:
