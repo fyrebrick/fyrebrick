@@ -38,7 +38,7 @@ You can create issues for fixes/bugs or features. I will try my best to create/f
  - [fyrebrick-classification-api](https://github.com/fyrebrick/fyrebrick-classification-api)
   Api with AI to classify a specific lego image.
 
-## Run locally
+## How to run Fyrebrick
 
  - install `docker-compose`
  - run the docker-compose.yml file via command: `docker-compose up`
@@ -48,17 +48,21 @@ You can create issues for fixes/bugs or features. I will try my best to create/f
  Mongo express is located at [localhost:8081](http://localhost:8081)
   - you will need to unblock yourself manually after logging in for the first time.
 
+ Running this version uses the `public.env` environment variables. 
+ 
+ You will not need to login, if you want to be able to login and have more than 1 users you can build from source.
+
 ## Build from source
 
 Clone the following repositories: 
  - [Fyrebrick](https://github.com/fyrebrick/fyrebrick)
  - [Fyrebrick-updater](https://github.com/fyrebrick/fyrebrick-updater)
  - [Fyrebrick-scraper](https://github.com/fyrebrick/fyrebrick-scraper)
+ - Create for each repo a valid `public.env` file.
+ - Pull and run a `mongo` container or have one running.
+ - Also pull and run a `redis` container or have one running.
+ - if needed change the `.env` files.
 
-Create for each repo a valid `.env` file.
+or you can start each repository seperatly with `yarn start`
 
-Pull and run a `mongo` container or have one running.
-
-Also pull and run a `redis` container or have one running.
-
-Start each repository with `npm start` or `yarn start`
+or build each docker container seperatly and change the image link in the docker-compose.yml
