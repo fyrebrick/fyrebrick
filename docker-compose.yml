@@ -44,7 +44,7 @@ services:
     build:
       context: .
     environment:
-      DB_URI: mongodb://mongo:27017/db
+      DB_URI: mongodb://mongo:27017/fyrebrick
       REDIS_URI: redis:6379
     deploy:
       replicas: 1
