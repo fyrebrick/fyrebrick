@@ -1,14 +1,11 @@
 const redis = require('redis');
 const session = require('express-session');
 const store = require('connect-redis')(session);
-
-const {vars} = require('../helpers/constants/vars');
 const {logger} = require("fyrebrick-helper").helpers;
-
-const client = redis.createClient(vars.redis.port,vars.redis.host);
+const client = redis.createClient(process.env.REDIS_URI.split(":")[1],process.env.REDIS_URI.split(":")[0]);
 const redisStore = new store({
-    host: process.env.DEVELOP_REDIS_HOST,
-    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_URI.split(":")[0],
+    port: process.env.REDIS_URI.split(":")[1],
     client: client,
     prefix:'session',
     ttl: 1209600
@@ -16,14 +13,14 @@ const redisStore = new store({
 });
 
 client.on('connect',()=>{
-    logger.info(`redis database connect on ${vars.redis.host}:${vars.redis.port}`);
+    logger.info(`redis database connect on ${process.env.REDIS_URI}`);
 });
 
 client.on('error',(error)=>{
     logger.info(`redis error: ${error}`);
 });
 
-if(vars.fyrebrick.develop){
+if(process.env.DEVELOPMENT){
     client.on('monitor',(time,args,rawReply)=>{
         logger.info(`${time}: args`)
     })

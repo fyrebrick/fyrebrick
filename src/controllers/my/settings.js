@@ -1,7 +1,6 @@
 const {User,Order} = require('fyrebrick-helper').models;
 const bricklinkPlus = require("bricklink-plus");
 const {logger} = require('fyrebrick-helper').helpers;
-const {vars} = require('../../helpers/constants/vars');
 const superagent = require('superagent');
 const settings = {
     index: async (req,res,next)=>{
@@ -12,7 +11,7 @@ const settings = {
     },
     fix:{
         duplicates: async (req,res,next) =>{
-            await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/removeDuplicates`)
+            await superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/orders/removeDuplicates`)
             .send({CONSUMER_KEY:req.session.user.CONSUMER_KEY})
             .set('accept','json')
             .end((err,result)=>{
@@ -27,7 +26,7 @@ const settings = {
     },
     update:{
         orders: async (req,res,next)=>{
-            await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/all`)
+            await superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/orders/all`)
                 .send({_id:req.session._id})
                 .set('accept','json')
                 .end((err,result)=>{
@@ -40,7 +39,7 @@ const settings = {
                 })
         },
         inventory: async(req,res,next)=>{
-            await superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/inventory`)
+            await superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/inventory`)
                 .send({_id:req.session._id})
                 .set('accept','json')
                 .end((err,result)=>{

@@ -25,16 +25,37 @@ const logon = async (req,res,next) => {
                     return;
                 }
             }
-            res.redirect(google.urlGoogle());
+            if(process.env.NO_LOGIN==="true"){
+                req.session.user = await User.findOne();
+                req.session._id = req.session.user._id;
+                req.session.logged_in = true;
+                res.redirect('/my/dashboard');
+            }else{
+                res.redirect(google.urlGoogle());
+            }
             return;
         }
     }
     if(req.query && req.query.returnUrl){
         req.session.returnUrl = req.query.returnUrl;
-        res.redirect(google.urlGoogle());
+        if(process.env.NO_LOGIN==="true"){
+            req.session.user = await User.findOne();
+            req.session._id = req.session.user._id;
+            req.session.logged_in = true;
+            res.redirect('/my/dashboard');
+        }else{
+            res.redirect(google.urlGoogle());
+        }
         return;
     }else{
-        res.redirect(google.urlGoogle());
+        if(process.env.NO_LOGIN==="true"){
+            req.session.user = await User.findOne();
+            req.session._id = req.session.user._id;
+            req.session.logged_in = true;
+            res.redirect('/my/dashboard');
+        }else{
+            res.redirect(google.urlGoogle());
+        }
         return;
     }
 }

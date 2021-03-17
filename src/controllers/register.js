@@ -1,7 +1,6 @@
 const bricklinkPlus = require("bricklink-plus");
 const {User} = require("fyrebrick-helper").models;
 const {logger} = require("fyrebrick-helper").helpers;
-const {vars} = require('../helpers/constants/vars');
 const superagent = require('superagent');
 
 const register = {
@@ -56,7 +55,7 @@ const register = {
                                 })
                             }
                         }); //new user, so update its bricklink tokens.
-                        superagent.post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/all`)
+                        superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/all`)
                         .send({_id:req.session._id})
                         .set('accept','json')
                         .end(async(err,result)=>{

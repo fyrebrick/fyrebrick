@@ -4,7 +4,6 @@ const {Inventory} = require("fyrebrick-helper").models;
 const frontend = require('../../frontend/orderList');
 const {getColorInlineStyle} = require('../../frontend/color');
 const {getImageSrcFromItem} = require('../../frontend/image');
-const {vars} = require('../../helpers/constants/vars');
 const { jsPDF } = require('jspdf');
 const {font,font2,font3,font4,font5} = require('../../helpers/objects/font');
 require("../../../public/other/f1");
@@ -219,7 +218,7 @@ const orders = {
     },
     removeDuplicates: async(req,res,next)=>{
         await superagent
-            .post(`${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}/orders/removeDuplicates`)
+            .post(`${process.env.FYREBRICK_UPDATER_API_URI}/orders/removeDuplicates`)
             .send({CONSUMER_KEY:req.session.user.CONSUMER_KEY})
             .set('accept','json')
             .end(async(err,result)=>{

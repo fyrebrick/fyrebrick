@@ -3,8 +3,6 @@ const {logger} = require("fyrebrick-helper").helpers;
 const bricklinkPlus = require('bricklink-plus');
 const {User} = require("fyrebrick-helper").models;
 const superagent = require('superagent');
-const {vars} = require('../../helpers/constants/vars');
-const FYREBRICK_UPDATER_API_URL = `${vars.fyrebrick.updater_api_host}:${vars.fyrebrick.updater_api_port}`;
 const inventory = {
     index:{
         get:(req,res,next)=>{
@@ -119,7 +117,7 @@ const inventory = {
     },
     update:{
         new_or_used:async (req,res,next)=>{
-            await superagent.post(`${FYREBRICK_UPDATER_API_URL}/update/new_or_used`)
+            await superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/update/new_or_used`)
                 .send({
                     _id:req.session._id,
                     inventory_id:req.body.inventory_id,
@@ -135,7 +133,7 @@ const inventory = {
                 })
         },
         remarks: async(req,res,next)=>{
-           await superagent.post(`${FYREBRICK_UPDATER_API_URL}/update/remarks`)
+           await superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/update/remarks`)
                 .send({
                     _id:req.session._id,
                     inventory_id:req.body.inventory_id,
@@ -156,7 +154,7 @@ const inventory = {
                 })
         },
         quantity:async (req,res,next)=>{
-           await superagent.post(`${FYREBRICK_UPDATER_API_URL}/update/quantity`)
+           await superagent.post(`${process.env.FYREBRICK_UPDATER_API_URI}/update/quantity`)
                 .send({
                     _id:req.session._id,
                     inventory_id:req.body.inventory_id,

@@ -118,3 +118,5 @@ package-lock.json
 yarn.lock
 .log
 yarn.lock
+private.env
+local.env

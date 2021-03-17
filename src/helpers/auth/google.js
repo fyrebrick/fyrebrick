@@ -1,15 +1,14 @@
 
 const {google} = require("googleapis");
 const {User} = require("fyrebrick-helper").models;
-const {vars} = require('../../helpers/constants/vars');
 const {logger} = require("fyrebrick-helper").helpers;
 let googleConfig, defaultScope;
 
 exports.startUp = () => {
     googleConfig = {
-        clientId: vars.google.id,
-        clientSecret: vars.google.secret,
-        redirect: vars.google.redirect_uri
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect: process.env.GOOGLE_REDIRECT_URL
     };
     defaultScope = [
         "https://www.googleapis.com/auth/plus.me",

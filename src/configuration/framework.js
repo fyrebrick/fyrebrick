@@ -10,7 +10,6 @@ const hpp = require('hpp');
 const useragent = require('express-useragent');
 //first party
 const {redisStore} = require("../configuration/session");
-const {vars} = require("../helpers/constants/vars");
 const {logger} = require("fyrebrick-helper").helpers;
 const {startUp}= require('../helpers/auth/google');
 const websocket = require('./websocket');
@@ -26,13 +25,19 @@ const start = function (app) {
     //     console.log(socket);
     // });
 
+    if(process.env.DEVELOPMENT===true){
+        process.env.NODE_ENV="development";
+    }else{
+        process.env.NODE_ENV="production";
+    }
+
     app.locals.title = "Fyrebrick";
     app.engine("pug", pug.__express);
     app.set("views", path.join(path.resolve(), "views"));
     app.set("view engine", "pug");
     //app.use(helmet());
     app.disable('x-powered-by');
-    app.use(cookieParser(vars.express.cookie_secret));
+    app.use(cookieParser(process.env.COOKIE_SECRET));
     app.set('trust proxy', 1)
     app.use(express.static(path.join(path.resolve(), "public")));
     app.use("/fn",express.static(path.join(path.resolve(), "src/frontend")));
@@ -45,7 +50,7 @@ const start = function (app) {
     app.use(
         session({
             name: "session",
-            secret: vars.express.session_secret,
+            secret: process.env.SESSION_SECRET,
             saveUninitialized: false,
             resave: false,
             store: redisStore
@@ -61,8 +66,8 @@ const start = function (app) {
             req.session.cookieSessionId = encodeURIComponent(req.cookies.session);
         }
         res.locals.session = req.session;
-        res.locals.version = vars.fyrebrick.version;
-        res.locals.type = vars.fyrebrick.type;
+        res.locals.version = ""; //not used anymore
+        res.locals.type = ""; //not used anymore
         //pug variables
         
         res.locals.frontend = {};
@@ -83,8 +88,8 @@ const start = function (app) {
         websocket.connection(socket);
     });
 
-    server.listen(vars.express.port,()=>{
-        logger.info(`express listening on port ${vars.express.port}`);
+    server.listen(process.env.PORT,()=>{
+        logger.info(`express listening on port ${process.env.PORT}`);
     });
     app.use(function (err, req, res, next) {
         res.status(500);
