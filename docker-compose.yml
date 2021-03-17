@@ -39,8 +39,13 @@ services:
     networks:
       - fyrebrick-net
     restart: unless-stopped
-  fyrebrick-updater-api:
-    image: ghcr.io/fyrebrick/fyrebrick-updater-api:latest
+  fyrebrick-updater:
+    image: ghcr.io/fyrebrick/fyrebrick-updater:latest
+    build:
+      context: .
+    environment:
+      DB_URI: mongodb://mongo:27017/db
+      REDIS_URI: redis:6379
     deploy:
       replicas: 1
     depends_on:
@@ -49,8 +54,13 @@ services:
     networks: 
       - fyrebrick-net
     restart: unless-stopped
-  fyrebrick-updater:
-    image: ghcr.io/fyrebrick/fyrebrick-updater:latest
+  fyrebrick-updater-api:
+    image: ghcr.io/fyrebrick/fyrebrick-updater-api:latest
+    build:
+      context: .
+    environment:
+      EXPRESS_PORT: 3030
+      DB_URI: mongodb://mongo:27017/fyrebrick
     deploy:
       replicas: 1
     depends_on:
