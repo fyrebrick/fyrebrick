@@ -1,5 +1,4 @@
-require('dotenv').config({path:'./public.env'}) //change this to your own .env file, edit the public.env or comment this and use the --env-file option when building as docker container
-console.log(process.env.REDIS_URI);
+//require('dotenv').config({path:'./public.env'}) //change this to your own .env file, edit the public.env or comment this and use the --env-file option when building as docker container
 const express = require('express');
 const database = require('./src/configuration/database');
 const framework = require('./src/configuration/framework');

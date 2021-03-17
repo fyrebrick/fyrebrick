@@ -2,6 +2,31 @@ version: "3.8"
 services:
   fyrebrick:
     image: ghcr.io/fyrebrick/fyrebrick:latest
+    build:
+      context: .
+    environment:
+      #Express port of fyrebrick (e.g 3000)
+      PORT: 3000
+      #URI of the fyrebrick-updater-api instance (e.g fyrebrick-updater-api:3030 or localhost:3030)
+      FYREBRICK_UPDATER_API_URI: fyrebrick-updater-api:3030
+      #URI of the MongoDB instance (e.g mongodb://mongo:27017/db or mongodb://localhost:3017)
+      MONGO_DB_URI: mongodb://mongo:27017/fyrebrick
+      #URI of the redis instance (e.g redis:6379 or localhost:6379)
+      REDIS_URI: redis:6379
+      #Login is skipped, no GOOGLE_CLIENT_* envs required
+      NO_LOGIN: "true"
+      #Google secret got from apis.google.com (e.g JDAJSDJA_OQWEQWUE18N1) (can be skipped if NO_LOGIN:true)
+      GOOGLE_CLIENT_SECRET:
+      #Google secret got from apis.google.com (e.g JDAJSDJA-OQWEQWUE18N1923092304923.apps.googleusercontent.com) (can be skipped if NO_LOGIN:true)
+      GOOGLE_CLIENT_ID:
+      #Google redirect URL should be /redirect on the end (can be skipped if NO_LOGIN:true)
+      GOOGLE_REDIRECT_URL:
+      #Pick a random secret string as session secret
+      SESSION_SECRET: 9876ab96c67deaadacbaf876adfb679a8dfbc76bdf6a7bfd8a9df5bc6da59f65d67adf
+      #Pick a random secret string as cookie secret
+      COOKIE_SECRET: 98e76cb98ec76987d9876a98c7bc78eac79e876bc987e6c8d7adb6ad78c9ae7be6ceead
+      #Turns node_env on development if true and shows more logs and errors
+      DEVELOPMENT: "false"
     ports:
       - "3000:3000"
     deploy:
