@@ -1585,10 +1585,10 @@ function-bind@^1.1.1:
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
-fyrebrick-helper@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/fyrebrick-helper/-/fyrebrick-helper-1.1.2.tgz"
-  integrity sha512-R+Op+Crs53scxBWUUht7R+oTF5568kxmA+Z0X4QJDbj9hBOxOvc5RnN+LWWAjmJYN6hftsT4XlIYf/dvQWmDyA==
+fyrebrick-helper@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/fyrebrick-helper/-/fyrebrick-helper-1.1.3.tgz#c86882a7ac78779f42748018dfd26809f9412aef"
+  integrity sha512-fVIQ3JN2ZKxz9KEmM1D8DS3gwCLReigfzv+TSIMJ55/WssBqldKbDhdV3GXv23fFgyRLZn4RrXKfaO31269ZPA==
   dependencies:
     cheerio "^1.0.0-rc.5"
     helmet "^4.3.1"
