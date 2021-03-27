@@ -312,6 +312,7 @@ const renderLabel = async (doc,pdfgrid,order_id) => {
     console.log(order_id);
     const order = await Order.findOne({order_id:order_id});
     var rowpl = 0;
+    let text;
     switch(row){
         case 1:
             rowpl = 15;
@@ -333,6 +334,7 @@ const renderLabel = async (doc,pdfgrid,order_id) => {
         countryTelData.allCountries[countryTelData.iso2Lookup[order.shipping.address.country_code.toLowerCase()]].name];
     for(t of text){
         while(pixelWidth(t,{size:fontSizeBig})>=270){
+            console.log(pixelWidth(t,{size:fontSizeBig}),t,fontSizeBig);
             fontSizeBig = fontSizeBig-0.5;            
         }
     }
