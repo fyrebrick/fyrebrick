@@ -331,7 +331,9 @@ const renderLabel = async (doc,pdfgrid,order_id) => {
     text = [
         ...order.shipping.address.name.full.split('\r\n'),
         ...order.shipping.address.full.split('\r\n'),
-        countryTelData.allCountries[countryTelData.iso2Lookup[order.shipping.address.country_code.toLowerCase()]].name];
+        countryTelData.allCountries[countryTelData.iso2Lookup[
+            order.shipping.address.country_code.toLowerCase()==="uk"?"gb":order.shipping.address.country_code.toLowerCase()
+        ]].name];
     for(t of text){
         while(pixelWidth(t,{size:fontSizeBig})>=270){
             console.log(pixelWidth(t,{size:fontSizeBig}),t,fontSizeBig);
