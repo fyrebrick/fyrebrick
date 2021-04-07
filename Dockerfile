@@ -1,4 +1,4 @@
-FROM node:15.12.0-alpine3.13
+FROM node:15.14.0-alpine3.13
 WORKDIR /app
 COPY package.json /app/package.json
 RUN apk add yarn
