@@ -3193,10 +3193,10 @@ path@^0.12.7:
     process "^0.11.1"
     util "^0.10.3"
 
-pdf-to-printer@^1.5.4:
-  version "1.5.4"
-  resolved "https://registry.npmjs.org/pdf-to-printer/-/pdf-to-printer-1.5.4.tgz"
-  integrity sha512-8I0aDY7j8SsAwMt4PzXxXD+QtwQr6bjUX3mF/KeWxxS32ocrry7dpUba8TvwpbruEefUYYJJftFMBGewj0Pw2A==
+pdf-to-printer@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/pdf-to-printer/-/pdf-to-printer-1.7.0.tgz#dd8f1b62573663b4d6d87a2ff94b7cab41771a5d"
+  integrity sha512-FdeAopDUTIgNlnN4VhZvyuBjaxGgBHOmecF49S+qKc+g0EGTn88Zv1bFSf+49k3Kgav++Wr7PbwurNalioJj3g==
 
 performance-now@^2.1.0:
   version "2.1.0"
