@@ -33,7 +33,7 @@
     "node-fetch": "^2.6.1",
     "node-schedule": "^2.0.0",
     "nodemon": "^2.0.7",
-    "npm": "^7.6.3",
+    "npm": "^7.10.0",
     "path": "^0.12.7",
     "pdf-to-printer": "^1.5.4",
     "pug": "^3.0.1",
