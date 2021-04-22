@@ -1,5 +1,5 @@
 //uncomment next line for development usages
-//require('dotenv').config({path:'./local.env'}) //change this to your own .env file, edit the public.env or comment this and use the --env-file option when building as docker container
+require('dotenv').config({path:'./local.env'}) //change this to your own .env file, edit the public.env or comment this and use the --env-file option when building as docker container
 const express = require('express');
 const database = require('./src/configuration/database');
 const framework = require('./src/configuration/framework');

@@ -1,6 +1,7 @@
 let tagCount = 0;
 let tagsCaseSensitive = false;
 $(document).ready(function () {
+    console.log("testing")
     sortableTableId = "mainTable";
     addSortIcons();
     
@@ -62,7 +63,7 @@ $(document).ready(function () {
 
     // Detect changes on new or used radio buttons
     $("#filterNuRadios input").on('change',function(){
-        const val = $("#filterNUradios input:checked").val();
+        const val = $("#filterNuRadios input:checked").val()
         $(".new_or_used-big").each(function(){
             if(val==="All"){
                 $($(this).parents()[2]).removeClass("hide-filter-nu");
