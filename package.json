@@ -37,7 +37,7 @@
     "path": "^0.12.7",
     "pdf-to-printer": "^2.0.0",
     "pug": "^3.0.1",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "rimraf": "^3.0.2",
     "socket.io": "^4.0.0",
     "string-pixel-width": "^1.10.0",
