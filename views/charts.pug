@@ -5,13 +5,13 @@ block content
         .card
             .card-body
               .row
-                //.col
+                .col
                   .input-group
                     select#selectCountry.custom-select
                       option(selected='BE',value='BE') Belgium
-                      option(value='global') global
-                      each store in allCountries
-                        option(value=store.countryID)=store.countryName
+                      option(value='europe') Europe
+                      //- each store in allCountries
+                      //-   option(value=store.countryID)=store.countryName
                   hr.my-2
               .active-member
                   .row
@@ -26,7 +26,7 @@ block content
                                   th.rank
                                   th.data-header  
                                   th.store store
-                                  //th.country country
+                                  th.country country
                           tbody#dynamicTable
 block styles
   link(rel='stylesheet' href='css/charts.css')

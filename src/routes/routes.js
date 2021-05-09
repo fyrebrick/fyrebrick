@@ -29,7 +29,7 @@ router.post('/register',controllers.register.post);
 router.get('/logout',controllers.logout.get);
 router.all('/socket.io',controllers.socket.io);
 router.get('/charts',controllers.charts.index);
-router.get('/charts/global/:type',controllers.charts.global);
+router.get('/charts/europe/:type',controllers.charts.europe);
 router.get('/charts/:countryID/:type',controllers.charts.national);
 router.post('/acceptCookies',controllers.login.acceptCookies);
 

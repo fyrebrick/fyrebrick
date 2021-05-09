@@ -350,5 +350,21 @@ const renderLabel = async (doc,pdfgrid,order_id) => {
     doc.text(order.order_id,isOnFirstCol?5:207,rowpl+25,null,90);
 }
 
+const renderBarcode = async (doc,order_id)=>{
+    const path = `./public/temp/${uuidv4()}.gif`;
+    const url = "http://www.keepautomation.com/online_barcode_generator/linear.aspx?TYPE=7&DATA="+req.query.order_id+"&PROCESS-TILDE=false&UOM=0&X=2&Y=60&ROTATE=0&RESOLUTION=72&FORMAT=gif&LEFT-MARGIN=0&RIGHT-MARGIN=0&SHOW-TEXT=true&TEXT-FONT=Arial%7C15%7CRegular";
+    const response = await fetch(url);
+    const buffer = await response.buffer();
+    await fs.writeFile(path, buffer, () => {
+        console.log('finished downloading!');
+        const imageAsBase64 = fs.readFileSync(path, 'base64');
+        doc.addImage(imageAsBase64,0,0);
+        const pdf = `./public/temp/${uuidv4()}.pdf`
+        doc.save(pdf);
+        res.contentType("application/pdf");
+        res.send(fs.readFileSync(pdf));
+    });
+}
+
 
 module.exports = orders;

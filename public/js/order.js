@@ -1,7 +1,6 @@
 let tagCount = 0;
 let tagsCaseSensitive = false;
 $(document).ready(function () {
-    console.log("testing")
     sortableTableId = "mainTable";
     addSortIcons();
     
