@@ -16,6 +16,8 @@ Therefore any maintance and/or development is going to be tailored to that clien
 
 Any contribution is appreciated but, in order for the application to suit your needs better, its easier to fork the repository and change everything you want in your own fork.
 
+[our MongoDB](https://cloud.mongodb.com/freemonitoring/cluster/P4O6G7FW7LACBE5VSMARQ36QW27GW7JE)
+
 
 ## Issues
 
