@@ -15,7 +15,7 @@
     "archiver": "^5.2.0",
     "body-parser": "^1.19.0",
     "bricklink-plus": "^1.0.10",
-    "connect-redis": "^5.0.0",
+    "connect-redis": "^6.0.0",
     "cookie-parser": "^1.4.5",
     "country-telephone-data": "^0.6.3",
     "dotenv": "^8.2.0",
