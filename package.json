@@ -24,7 +24,7 @@
     "express-session": "^1.17.1",
     "express-useragent": "^1.0.15",
     "fyrebrick-helper": "1.1.5",
-    "googleapis": "^72.0.0",
+    "googleapis": "^82.0.0",
     "helmet": "^4.3.1",
     "hpp": "^0.2.3",
     "jspdf": "^2.3.1",
