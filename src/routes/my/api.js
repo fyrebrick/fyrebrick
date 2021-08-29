@@ -10,10 +10,10 @@ router.all('/*',(req,res)=>{
     res.setHeader('Content-Type', 'application/json');
     let uri = "https://api.bricklink.com/api/store/v1"+req.url;
     const oauth = new OAuth.OAuth(
-        req.session.user.TOKEN_VALUE,
-        req.session.user.TOKEN_SECRET,
-        req.session.user.CONSUMER_KEY,
-        req.session.user.CONSUMER_SECRET,
+        req.session.user.TOKEN_VALUE||req.query.TOKEN_VALUE||req.body.TOKEN_VALUE,
+        req.session.user.TOKEN_SECRET||req.query.TOKEN_SECRET||req.body.TOKEN_SECRET,
+        req.session.user.CONSUMER_KEY||req.query.CONSUMER_KEY||req.body.CONSUMER_KEY,
+        req.session.user.CONSUMER_SECRET||req.query.CONSUMER_SECRET||req.body.CONSUMER_SECRET
         "1.0",
         null,
         "HMAC-SHA1"
@@ -48,10 +48,10 @@ const doCall = (req,res)=>{
     res.setHeader('Content-Type', 'application/json');
     let uri = "https://api.bricklink.com/api/store/v1"+req.url;
     const oauth = new OAuth.OAuth(
-        req.session.user.TOKEN_VALUE,
-        req.session.user.TOKEN_SECRET,
-        req.session.user.CONSUMER_KEY,
-        req.session.user.CONSUMER_SECRET,
+        req.session.user.TOKEN_VALUE||req.query.TOKEN_VALUE||req.body.TOKEN_VALUE,
+        req.session.user.TOKEN_SECRET||req.query.TOKEN_SECRET||req.body.TOKEN_SECRET,
+        req.session.user.CONSUMER_KEY||req.query.CONSUMER_KEY||req.body.CONSUMER_KEY,
+        req.session.user.CONSUMER_SECRET||req.query.CONSUMER_SECRET||req.body.CONSUMER_SECRET
         "1.0",
         null,
         "HMAC-SHA1"
