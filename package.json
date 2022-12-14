@@ -19,7 +19,7 @@
     "cookie-parser": "^1.4.5",
     "country-telephone-data": "^0.6.3",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-flash": "^0.0.2",
     "express-session": "^1.17.1",
     "express-useragent": "^1.0.15",
