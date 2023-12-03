@@ -3194,9 +3194,9 @@ path@^0.12.7:
     util "^0.10.3"
 
 pdf-to-printer@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/pdf-to-printer/-/pdf-to-printer-2.0.0.tgz#6f3b0a48af9ea5bccd0dbf373a2239f6612ab484"
-  integrity sha512-+ZJn9l9Qt0LCBgo0vVrdlFvnOEouAxrsP6AOxDwYezBmug5NjZwEz7cwwNybnBfGg2z9cUH+r6waR6dlKubV6g==
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/pdf-to-printer/-/pdf-to-printer-2.0.6.tgz#edd126093f2246db5c59610a77c3db7d9467ab2a"
+  integrity sha512-I2TW3U1M4l+AEJH4cbvt4KfGL79jt3HIjQgHjtEte2J/BeFqHJHc9s4YuYDu6rHLeEY15maYwnKGK3WbrrPmYg==
 
 performance-now@^2.1.0:
   version "2.1.0"
