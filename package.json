@@ -42,7 +42,7 @@
     "socket.io": "^4.0.0",
     "string-pixel-width": "^1.10.0",
     "superagent": "^6.1.0",
-    "uuid": "^8.3.2",
+    "uuid": "^11.0.0",
     "winston": "^3.3.3",
     "yarn": "^1.22.10"
   }
